@@ -1,7 +1,10 @@
 import config from '@/http/config.js';
 
 /* 1.请求拦截器 */
-let Interceptor = ({loading,...interOption}) => {
+let Interceptor = ({
+	loading,
+	...interOption
+}) => {
 	let options = {};
 	const TOKEN = uni.getStorageSync('token'); // token鉴权
 	interOption.url = config.baseUrl + interOption.url; // 请求地址
@@ -11,7 +14,7 @@ let Interceptor = ({loading,...interOption}) => {
 		'Content-Type': 'application/json;charset=UTF-8',
 		...interOption.header,
 	};
-	
+
 	//如果传入loading为true,则显示loading加载
 	if (loading) {
 		uni.showLoading({
