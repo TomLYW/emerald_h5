@@ -6,11 +6,11 @@ let Interceptor = ({
 	...interOption
 }) => {
 	let options = {};
-	const TOKEN = uni.getStorageSync('token'); // token鉴权
+	const token = uni.getStorageSync('token'); // token鉴权
 	interOption.url = config.baseUrl + interOption.url; // 请求地址
 	// 请求头
 	interOption.header = {
-		token: TOKEN, // 请求携带token
+		'X-Access-Token': token,
 		'Content-Type': 'application/json;charset=UTF-8',
 		...interOption.header,
 	};

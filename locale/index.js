@@ -1,10 +1,6 @@
-import en from './en.json'
-import zhHans from './zh-Hans.json'
-import zhHant from './zh-Hant.json'
-import ja from './ja.json'
+import en from './en.json';
+import cn from './cn.json';
 export default {
 	en,
-	'zh-Hans': zhHans,
-	'zh-Hant': zhHant,
-	ja
+	cn
 }
