@@ -4,7 +4,6 @@ unpackage/dist
 unpackage/release
 unpackage/cache
 /dist
-vue.config
 
 # local env files
 .env.local
