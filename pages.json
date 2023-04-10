@@ -3,13 +3,21 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "%首页%",
-				"titleNView": false
+				"navigationBarTitleText": "%home%"
+				// "titleNView": false
 			}
 		}, {
-			"path": "pages/component/NoData",
+			"path": "pages/Login/resetPwd/index",
 			"style": {
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				// "navigationStyle":"custom",
+				"h5": {
+					"titleNView": {
+						"buttons": {
+							"type": "back"
+						}
+					}
+				}
 			}
 		}, {
 			"path": "pages/Login/index",
@@ -58,7 +66,7 @@
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "Emerald",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},

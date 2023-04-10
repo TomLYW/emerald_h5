@@ -1,3 +1,9 @@
+// import {
+// 	useI18n
+// } from 'vue-i18n';
+// const {
+// 	t
+// } = useI18n();
 import config from '@/http/config.js';
 
 /* 1.请求拦截器 */
@@ -19,7 +25,7 @@ let Interceptor = ({
 	//如果传入loading为true,则显示loading加载
 	if (loading) {
 		uni.showLoading({
-			title: '加载中...',
+			title: 'Loading...',
 			mask: true,
 		});
 	}
@@ -37,21 +43,21 @@ let Responder = (res) => {
 			case 1000:
 				uni.showToast({
 					icon: 'error',
-					title: '用户认证失效',
+					title: t('用户认证失效'),
 					duration: 2000,
 				});
 				return Promise.reject(res.data);
 			case 1001:
 				uni.showToast({
 					icon: 'none',
-					title: "此账户已被禁用，请联系管理员了解",
+					title: t("此账户已被禁用，请联系管理员了解"),
 					duration: 2000,
 				});
 				return Promise.reject(res.data);
 			case 1002:
 				uni.showToast({
 					icon: 'error',
-					title: "此账户已登录其他设备",
+					title: t("此账户已登录其他设备"),
 					duration: 2000,
 				});
 				return Promise.reject(res.data);
@@ -74,13 +80,9 @@ let request = (configOptions = {}) => {
 				networkType
 			}) => {
 				if (networkType === 'none') {
-					uni.showModal({
-						title: '没有网络',
-						content: '请检查您的网络',
-						showCancel: false,
-						success: () => {
-							uni.hideLoading();
-						},
+					uni.showToast({
+						title: t('网络错误'),
+						icon: 'error'
 					});
 				} else {
 					uni.request({

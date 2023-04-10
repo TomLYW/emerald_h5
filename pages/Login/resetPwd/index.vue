@@ -1,25 +1,18 @@
 <template>
 	<view class="login">
-		<text class="login-title">{{$t('登录')}}</text>
+		<text class="login-title">{{$t('找回密码')}}</text>
 		<Form @submit="handleSubmit">
 			<Field center :placeholder="$t('请输入邮箱')" class="ipt" name='account' v-model='submitInfo.account' />
-			<Field center :placeholder="$t('请输入验证码')" class="ipt" v-model="submitInfo.code" name='code' maxlength='6'
-				v-if="showCode">
+			<Field center :placeholder="$t('请输入验证码')" class="ipt" v-model="submitInfo.code" name='code' maxlength='6'>
 				<template #button>
 					<text class="code" @click="handleSend">{{$t('获取验证码')}}</text>
 				</template>
 			</Field>
-			<Field center :placeholder="$t('请输入密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'"
+			<Field center :placeholder="$t('请设置密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'"
 				:right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
-				@click-right-icon='handleEyes' v-model="submitInfo.password" name='password' v-else />
-			<view class="login-code">
-				<text @click="handleCode">{{$t('验证码登录')}}</text>
-			</view>
-			<Button native-type="submit" block class="btn" :disabled="btnState">{{$t('登录')}}</Button>
+				@click-right-icon='handleEyes' v-model="submitInfo.password" name='password' />
+			<Button native-type="submit" block class="btn" :disabled="btnState">{{$t('重置密码')}}</Button>
 		</Form>
-		<view class="forget">
-			<text @click="handleForget">{{$t('忘记密码')}}</text>
-		</view>
 	</view>
 </template>
 
@@ -48,7 +41,6 @@
 
 
 	const pwdEyes = ref(false);
-	const showCode = ref(false);
 	const btnState = ref(true);
 	const submitInfo = reactive({
 		areaCode: '86',
@@ -64,12 +56,6 @@
 		console.log('xx', value)
 	}
 
-	const handleForget = () => {
-		uni.navigateTo({
-			url: 'resetPwd/index'
-		});
-	}
-
 	//获取验证码
 	const handleSend = () => {
 		if (!submitInfo.account) {
@@ -81,22 +67,14 @@
 		}
 		console.log('xx')
 	}
-	// 验证码登录
-	const handleCode = () => {
-		showCode.value = !showCode.value;
-		if (showCode.value) {
-			submitInfo.password = '';
-		} else {
-			submitInfo.code = '';
-		}
-	}
+
 	// 密码框
 	const handleEyes = () => {
 		pwdEyes.value = !pwdEyes.value;
 	}
 
 	watch(submitInfo, (value) => {
-		if (value.account && (value.password.length > 5 || value.code)) {
+		if (value.account && value.password.length > 5 && value.code.length > 5) {
 			btnState.value = false;
 		} else {
 			btnState.value = true;
@@ -129,18 +107,6 @@
 			background-color: #05AA84;
 			color: #fff;
 			border-radius: 10px;
-		}
-
-		.forget {
-			text-align: center;
-			margin-top: 16px;
-		}
-
-		.login-code {
-			text-align: right;
-			font-size: 14px;
-			margin-top: -8px;
-			margin-bottom: 14px;
 		}
 
 		.code {
