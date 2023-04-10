@@ -6,12 +6,13 @@ let Interceptor = ({
 	...interOption
 }) => {
 	let options = {};
-	const token = uni.getStorageSync('token'); // token鉴权
-	interOption.url = config.baseUrl + interOption.url; // 请求地址
+	// const token = uni.getStorageSync('token');
+	const token =
+		"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOjUsImV4cCI6MTY4MzY4MzUwMiwiaWF0IjoxNjgxMDkxNTAyLCJpc3MiOiJhcHAiLCJ2ZXIiOjUzfQ.RbNK1dypmIQpA3jyc4zP0UbUJ-LLJQpxP6HQTRz3cC8";
+	interOption.url = config.baseUrl + interOption.url;
 	// 请求头
 	interOption.header = {
 		'X-Access-Token': token,
-		'Content-Type': 'application/json;charset=UTF-8',
 		...interOption.header,
 	};
 

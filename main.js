@@ -9,6 +9,7 @@ let i18nConfig = {
 // #ifndef VUE3
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
+
 Vue.use(VueI18n);
 const i18n = new VueI18n(i18nConfig);
 Vue.config.productionTip = false;
@@ -26,7 +27,8 @@ import { createI18n } from 'vue-i18n';
 import * as Pinia from 'pinia';
 import { createUnistorage } from './uni_modules/pinia-plugin-unistorage';
 
-const i18n = createI18n(i18nConfig);
+const I18n = createI18n(i18nConfig);
+
 export function createApp() {
   const app = createSSRApp(App);
   // 状态管理
@@ -34,7 +36,8 @@ export function createApp() {
   // 状态持久化
   store.use(createUnistorage());
   app.use(store);
-  app.use(i18n);
+  app.use(I18n);
+  
   return {
     app,
 	Pinia

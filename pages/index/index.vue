@@ -45,7 +45,7 @@
 			onLocaleChange(e) {
 				if (this.isAndroid) {
 					uni.showModal({
-						content: this.$t('index.language-change-confirm'),
+						content:'确定',
 						success: (res) => {
 							if (res.confirm) {
 								uni.setLocale(e.code);

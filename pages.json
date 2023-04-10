@@ -9,15 +9,13 @@
 		}, {
 			"path": "pages/component/NoData",
 			"style": {
-				"navigationBarTitleText": "%云算力套餐%",
 				"enablePullDownRefresh": false
 			}
 		}, {
-			"path": "pages/api/api",
+			"path": "pages/Login/index",
 			"style": {
-				// "navigationBarTitleText": "%订单%",
-				"navigationBarTitleText": "订单",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"titleNView": false
 			}
 		}, {
 			"path": "pages/schema/schema",
@@ -34,25 +32,25 @@
 		"backgroundColor": "#F8F8F8",
 		"list": [{
 				"pagePath": "pages/index/index",
-				"text": "%首页%",
+				"text": "%home%",
 				"iconPath": "static/tab/tab_home.png",
 				"selectedIconPath": "static/tab/tab_home_s.png"
 			},
 			{
-				"pagePath": "pages/component/NoData",
-				"text": "%云算力套餐%",
+				"pagePath": "pages/Login/index",
+				"text": "%cloud%",
 				"iconPath": "static/tab/tab_yun.png",
 				"selectedIconPath": "static/tab/tab_yun_s.png"
 			},
 			{
 				"pagePath": "pages/api/api",
-				"text": "%1%",
+				"text": "%order%",
 				"iconPath": "static/tab/tab_order.png",
 				"selectedIconPath": "static/tab/tab_order_s.png"
 			},
 			{
 				"pagePath": "pages/schema/schema",
-				"text": "%api.message%",
+				"text": "%mine%",
 				"iconPath": "static/tab/tab_mine.png",
 				"selectedIconPath": "static/tab/tab_mine_s.png"
 			}
