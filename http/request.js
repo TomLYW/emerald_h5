@@ -16,6 +16,7 @@ let Interceptor = ({
 	// 请求头
 	interOption.header = {
 		'X-Access-Token': uni.getStorageSync('token'),
+		'X-Lang': uni.getLocale() === 'cn' ? 'zh_CN' : 'en_US',
 		...interOption.header,
 	};
 
@@ -32,7 +33,7 @@ let Interceptor = ({
 
 /* 2.响应拦截器 */
 let Responder = (res) => {
-	if (res && res.data) {
+	if (res?.data) {
 		switch (res.data.code) {
 			case 1000:
 				uni.showToast({
@@ -59,8 +60,6 @@ let Responder = (res) => {
 				return Promise.resolve(res.data);
 		}
 	}
-
-	return resOption;
 };
 
 /* 3.请求 */
