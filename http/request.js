@@ -12,13 +12,10 @@ let Interceptor = ({
 	...interOption
 }) => {
 	let options = {};
-	// const token = uni.getStorageSync('token');
-	const token =
-		"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOjUsImV4cCI6MTY4MzY4MzUwMiwiaWF0IjoxNjgxMDkxNTAyLCJpc3MiOiJhcHAiLCJ2ZXIiOjUzfQ.RbNK1dypmIQpA3jyc4zP0UbUJ-LLJQpxP6HQTRz3cC8";
 	interOption.url = config.baseUrl + interOption.url;
 	// 请求头
 	interOption.header = {
-		'X-Access-Token': token,
+		'X-Access-Token': uni.getStorageSync('token'),
 		...interOption.header,
 	};
 
@@ -35,34 +32,31 @@ let Interceptor = ({
 
 /* 2.响应拦截器 */
 let Responder = (res) => {
-	uni.hideLoading(); // 停止加载
 	if (res && res.data) {
 		switch (res.data.code) {
-			case 200:
-				return Promise.resolve(res.data);
 			case 1000:
 				uni.showToast({
 					icon: 'error',
 					title: t('用户认证失效'),
 					duration: 2000,
 				});
-				return Promise.reject(res.data);
+				return;
 			case 1001:
 				uni.showToast({
 					icon: 'none',
 					title: t("此账户已被禁用，请联系管理员了解"),
 					duration: 2000,
 				});
-				return Promise.reject(res.data);
+				return;
 			case 1002:
 				uni.showToast({
 					icon: 'error',
 					title: t("此账户已登录其他设备"),
 					duration: 2000,
 				});
-				return Promise.reject(res.data);
+				return;
 			default:
-				return Promise.reject(res.data);
+				return Promise.resolve(res.data);
 		}
 	}
 
@@ -88,16 +82,12 @@ let request = (configOptions = {}) => {
 					uni.request({
 						...options,
 						success: (res) => {
+							uni.hideLoading();
 							resolve(Responder(res)); // 响应拦截
 						},
 						fail: (err) => {
-							reject(err);
 							uni.hideLoading();
-							uni.showToast({
-								icon: 'none',
-								title: err.errMsg,
-								duration: 2000,
-							});
+							reject(err);
 						},
 					});
 				}

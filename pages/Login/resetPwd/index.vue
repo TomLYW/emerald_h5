@@ -5,7 +5,7 @@
 			<Field center :placeholder="$t('请输入邮箱')" class="ipt" name='account' v-model='submitInfo.account' />
 			<Field center :placeholder="$t('请输入验证码')" class="ipt" v-model="submitInfo.code" name='code' maxlength='6'>
 				<template #button>
-					<text class="code" @click="handleSend">{{$t('获取验证码')}}</text>
+					<text class="code" @click="handleSend">{{count=== 61 ? $t('获取验证码') : count + $t('s后获取')}}</text>
 				</template>
 			</Field>
 			<Field center :placeholder="$t('请设置密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'"
@@ -36,10 +36,16 @@
 		Form
 	} from 'vant';
 	import {
-		sendCode
+		sendCode,
+		resetPwd
 	} from '@/services/user.js';
+	import {
+		isEmailAddress,
+		checkPassword
+	} from '@/utils/index.js';
+	import Toast from '@/hooks/useToast.js';
 
-
+	const count = ref(61);
 	const pwdEyes = ref(false);
 	const btnState = ref(true);
 	const submitInfo = reactive({
@@ -49,25 +55,79 @@
 		password: '',
 		authMethod: 'password', // password/code
 		accountType: 'email', // 默认手机好注册 email/tel
-		secureTextEntry: true,
 	});
 
 	const handleSubmit = (value) => {
-		console.log('xx', value)
-	}
+		if (!isEmailAddress(submitInfo.account)) {
+			Toast.show(t('请输入正确格式的邮箱'));
+			return;
+		}
 
-	//获取验证码
-	const handleSend = () => {
-		if (!submitInfo.account) {
-			uni.showToast({
-				title: t('请输入邮箱'),
-				icon: 'error'
+		if (!checkPassword(submitInfo.password)) {
+			Toast.show(t("登录密码为8-16位，数字字母组合"), {
+				type: 'fail',
+				duration: 3000
 			});
 			return;
 		}
-		console.log('xx')
+
+		resetPwd(submitInfo).then(res => {
+			if (res.code === 0) {
+				Toast.show(t('重置成功'), {
+					type: 'success'
+				})
+				uni.navigateTo({
+					url: 'login/index'
+				});
+			} else {
+				Toast.show(res.message);
+			}
+		})
 	}
 
+	// 定时器
+	const startTimer = () => {
+		let timer = setInterval(() => {
+			count.value -= 1;
+
+			if (count.value === 0) {
+				count.value = 61;
+				if (timer !== null) {
+					clearInterval(timer);
+				}
+			}
+		}, 1000);
+	}
+	//获取验证码
+	const handleSend = () => {
+		if (!submitInfo.account) {
+			Toast.show(t('请输入邮箱'));
+			return;
+		}
+
+		if (!isEmailAddress(submitInfo.account)) {
+			Toast.show(t('请输入正确格式的邮箱'));
+			return;
+		}
+
+		const parmas = {
+			accountType: 'email',
+			authType: 'login',
+			account: submitInfo.account
+		}
+		if (count.value !== 61) return;
+
+		sendCode(parmas).then(res => {
+			if (res.code === 0) {
+				Toast.show(t('发送成功'), {
+					type: 'success'
+				})
+				startTimer();
+			} else {
+				Toast.show(res.message);
+			}
+		})
+	}
 	// 密码框
 	const handleEyes = () => {
 		pwdEyes.value = !pwdEyes.value;

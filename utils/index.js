@@ -1,4 +1,4 @@
-import store from '../store';
+import {useUserStore} from '@/store/user.js';
 
 /*判断是否登录*/
 export function whetherLogin(navigation) {

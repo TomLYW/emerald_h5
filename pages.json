@@ -1,34 +1,25 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/Home/index",
+			"style": {
+				"enablePullDownRefresh": false
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "%home%"
-				// "titleNView": false
+				// "navigationBarTitleText": "%home%"
+				"enablePullDownRefresh": false
 			}
 		}, {
 			"path": "pages/Login/resetPwd/index",
 			"style": {
-				"enablePullDownRefresh": false,
-				// "navigationStyle":"custom",
-				"h5": {
-					"titleNView": {
-						"buttons": {
-							"type": "back"
-						}
-					}
-				}
+				"enablePullDownRefresh": false
 			}
 		}, {
 			"path": "pages/Login/index",
 			"style": {
-				"enablePullDownRefresh": false,
-				"titleNView": false
-			}
-		}, {
-			"path": "pages/schema/schema",
-			"style": {
-				"navigationBarTitleText": "%个人中心%",
 				"enablePullDownRefresh": false
 			}
 		}
@@ -39,7 +30,7 @@
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
 		"list": [{
-				"pagePath": "pages/index/index",
+				"pagePath": "pages/Home/index",
 				"text": "%home%",
 				"iconPath": "static/tab/tab_home.png",
 				"selectedIconPath": "static/tab/tab_home_s.png"
@@ -57,7 +48,7 @@
 				"selectedIconPath": "static/tab/tab_order_s.png"
 			},
 			{
-				"pagePath": "pages/schema/schema",
+				"pagePath": "pages/index/index",
 				"text": "%mine%",
 				"iconPath": "static/tab/tab_mine.png",
 				"selectedIconPath": "static/tab/tab_mine_s.png"
@@ -68,7 +59,8 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "Emerald",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"backgroundColor": "#F8F8F8",
+		"navigationStyle": "custom"
 	},
 	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)

@@ -2,6 +2,7 @@
 	import 'vant/lib/button/style';
 	import 'vant/lib/field/style';
 	import 'vant/lib/form/style';
+	import 'vant/lib/toast/style';
 	
 	export default {
 		onLaunch: function() {
