@@ -45,10 +45,10 @@
 	} from '@/utils/index.js';
 	import Toast from '@/hooks/useToast.js';
 
-	const count = ref(61);
-	const pwdEyes = ref(false);
-	const btnState = ref(true);
-	const submitInfo = reactive({
+	let count = ref(61);
+	let pwdEyes = ref(false);
+	let btnState = ref(true);
+	let submitInfo = reactive({
 		areaCode: '86',
 		account: '',
 		code: '',

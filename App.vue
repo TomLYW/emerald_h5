@@ -3,7 +3,8 @@
 	import 'vant/lib/field/style';
 	import 'vant/lib/form/style';
 	import 'vant/lib/toast/style';
-	
+	import 'vant/lib/text-ellipsis/style';
+
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
@@ -18,11 +19,10 @@
 </script>
 
 <style>
-	.container {
-		padding: 15px;
-	}
-
-	button {
-		margin-bottom: 15px;
+	uni-page-body,
+	html,
+	body {
+		/* height: 100%; */
+		background-color: #F5F5FA;
 	}
 </style>

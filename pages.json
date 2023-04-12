@@ -3,7 +3,8 @@
 		{
 			"path": "pages/Home/index",
 			"style": {
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"titleNView": false
 			}
 		},
 		{
@@ -15,12 +16,36 @@
 		}, {
 			"path": "pages/Login/resetPwd/index",
 			"style": {
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				// "navigationBarTitleText": ""
+				"titleNView": false
 			}
 		}, {
 			"path": "pages/Login/index",
 			"style": {
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"titleNView": false
+			}
+		},
+		{
+			"path": "pages/Home/details/index",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": "%detail%"
+			}
+		},
+		{
+			"path": "pages/Home/notice/index",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": "%notice_list%"
+			}
+		},
+		{
+			"path": "pages/Home/YunList/index",
+			"style": {
+				"enablePullDownRefresh": false,
+				"titleNView": false
 			}
 		}
 	],
@@ -42,7 +67,7 @@
 				"selectedIconPath": "static/tab/tab_yun_s.png"
 			},
 			{
-				"pagePath": "pages/api/api",
+				"pagePath": "pages/Home/YunList/index",
 				"text": "%order%",
 				"iconPath": "static/tab/tab_order.png",
 				"selectedIconPath": "static/tab/tab_order_s.png"
@@ -58,9 +83,9 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "Emerald",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8",
-		"navigationStyle": "custom"
+		"navigationBarBackgroundColor": "#F5F5FA",
+		"backgroundColor": "#F8F8F8"
+		// "navigationStyle": "custom"
 	},
 	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
