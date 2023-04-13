@@ -42,10 +42,10 @@
 			}
 		},
 		{
-			"path": "pages/Home/YunList/index",
+			"path": "pages/Home/description/index",
 			"style": {
 				"enablePullDownRefresh": false,
-				"titleNView": false
+				"navigationBarTitleText": ""
 			}
 		}
 	],
@@ -67,7 +67,7 @@
 				"selectedIconPath": "static/tab/tab_yun_s.png"
 			},
 			{
-				"pagePath": "pages/Home/YunList/index",
+				"pagePath": "pages/Login/resetPwd/index",
 				"text": "%order%",
 				"iconPath": "static/tab/tab_order.png",
 				"selectedIconPath": "static/tab/tab_order_s.png"

@@ -10,7 +10,7 @@
 			</swiper-item>
 		</swiper>
 
-		<view class="middle" @click="handleMiddle">
+		<view class="middle" @click="handleMiddle" v-if="current.noticeList.length > 0">
 			<image class="midl-img" src='/static/home/home_icon_notice.png' />
 			<view class="mid-content">
 				<text class="title">{{current.noticeList[0]?.title}}</text>
@@ -22,12 +22,7 @@
 			<image src='/static/home/title_icon.png' class="bar" />
 			<text class="tip">{{ $t('推荐矿机共享服务')}}</text>
 		</view>
-		<!-- <scroll-view style="height: 200px;" scroll-y>
-
-			<view v-for="i  in 20" :key="i">
-				<text>换句话菊花</text>
-			</view>
-		</scroll-view> -->
+		<YunCell :item='current.cloudData' v-if="'sold' in current.cloudData"/>
 		<view class="footer">
 			<image class="icon" src='/static/base/base_bottom_title.png'></image>
 			<text class="title">{{$t('值得信赖的矿机服务平台')}}</text>
@@ -40,13 +35,13 @@
 	import {
 		onShow,
 	} from "@dcloudio/uni-app";
-	import {
-		useI18n
-	} from 'vue-i18n';
+	// import {
+	// 	useI18n
+	// } from 'vue-i18n';
 
-	const {
-		t
-	} = useI18n();
+	// const {
+	// 	t
+	// } = useI18n();
 	import {
 		reactive,
 		onMounted
@@ -64,6 +59,7 @@
 	import {
 		formatDate
 	} from '@/utils/index.js';
+	import YunCell from '@/pages/Home/YunList/index.vue';
 
 	let current = reactive({
 		bannerList: [],
@@ -113,7 +109,9 @@
 	onMounted(() => {
 		getData();
 	})
-	onShow(() => {})
+	onShow(() => {
+		getData();
+	})
 </script>
 
 <style lang="scss" scoped>

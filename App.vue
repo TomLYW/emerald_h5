@@ -4,6 +4,7 @@
 	import 'vant/lib/form/style';
 	import 'vant/lib/toast/style';
 	import 'vant/lib/text-ellipsis/style';
+	import 'vant/lib/circle/style';
 
 	export default {
 		onLaunch: function() {
