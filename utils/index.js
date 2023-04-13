@@ -166,6 +166,6 @@ export function unroundNumber(number, length) {
 }
 
 // 格式化日期
-export function formatDate(date) {
-	return moment(date).format('YYYY-MM-DD HH:mm:ss');
+export function formatDate(date, format = 'YYYY-MM-DD HH:mm:ss') {
+	return moment(date).format(format);
 }

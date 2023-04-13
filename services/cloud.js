@@ -1,4 +1,5 @@
 import http from '@/http/request.js';
+import i18n from '@/hooks/useLocale.js';
 
 // 获取云算力列表
 export const getMinerList = (data) => {
@@ -10,13 +11,10 @@ export const getMinerList = (data) => {
 export function getMealType(type) {
   switch (type) {
     case 'classic':
-      // return {text: I18n.t('经典套餐'), bgColor: '#05AA84'};
-      return {text: '经典套餐', bgColor: '#05AA84'};
+      return {text: i18n.t('经典套餐'), bgColor: '#05AA84'};
     case 'speeded':
-      // return {text: I18n.t('加速套餐'), bgColor: '#4E6EF2'};
-      return {text: '加速套餐', bgColor: '#4E6EF2'};
+      return {text: i18n.t('加速套餐'), bgColor: '#4E6EF2'};
     default:
-      // return {text: I18n.t('保本套餐'), bgColor: '#00BDFF'};
-      return {text: '保本套餐', bgColor: '#00BDFF'};
+      return {text: i18n.t('保本套餐'), bgColor: '#00BDFF'};
   }
 }

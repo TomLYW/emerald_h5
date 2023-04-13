@@ -19,16 +19,10 @@
 
 <script setup>
 	import {
-		useI18n
-	} from 'vue-i18n';
-
-	const {
-		t
-	} = useI18n();
-	import {
 		reactive,
 		ref,
-		watch
+		watch,
+		getCurrentInstance
 	} from 'vue';
 	import {
 		Field,
@@ -44,6 +38,9 @@
 		checkPassword
 	} from '@/utils/index.js';
 	import Toast from '@/hooks/useToast.js';
+	const {
+		$t: t
+	} = getCurrentInstance().proxy;
 
 	let count = ref(61);
 	let pwdEyes = ref(false);

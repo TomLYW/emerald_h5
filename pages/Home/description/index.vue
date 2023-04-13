@@ -9,10 +9,7 @@
 
 			</view>
 
-			<view class="sell">
-				<image src='/static/home/title_icon.png' class="bar" />
-				<text class="tip">{{ $t('算力详情')}}</text>
-			</view>
+			<CustomTitle :title="$t('算力详情')" />
 			<view class="last-card" v-for="i  in 3" :key="i">
 
 			</view>
@@ -26,6 +23,9 @@
 </template>
 
 <script setup>
+	import CustomTitle from '@/pages/component/CustomTitle/index.vue';
+	import i18n from '@/hooks/useLocale.js';
+	
 </script>
 
 <style lang="scss" scoped>
@@ -37,22 +37,6 @@
 			font-size: 24px;
 		}
 
-		.sell {
-			display: flex;
-			align-items: center;
-			margin: 22px 0;
-
-			.bar {
-				width: 6px;
-				height: 18px;
-				margin-right: 10px;
-			}
-
-			.tip {
-				font-size: 18px;
-				font-weight: bold;
-			}
-		}
 
 		.first-card {
 			height: 170px;

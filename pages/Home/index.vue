@@ -18,11 +18,8 @@
 			</View>
 			<image class="midr-img" src='/static/home/home_icon_rightarrow.png' />
 		</view>
-		<view class="sell">
-			<image src='/static/home/title_icon.png' class="bar" />
-			<text class="tip">{{ $t('推荐矿机共享服务')}}</text>
-		</view>
-		<YunCell :item='current.cloudData' v-if="'sold' in current.cloudData"/>
+		<CustomTitle :title="$t('推荐矿机共享服务')" />
+		<YunCell :item='current.cloudData' v-if="'sold' in current.cloudData" />
 		<view class="footer">
 			<image class="icon" src='/static/base/base_bottom_title.png'></image>
 			<text class="title">{{$t('值得信赖的矿机服务平台')}}</text>
@@ -60,6 +57,7 @@
 		formatDate
 	} from '@/utils/index.js';
 	import YunCell from '@/pages/Home/YunList/index.vue';
+	import CustomTitle from '@/pages/component/CustomTitle/index.vue';
 
 	let current = reactive({
 		bannerList: [],
@@ -177,23 +175,6 @@
 					color: #C1C1C1;
 					margin-top: 6px;
 				}
-			}
-		}
-
-		.sell {
-			display: flex;
-			align-items: center;
-			margin: 22px 0;
-
-			.bar {
-				width: 6px;
-				height: 18px;
-				margin-right: 10px;
-			}
-
-			.tip {
-				font-size: 18px;
-				font-weight: bold;
 			}
 		}
 

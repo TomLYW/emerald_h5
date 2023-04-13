@@ -1,10 +1,5 @@
-// import {
-// 	useI18n
-// } from 'vue-i18n';
-// const {
-// 	t
-// } = useI18n();
 import config from '@/http/config.js';
+import i18n from '@/hooks/useLocale.js';
 
 /* 1.请求拦截器 */
 let Interceptor = ({
@@ -38,21 +33,21 @@ let Responder = (res) => {
 			case 1000:
 				uni.showToast({
 					icon: 'error',
-					title: t('用户认证失效'),
+					title: i18n.t('用户认证失效'),
 					duration: 2000,
 				});
 				return;
 			case 1001:
 				uni.showToast({
 					icon: 'none',
-					title: t("此账户已被禁用，请联系管理员了解"),
+					title: i18n.t("此账户已被禁用，请联系管理员了解"),
 					duration: 2000,
 				});
 				return;
 			case 1002:
 				uni.showToast({
 					icon: 'error',
-					title: t("此账户已登录其他设备"),
+					title: i18n.t("此账户已登录其他设备"),
 					duration: 2000,
 				});
 				return;
@@ -74,7 +69,7 @@ let request = (configOptions = {}) => {
 			}) => {
 				if (networkType === 'none') {
 					uni.showToast({
-						title: t('网络错误'),
+						title: i18n.t('网络错误'),
 						icon: 'error'
 					});
 				} else {

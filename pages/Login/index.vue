@@ -26,16 +26,10 @@
 
 <script setup>
 	import {
-		useI18n
-	} from 'vue-i18n';
-
-	const {
-		t
-	} = useI18n();
-	import {
 		reactive,
 		ref,
-		watch
+		watch,
+		getCurrentInstance
 	} from 'vue';
 	import {
 		Field,
@@ -53,6 +47,9 @@
 	import {
 		useUserStore
 	} from '@/store/user.js';
+	const {
+		$t: t
+	} = getCurrentInstance().proxy;
 	let user = useUserStore();
 
 	let count = ref(61);

@@ -8,6 +8,13 @@
 			}
 		},
 		{
+			"path": "pages/Cloud/index",
+			"style": {
+				"enablePullDownRefresh": false,
+				"titleNView": false
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				// "navigationBarTitleText": "%home%"
@@ -61,7 +68,7 @@
 				"selectedIconPath": "static/tab/tab_home_s.png"
 			},
 			{
-				"pagePath": "pages/Login/index",
+				"pagePath": "pages/Cloud/index",
 				"text": "%cloud%",
 				"iconPath": "static/tab/tab_yun.png",
 				"selectedIconPath": "static/tab/tab_yun_s.png"
