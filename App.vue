@@ -23,7 +23,7 @@
 	uni-page-body,
 	html,
 	body {
-		/* height: 100%; */
-		background-color: #F5F5FA;
+		height: 100%;
+		background-color: #F2F2F2;
 	}
 </style>

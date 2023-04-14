@@ -18,3 +18,13 @@ export function getMealType(type) {
       return {text: i18n.t('保本套餐'), bgColor: '#00BDFF'};
   }
 }
+
+// 获取套餐类型
+export function getDeviceType(type) {
+  switch (type) {
+    case 'subscribe':
+      return {text: i18n.t('认购'), bgColor: '#05AA84'};
+    default:
+      return {text: i18n.t('托管'), bgColor: '#00BDFF'};
+  }
+}

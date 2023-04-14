@@ -32,13 +32,6 @@
 	import {
 		onShow,
 	} from "@dcloudio/uni-app";
-	// import {
-	// 	useI18n
-	// } from 'vue-i18n';
-
-	// const {
-	// 	t
-	// } = useI18n();
 	import {
 		reactive,
 		onMounted
@@ -58,6 +51,11 @@
 	} from '@/utils/index.js';
 	import YunCell from '@/pages/Home/YunList/index.vue';
 	import CustomTitle from '@/pages/component/CustomTitle/index.vue';
+	import {
+		useNoticeStore
+	} from '@/store/notice.js';
+
+	const store = useNoticeStore();
 
 	let current = reactive({
 		bannerList: [],
@@ -66,9 +64,6 @@
 	})
 
 	const handleNotice = () => {
-		setTimeout(() => {
-			uni.$emit('item', current.noticeList);
-		}, 300)
 		uni.navigateTo({
 			url: '/pages/Home/notice/index'
 		})
@@ -93,6 +88,7 @@
 		}).then(res => {
 			if (res.code === 0) {
 				current.noticeList = res.data;
+				store.setNoticeList(res.data);
 			}
 		})
 
@@ -104,9 +100,9 @@
 			}
 		})
 	}
-	onMounted(() => {
-		getData();
-	})
+	// onMounted(() => {
+	// 	getData();
+	// })
 	onShow(() => {
 		getData();
 	})

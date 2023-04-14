@@ -1,13 +1,21 @@
 <template>
-	<view class="cloud">
-		<OrderMinerList :item="item" />
-	</view>
+	<scroll-view scroll-y="true" height="100%">
+		<view class="output_record">
+			<OrderPowerDetails :item="item" />
+			<CustomTitle :title="$t('output_r')" />
+			<view v-if="true">
+				<Cell v-for="i in 8" :key="i" style="margin-bottom: 15px;" />
+			</view>
+			<NoData hideBtn v-else />
+		</view>
+	</scroll-view>
 </template>
 
 <script setup>
-	import OrderPowerList from '@/pages/Order/components/OrderPowerList.vue';
-	import OrderMinerList from '@/pages/Order/components/OrderMinerList.vue';
-
+	import OrderPowerDetails from '@/pages/Order/components/OrderPowerDetails.vue';
+	import CustomTitle from '@/pages/component/CustomTitle/index.vue';
+	import NoData from '@/pages/component/NoData/index.vue';
+	import Cell from '@/pages/component/Cell/index.vue';
 	let item = {
 		id: 1,
 		createdAt: '2022-09-21T05:31:48.263Z',
@@ -39,8 +47,7 @@
 </script>
 
 <style lang="scss" scoped>
-	.cloud {
+	.output_record {
 		padding: 15px;
-		height: 100%;
 	}
 </style>

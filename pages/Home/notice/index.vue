@@ -1,7 +1,7 @@
 <template>
 	<scroll-view scroll-y style="height: 100%;">
 		<view class="container">
-			<view class="cell" v-for="item in list" :key="item.id" @click="handleClick(item.id)">
+			<view class="cell" v-for="item in store.noticeList" :key="item.id" @click="handleClick(item.id)">
 				<text>{{item.title}}</text>
 				<TextEllipsis class="content" rows='2' :content='item.content' />
 				<text class="date">{{formatDate(item.createdAt)}}</text>
@@ -12,35 +12,23 @@
 
 <script setup>
 	import {
-		onLoad,
-		onUnload
-	} from "@dcloudio/uni-app";
-	import {
-		ref
-	} from 'vue';
-	import {
 		TextEllipsis
 	} from 'vant';
 	import {
 		formatDate
 	} from '@/utils/index.js';
+	import {
+		useNoticeStore
+	} from '@/store/notice.js';
 
-	let list = ref([]);
+	const store = useNoticeStore();
+
 
 	const handleClick = (id) => {
 		uni.navigateTo({
 			url: `/pages/Home/details/index?id=${id}`
 		})
 	}
-
-	onLoad(() => {
-		uni.$on('item', (res) => {
-			list.value = res;
-		})
-	})
-	onUnload(() => {
-		uni.$off('item');
-	})
 </script>
 
 <style lang="scss" scoped>

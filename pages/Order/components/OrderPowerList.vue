@@ -15,9 +15,9 @@
 		</view>
 		<view class="line" />
 		<view class="bottom">
-			<view class="overtime">
+			<view>
 				<text class="left">{{$t('到期时间：')}}</text>
-				<text class="right">2022-11-09</text>
+				<text class="right">{{formatDate('2022-11-09','YYYY-MM-DD')}}</text>
 			</view>
 			<text>已生效</text>
 		</view>
@@ -25,9 +25,6 @@
 </template>
 
 <script setup>
-	import {
-		ref
-	} from 'vue';
 	import {
 		getMealType
 	} from '@/services/cloud.js';
@@ -77,7 +74,7 @@
 
 	function handleClick() {
 		uni.navigateTo({
-			url: '/pages/Home/description/index'
+			url: '/pages/Order/OrderPowerMore/index'
 		})
 	}
 </script>
