@@ -11,7 +11,7 @@ let Interceptor = ({
 	// 请求头
 	interOption.header = {
 		'X-Access-Token': uni.getStorageSync('token'),
-		'X-Lang': uni.getLocale() === 'cn' ? 'zh_CN' : 'en_US',
+		'X-Lang': uni.getLocale() === 'zh' ? 'zh_CN' : 'en_US',
 		...interOption.header,
 	};
 

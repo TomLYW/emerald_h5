@@ -4,7 +4,7 @@
 			<image class="img" src="/static/base/none_icon.png" />
 			<text class="text">{{$t('暂无数据')}}</text>
 		</view>
-		<view class="btn" @click="handleClick" v-if="hideBtn ? false : true">
+		<view class="btn" @click="handleClick" v-show="!hideBtn">
 			<text class="btn_text">{{$t('登录后，查看订单')}}</text>
 		</view>
 	</view>

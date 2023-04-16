@@ -6,6 +6,7 @@
 	import 'vant/lib/text-ellipsis/style';
 	import 'vant/lib/circle/style';
 
+
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')

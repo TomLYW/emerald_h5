@@ -1,7 +1,7 @@
 <template>
 	<scroll-view scroll-y="true" height="100%">
 		<view class="output_record">
-			<OrderPowerDetails :item="item" />
+			<OrderMinerList :item="item" />
 			<CustomTitle :title="$t('output_r')" />
 			<view v-if="true">
 				<Cell v-for="i in 8" :key="i" style="margin-bottom: 15px;" @click="handleClick" />
@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-	import OrderPowerDetails from '@/pages/Order/components/OrderPowerDetails.vue';
+	import OrderMinerList from '@/pages/Order/components/OrderMinerList.vue';
 	import CustomTitle from '@/pages/component/CustomTitle/index.vue';
 	import NoData from '@/pages/component/NoData/index.vue';
 	import Cell from '@/pages/component/Cell/index.vue';
@@ -42,7 +42,8 @@
 		duration: 365,
 		isRecommend: true,
 		images: null,
-		yieldRate: 0.65
+		yieldRate: 0.65,
+		status:'activeted'
 	}
 
 	function handleClick() {

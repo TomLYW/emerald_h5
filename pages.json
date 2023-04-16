@@ -89,6 +89,26 @@
 				"enablePullDownRefresh": false,
 				"navigationBarTitleText": "%output_r%"
 			}
+		},
+		{
+			"path": "pages/Mine/webview/index",
+			"style": {
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/Mine/AboutUs/index",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": "%about_us%"
+			}
+		},
+		{
+			"path": "pages/Mine/invite/index",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": "%invite%"
+			}
 		}
 	],
 	"tabBar": {
@@ -115,7 +135,7 @@
 				"selectedIconPath": "static/tab/tab_order_s.png"
 			},
 			{
-				"pagePath": "pages/index/index",
+				"pagePath": "pages/Mine/index",
 				"text": "%mine%",
 				"iconPath": "static/tab/tab_mine.png",
 				"selectedIconPath": "static/tab/tab_mine_s.png"

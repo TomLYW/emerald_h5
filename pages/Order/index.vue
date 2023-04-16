@@ -1,13 +1,24 @@
 <template>
-	<scroll-view scroll-y="true" height="100%">
-		<view class="order">
-			<OrderPowerList :item="item" />
+	<view class="order">
+		<Tabs :tab1="$t('云算力')" :tab2="$t('矿机')" @onChange="handleChange" />
+		<view class="main" v-if="tab === 1">
+			<OrderPowerList :item="item" v-for="i  in 4" :key="i" style="margin-bottom: 15px;" />
 		</view>
-	</scroll-view>
+		<view class="main" v-else>
+			<OrderMinerList :item="item" hideBtn v-for="i  in 4" :key="i" style="margin-bottom: 15px;" />
+		</view>
+	</view>
 </template>
 
 <script setup>
+	import {
+		ref
+	} from 'vue';
+	import OrderMinerList from '@/pages/Order/components/OrderMinerList.vue';
 	import OrderPowerList from '@/pages/Order/components/OrderPowerList.vue';
+	import Tabs from '@/pages/component/Tabs/index.vue';
+	let tab = ref(1);
+
 	let item = {
 		id: 1,
 		createdAt: '2022-09-21T05:31:48.263Z',
@@ -36,10 +47,22 @@
 		images: null,
 		yieldRate: 0.65
 	}
+
+	function handleChange(val) {
+		tab.value = val;
+	}
 </script>
 
 <style lang="scss" scoped>
 	.order {
-		padding: 0 15px;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+
+		.main {
+			padding: 15px 15px 0px;
+			flex: 1;
+			overflow-y: auto;
+		}
 	}
 </style>

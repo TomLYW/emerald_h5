@@ -1,6 +1,6 @@
 import en from './en.json';
-import cn from './cn.json';
+import zh from './zh.json';
 export default {
 	en,
-	cn
+	zh
 }

@@ -1,12 +1,16 @@
 <template>
 	<view class="cloud">
-		<OrderMinerList :item="item" />
+		<Tabs tab1="BTC" tab2="ETH" @onChange="handleChange" />
+		<view class="main">
+			<YunCell :item="item" hideBtn v-for="i  in 4" :key="i" style="margin-bottom: 15px;" />
+		</view>
 	</view>
 </template>
 
 <script setup>
-	import OrderPowerList from '@/pages/Order/components/OrderPowerList.vue';
-	import OrderMinerList from '@/pages/Order/components/OrderMinerList.vue';
+	import YunCell from '@/pages/Home/YunList/index.vue';
+	import Tabs from '@/pages/component/Tabs/index.vue';
+
 
 	let item = {
 		id: 1,
@@ -34,13 +38,25 @@
 		duration: 365,
 		isRecommend: true,
 		images: null,
-		yieldRate: 0.65
+		yieldRate: 0.65,
+		status: 'activated'
+	}
+
+	function handleChange(val) {
+		console.log('lookkkks', val)
 	}
 </script>
 
 <style lang="scss" scoped>
 	.cloud {
-		padding: 15px;
 		height: 100%;
+		display: flex;
+		flex-direction: column;
+
+		.main {
+			padding: 15px 15px 0px;
+			flex: 1;
+			overflow-y: auto;
+		}
 	}
 </style>

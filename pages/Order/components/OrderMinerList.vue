@@ -35,10 +35,21 @@
 			</view>
 		</view>
 		<image src="/static/order/mining_img.png" class="pop_img" />
+		<view class="some_btns" v-show="showNum !== 0">
+			<view class="btn" @click.stop="handleOver" v-if="showNum === 1">
+				{{$t('挂起')}}
+			</view>
+			<view class="btn bgc" @click.stop="handleOver" v-else-if="showNum === 2">
+				{{$t('激活')}}
+			</view>
+		</view>
 	</view>
 </template>
 
 <script setup>
+	import {
+		ref
+	} from 'vue';
 	import {
 		getDeviceType
 	} from '@/services/cloud.js';
@@ -50,11 +61,45 @@
 	} from '@/utils/index.js';
 	import I18n from '@/hooks/useLocale.js';
 	const {
-		item
+		item,
+		hideBtn
 	} = defineProps({
-		item: Object
+		item: Object,
+		hideBtn: Boolean
 	})
 	const px = uni.getLocale() === 'cn' ? '12px' : '4px';
+
+	let showNum = ref(0);
+
+	function showActionNum() {
+		if (!item.status) return;
+
+		if (hideBtn) {
+			showNum.value = 0;
+			return;
+		}
+
+		if (
+			item.status === 'pending' ||
+			item.status === 'destroyed' ||
+			item.status === 'recovery' ||
+			item.status === 'arrears'
+		) {
+			showNum.value = 0;
+			return;
+		}
+
+		if (item.status === 'activated') {
+			//激活
+			showNum.value = 1;
+			return;
+		}
+
+		//挂起
+		showNum.value = 2;
+	}
+
+	showActionNum();
 
 	function getStateStr() {
 		switch (item.status) {
@@ -93,6 +138,8 @@
 				return '#999999';
 		}
 	}
+
+	// 激活矿机
 
 	// 激活矿机
 	function gotoActiveMiner() {
@@ -149,9 +196,14 @@
 	}
 
 	function handleClick() {
+		if (!hideBtn) return;
 		uni.navigateTo({
 			url: '/pages/Order/OrderMinerMore/index'
 		})
+	}
+
+	function handleOver() {
+		console.log('sdfsfsd', hideBtn)
 	}
 </script>
 
@@ -258,6 +310,29 @@
 			position: absolute;
 			top: -8px;
 			right: 10px;
+		}
+
+		.some_btns {
+			padding-top: 10px;
+			padding-bottom: 15px;
+
+			.btn {
+				margin: 0 30px;
+				border-radius: 10px;
+				background-color: #FF4040;
+				text-align: center;
+				color: #fff;
+				padding-top: 10px;
+				padding-bottom: 10px;
+
+				&:active {
+					opacity: 0.6;
+				}
+			}
+
+			.bgc {
+				background-color: #05AA84;
+			}
 		}
 	}
 </style>
