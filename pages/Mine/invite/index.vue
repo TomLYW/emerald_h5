@@ -6,15 +6,17 @@
 			<text class="copy_btn" @click="handleCopy">{{$t('复制')}}</text>
 		</view>
 		<CustomTitle :title="$t('invite')" />
-		<view class="invite_record">
+		<view v-if="copy.list.length > 0">
+			<RecordCell v-for="item in copy.list" :key="item.id" :item="item" />
 		</view>
-		<NoData hideBtn class="empty" />
+		<NoData hideBtn class="empty" v-else />
 	</view>
 </template>
 
 <script setup>
 	import CustomTitle from '@/pages/component/CustomTitle/index.vue';
 	import NoData from '@/pages/component/NoData/index.vue';
+	import RecordCell from '@/pages/Mine/invite/RecordCell.vue';
 	import Toast from '@/hooks/useToast.js';
 	import I18n from '@/hooks/useLocale.js';
 	import {
@@ -41,7 +43,6 @@
 				});
 			}
 		});
-
 	}
 
 	function getData() {
@@ -110,7 +111,5 @@
 				}
 			}
 		}
-
-		.invite_record {}
 	}
 </style>

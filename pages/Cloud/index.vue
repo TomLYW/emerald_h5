@@ -1,50 +1,62 @@
 <template>
 	<view class="cloud">
 		<Tabs tab1="BTC" tab2="ETH" @onChange="handleChange" />
-		<view class="main">
-			<YunCell :item="item" hideBtn v-for="i  in 4" :key="i" style="margin-bottom: 15px;" />
+		<view class="main" v-if="cloudList.ethData.length || cloudList.btcData.length">
+			<YunCell :item="item" v-for="item  in  (tab === 1 ? cloudList.btcData : cloudList.ethData)" :key="item.id"
+				style="margin-bottom: 15px;" />
 		</view>
+		<NoData v-else hideBtn />
 	</view>
 </template>
 
 <script setup>
 	import YunCell from '@/pages/Home/YunList/index.vue';
 	import Tabs from '@/pages/component/Tabs/index.vue';
+	import NoData from '@/pages/component/NoData/index.vue';
+	import {
+		getMinerList
+	} from '@/services/cloud.js';
+	import {
+		ref,
+		reactive,
+		onMounted
+	} from 'vue';
 
+	let tab = ref(1);
+	let cloudList = reactive({
+		ethData: [],
+		btcData: []
+	})
 
-	let item = {
-		id: 1,
-		createdAt: '2022-09-21T05:31:48.263Z',
-		updatedAt: '2022-10-18T03:38:42.804Z',
-		type: 'classic',
-		currency: 'BTC',
-		payCurrency: 'USDT',
-		saleTime: '2022-09-14T05:31:26.115Z',
-		deployTime: '2022-10-18T03:45:40.38Z',
-		effectTime: '2022-10-18T03:59:44.313Z',
-		name: '超级算力',
-		image: 'https://s3.us-east-1.amazonaws.com/flashpics/a/1/264/1663738191070907388.jpg',
-		model: 'S19',
-		power: 95,
-		powerWaste: 3250,
-		electricFees: 0.29,
-		electricLoss: 0.05,
-		parkingFees: 5,
-		initElectricFees: 100,
-		serviceFees: 0,
-		stock: 0,
-		sold: 10,
-		price: '300',
-		duration: 365,
-		isRecommend: true,
-		images: null,
-		yieldRate: 0.65,
-		status: 'activated'
+	function getEthList() {
+		getMinerList({
+			currency: "ETH"
+		}).then(res => {
+			if (res.code === 0) {
+				cloudList.ethData = res.data;
+			}
+		})
 	}
+
+	function getBtcList() {
+		getMinerList({
+			currency: "BTC"
+		}).then(res => {
+			if (res.code === 0) {
+				cloudList.btcData = res.data;
+			}
+		})
+	}
+
 
 	function handleChange(val) {
-		console.log('lookkkks', val)
+		tab.value = val;
 	}
+
+	onMounted(() => {
+		getBtcList();
+		getEthList();
+	})
 </script>
 
 <style lang="scss" scoped>

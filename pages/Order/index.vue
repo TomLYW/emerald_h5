@@ -2,55 +2,62 @@
 	<view class="order">
 		<Tabs :tab1="$t('云算力')" :tab2="$t('矿机')" @onChange="handleChange" />
 		<view class="main" v-if="tab === 1">
-			<OrderPowerList :item="item" v-for="i  in 4" :key="i" style="margin-bottom: 15px;" />
+			<OrderPowerList :item="item" v-for="item  in  listData.power" :key="item.id" style="margin-bottom: 15px;"
+				v-if="listData.power.length" />
+			<NoData hideBtn v-else />
 		</view>
 		<view class="main" v-else>
-			<OrderMinerList :item="item" hideBtn v-for="i  in 4" :key="i" style="margin-bottom: 15px;" />
+			<OrderMinerList :item="item" hideBtn v-for="item  in listData.miner" :key="item.id"
+				style="margin-bottom: 15px;" v-if="listData.miner.length" />
+			<NoData hideBtn v-else />
 		</view>
 	</view>
 </template>
 
 <script setup>
 	import {
-		ref
+		ref,
+		reactive,
+		onMounted
 	} from 'vue';
 	import OrderMinerList from '@/pages/Order/components/OrderMinerList.vue';
 	import OrderPowerList from '@/pages/Order/components/OrderPowerList.vue';
 	import Tabs from '@/pages/component/Tabs/index.vue';
+	import NoData from '@/pages/component/NoData/index.vue';
+	import {
+		getMinerOrder,
+		getPowerOrder
+	} from '@/services/order.js';
 	let tab = ref(1);
+	let listData = reactive({
+		miner: [],
+		power: []
+	})
 
-	let item = {
-		id: 1,
-		createdAt: '2022-09-21T05:31:48.263Z',
-		updatedAt: '2022-10-18T03:38:42.804Z',
-		type: 'classic',
-		currency: 'BTC',
-		payCurrency: 'USDT',
-		saleTime: '2022-09-14T05:31:26.115Z',
-		deployTime: '2022-10-18T03:45:40.38Z',
-		effectTime: '2022-10-18T03:59:44.313Z',
-		name: '超级算力',
-		image: 'https://s3.us-east-1.amazonaws.com/flashpics/a/1/264/1663738191070907388.jpg',
-		model: 'S19',
-		power: 95,
-		powerWaste: 3250,
-		electricFees: 0.29,
-		electricLoss: 0.05,
-		parkingFees: 5,
-		initElectricFees: 100,
-		serviceFees: 0,
-		stock: 0,
-		sold: 10,
-		price: '300',
-		duration: 365,
-		isRecommend: true,
-		images: null,
-		yieldRate: 0.65
+	function getPowerData() {
+		getPowerOrder().then(res => {
+			if (res.code === 0) {
+				listData.power = res.data;
+			}
+		})
+	}
+
+	function getMinerData() {
+		getMinerOrder().then(res => {
+			if (res.code === 0) {
+				listData.miner = res.data;
+			}
+		})
 	}
 
 	function handleChange(val) {
 		tab.value = val;
 	}
+
+	onMounted(() => {
+		getPowerData();
+		getMinerData();
+	})
 </script>
 
 <style lang="scss" scoped>

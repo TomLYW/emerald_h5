@@ -21,7 +21,7 @@
 					<text class="down">{{$t('期限')}}</text>
 				</view>
 				<view class="desc-cell">
-					<text class="up">{{item.power}}{{item.currency === 'BTC' ? 'TH/s' : 'MH/s'}}</text>
+					<text class="up">{{item.power}} {{item.currency === 'BTC' ? 'TH/s' : 'MH/s'}}</text>
 					<text class="down">{{$t('规格')}}</text>
 				</view>
 				<view class="desc-cell">
@@ -65,7 +65,7 @@
 	} = defineProps({
 		item: Object
 	})
-	const px = uni.getLocale() === 'cn' ? '12px' : '4px';
+	const px = uni.getLocale() === 'zh' ? '12px' : '4px';
 	const initRate = ref(0);
 	const percent = (item.sold / (item.sold + item.stock)) * 100;
 

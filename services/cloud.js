@@ -7,6 +7,12 @@ export const getMinerList = (data) => {
 }
 
 
+// // 获取云算力列表
+// export const getMinerList = (data) => {
+// 	return http.get('/v1/cloud-miner/list', data);
+// }
+
+
 // 获取套餐类型
 export function getMealType(type) {
   switch (type) {

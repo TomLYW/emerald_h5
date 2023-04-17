@@ -8,18 +8,18 @@
 				<image class="icon"
 					:src="item.currency === 'BTC' ? '/static/home/home_icon_btc.png':'/static/home/home_icon_eth.png'" />
 				<text class="name">{{item.name + item.model}}</text>
-				<view class="tagCount">X2</view>
+				<view class="tagCount">X{{item.numbers}}</view>
 			</view>
-			<text class="amount">{{item.price}}</text>
-			<text class="sub-title">{{$t('总产量')}}(BTC)</text>
+			<text class="amount">{{unroundNumber(item.totalYield,8)}}</text>
+			<text class="sub-title">{{$t('总产量')}}({{item.currency}})</text>
 		</view>
 		<view class="line" />
 		<view class="bottom">
 			<view>
 				<text class="left">{{$t('到期时间：')}}</text>
-				<text class="right">{{formatDate('2022-11-09','YYYY-MM-DD')}}</text>
+				<text class="right">{{formatDate(item.expiredAt,'YYYY-MM-DD')}}</text>
 			</view>
-			<text>已生效</text>
+			<text :style="{color: getStateColor(),fontWeight: 'bold'}">{{getStateStr()}}</text>
 		</view>
 	</view>
 </template>
@@ -40,7 +40,7 @@
 	} = defineProps({
 		item: Object
 	})
-	const px = uni.getLocale() === 'cn' ? '12px' : '4px';
+	const px = uni.getLocale() === 'zh' ? '12px' : '4px';
 
 	function getStateStr() {
 		switch (item.status) {
@@ -74,7 +74,7 @@
 
 	function handleClick() {
 		uni.navigateTo({
-			url: '/pages/Order/OrderPowerMore/index'
+			url: `/pages/Order/OrderPowerMore/index?id=${item.id}`
 		})
 	}
 </script>

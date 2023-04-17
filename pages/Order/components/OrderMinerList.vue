@@ -7,39 +7,39 @@
 			<view class="log">
 				<image class="icon"
 					:src="item.currency === 'BTC' ? '/static/home/home_icon_btc.png':'/static/home/home_icon_eth.png'" />
-				<text class="name">{{item.name + item.model}}</text>
-				<view class="tagCount">X2</view>
+				<text class="name">{{item.model + item.name}}</text>
+				<view class="tagCount">X{{item.numbers}}</view>
 			</view>
 			<view class="second">
 				<text class="item_1">{{$t('总产量：')}}</text>
-				<text class="item_2">{{item.price}}</text>
+				<text class="item_2">{{dealNumber(item.totalYield, 8)}}</text>
 			</view>
 		</view>
 		<view class="line" />
 		<view class="bottom">
 			<view class="bottom_item">
-				<text class="up_tip">{{formatDate('2034-12-29','YY-MM-DD')}}</text>
+				<text class="up_tip">{{formatDate(item.expiredAt,'YY-MM-DD')}}</text>
 				<text class="sub_tip">{{$t('到期')}}</text>
 			</view>
 			<view class="bottom_item">
-				<text class="up_tip">12 {{item.currency === 'BTC' ? 'TH/s' : 'MH/s'}}</text>
+				<text class="up_tip">{{item.power}} {{item.currency === 'BTC' ? 'TH/s' : 'MH/s'}}</text>
 				<text class="sub_tip">{{$t('算力')}}</text>
 			</view>
 			<view class="bottom_item">
-				<text class="up_tip">87 W/h</text>
+				<text class="up_tip">{{item.powerWaste}} W/h</text>
 				<text class="sub_tip">{{$t('功率')}}</text>
 			</view>
 			<view class="bottom_item">
-				<text class="up_tip">已生效</text>
+				<text class="up_tip" :style="{color: getStateColor()}">{{getStateStr()}}</text>
 				<text class="sub_tip">{{$t('状态')}}</text>
 			</view>
 		</view>
 		<image src="/static/order/mining_img.png" class="pop_img" />
 		<view class="some_btns" v-show="showNum !== 0">
-			<view class="btn" @click.stop="handleOver" v-if="showNum === 1">
+			<view class="btn" @click.stop="gotoStopMiner" v-if="showNum === 1">
 				{{$t('挂起')}}
 			</view>
-			<view class="btn bgc" @click.stop="handleOver" v-else-if="showNum === 2">
+			<view class="btn bgc" @click.stop="gotoActiveMiner" v-else-if="showNum === 2">
 				{{$t('激活')}}
 			</view>
 		</view>
@@ -55,11 +55,18 @@
 	} from '@/services/cloud.js';
 
 	import {
-		accMul,
 		formatDate,
-		unroundNumber
+		dealNumber
 	} from '@/utils/index.js';
+	import {
+		activeMiner,
+		stopMiner
+	} from '@/services/order.js';
 	import I18n from '@/hooks/useLocale.js';
+	import Toast from '@/hooks/useToast.js';
+	import {
+		showConfirmDialog
+	} from 'vant';
 	const {
 		item,
 		hideBtn
@@ -67,12 +74,14 @@
 		item: Object,
 		hideBtn: Boolean
 	})
-	const px = uni.getLocale() === 'cn' ? '12px' : '4px';
+
+	const px = uni.getLocale() === 'zh' ? '12px' : '4px';
 
 	let showNum = ref(0);
+	let status = ref(item.status);
 
 	function showActionNum() {
-		if (!item.status) return;
+		if (!status.value) return;
 
 		if (hideBtn) {
 			showNum.value = 0;
@@ -80,16 +89,16 @@
 		}
 
 		if (
-			item.status === 'pending' ||
-			item.status === 'destroyed' ||
-			item.status === 'recovery' ||
-			item.status === 'arrears'
+			status.value === 'pending' ||
+			status.value === 'destroyed' ||
+			status.value === 'recovery' ||
+			status.value === 'arrears'
 		) {
 			showNum.value = 0;
 			return;
 		}
 
-		if (item.status === 'activated') {
+		if (status.value === 'activated') {
 			//激活
 			showNum.value = 1;
 			return;
@@ -102,7 +111,7 @@
 	showActionNum();
 
 	function getStateStr() {
-		switch (item.status) {
+		switch (status.value) {
 			case 'pending':
 				return I18n.t('未生效');
 			case 'activated':
@@ -121,7 +130,7 @@
 	}
 
 	function getStateColor() {
-		switch (item.status) {
+		switch (status.value) {
 			case 'pending':
 				return '#999999';
 			case 'activated':
@@ -140,70 +149,65 @@
 	}
 
 	// 激活矿机
-
-	// 激活矿机
 	function gotoActiveMiner() {
-		BToast.showLoading(I18n.t('正在处理'));
+		Toast.show(I18n.t('正在处理'), {
+			type: 'loading'
+		});
 		activeMiner({
 				orderId: item.id
 			})
-			.then(response => {
-				if (response.data.code === 0) {
-					BToast.showSuccess(I18n.t('激活成功'));
-					item.status = 'activated';
-					setShowType(1);
+			.then(res => {
+				if (res.code === 0) {
+					Toast.show(I18n.t('激活成功'), {
+						type: 'success'
+					});
+					status.value = 'activated';
+					showNum.value = 1;
 				} else {
-					BToast.showAlert(response.data.message);
+					Toast.show(res.message);
 				}
 			})
-			.catch(error => {
-				console.log(error);
-			});
 	}
 
 	//挂起矿机
 	function gotoStopMiner() {
-		Alert.alert(
-			I18n.t('提示'),
-			I18n.t('挂起后需间隔7天才能再次激活，是否挂起？'),
-			[{
-					text: I18n.t('取消'),
-					color: 'red'
-				},
-				{
-					text: I18n.t('确认'),
-					onPress: () => {
-						BToast.showLoading(I18n.t('正在处理'));
-						stopMiner({
-								orderId: item.id
-							})
-							.then(response => {
-								if (response.data.code === 0) {
-									BToast.showSuccess(I18n.t('挂起成功'));
-									item.status = 'standby';
-									setShowType(2);
-								} else {
-									BToast.showAlert(response.data.message);
-								}
-							})
-							.catch(error => {
-								console.log(error);
+		showConfirmDialog({
+				title: I18n.t('提示'),
+				message: I18n.t('挂起后需间隔7天才能再次激活，是否挂起？'),
+				confirmButtonText: I18n.t('确认'),
+				cancelButtonText: I18n.t('取消'),
+				cancelButtonColor: 'red',
+				confirmButtonColor: '#05AA84',
+			})
+			.then(() => {
+				Toast.show(I18n.t('正在处理'), {
+					type: 'loading'
+				});
+				stopMiner({
+						orderId: item.id
+					})
+					.then(res => {
+						if (res.code === 0) {
+							Toast.show(I18n.t('挂起成功'), {
+								type: 'success'
 							});
-					},
-				},
-			],
-		);
+							status.value = 'standby';
+							showNum.value = 2;
+						} else {
+							Toast.show(res.message);
+						}
+					})
+			})
+			.catch(() => {
+				// on cancel
+			});
 	}
 
 	function handleClick() {
 		if (!hideBtn) return;
 		uni.navigateTo({
-			url: '/pages/Order/OrderMinerMore/index'
+			url: `/pages/Order/OrderMinerMore/index?id=${item.id}`
 		})
-	}
-
-	function handleOver() {
-		console.log('sdfsfsd', hideBtn)
 	}
 </script>
 

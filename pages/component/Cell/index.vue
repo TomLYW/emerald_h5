@@ -1,10 +1,12 @@
 <template>
 	<view class="cell">
 		<view class="cell_left">
-			<text>BTC</text>
-			<text class="date">{{formatDate('2023-01-23 12:43:45')}}</text>
+			<text>{{item.currency}}</text>
+			<text class="date">{{formatDate(item.createdAt)}}</text>
 		</view>
-		<view class="cell_right">还是就会附件是</view>
+		<slot>
+			<view class="cell_right">+{{item.yield}}</view>
+		</slot>
 	</view>
 </template>
 

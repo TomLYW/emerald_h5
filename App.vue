@@ -5,6 +5,7 @@
 	import 'vant/lib/toast/style';
 	import 'vant/lib/text-ellipsis/style';
 	import 'vant/lib/circle/style';
+	import 'vant/lib/dialog/style';
 
 
 	export default {

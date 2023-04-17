@@ -65,6 +65,7 @@ export function algorithm() {
 
 /*手机号加密*/
 export function phoneEncryption(phone) {
+	if(!phone) return '-';
 	return phone.substring(0, 3) + '****' + phone.substring(7);
 }
 

@@ -5,35 +5,58 @@
 		</view>
 		<view class="item">
 			<text>{{$t('计划产出')}}</text>
-			<text class="gray">1.324241 BTC</text>
+			<text class="gray">{{pageData.yield}} {{currency}}</text>
 		</view>
 		<view class="item">
 			<text>{{$t('电费消耗')}}</text>
-			<text class="gray">1.324241 USDT</text>
+			<text class="gray">{{pageData.electricFees}} USDT</text>
 		</view>
 		<view class="item">
 			<text>{{$t('抵扣价格')}}</text>
-			<text class="gray">1.324241 USDT</text>
+			<text class="gray">{{pageData.currenciesPrice}} USDT</text>
 		</view>
 		<view class="item">
 			<text>{{$t('抵扣数量')}}</text>
-			<text class="gray">1.324241 BTC</text>
+			<text class="gray">{{Number(pageData.electricStruck).toFixed(8)}} {{currency}}</text>
 		</view>
 		<view class="item">
 			<text>{{$t('实际产出')}}</text>
-			<text class="fw">1.324241 BTC</text>
+			<text class="fw">{{Number(pageData.realYield).toFixed(8)}} {{currency}}</text>
 		</view>
 		<view class="item">
 			<text>{{$t('产出时间')}}</text>
-			<text class="gray">{{formatDate('2034-05-23 23:43:12')}}</text>
+			<text class="gray">{{formatDate(pageData.createdAt)}}</text>
 		</view>
 	</view>
 </template>
 
 <script setup>
 	import {
+		onLoad
+	} from '@dcloudio/uni-app';
+	import {
 		formatDate
 	} from '@/utils/index.js';
+	import {
+		getOutputDetails
+	} from '@/services/order.js';
+	import {
+		ref
+	} from 'vue';
+
+	let pageData = ref({});
+	let currency = ref('');
+
+	onLoad((option) => {
+		currency.value = option.type;
+		getOutputDetails({
+			id: option.id
+		}).then(res => {
+			if (res.code === 0) {
+				pageData.value = res.data;
+			}
+		})
+	})
 </script>
 
 <style lang="scss" scoped>

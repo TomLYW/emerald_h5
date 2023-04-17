@@ -8,42 +8,42 @@
 				<image class="icon"
 					:src="item.currency === 'BTC' ? '/static/home/home_icon_btc.png':'/static/home/home_icon_eth.png'" />
 				<text class="name">{{item.name + item.model}}</text>
-				<view class="tagCount">X2</view>
+				<view class="tagCount">X{{item.numbers}}</view>
 			</view>
-			<text class="amount">{{item.price}}</text>
-			<text class="sub-title">{{$t('总产量')}}(BTC)</text>
+			<text class="amount">{{unroundNumber(item.totalYield,8)}}</text>
+			<text class="sub-title">{{$t('总产量')}}({{item.currency}})</text>
 		</view>
 		<view class="line" />
 		<view class="middle">
 			<view class="middle_item">
-				<text class="up_tip">{{formatDate('2034-12-29','YY-MM-DD')}}</text>
+				<text class="up_tip">{{formatDate(item.expiredAt,'YY-MM-DD')}}</text>
 				<text class="sub_tip">{{$t('到期')}}</text>
 			</view>
 			<view class="middle_item">
-				<text class="up_tip">12 {{item.currency === 'BTC' ? 'TH/s' : 'MH/s'}}</text>
+				<text class="up_tip">{{item.power}} {{item.currency === 'BTC' ? 'TH/s' : 'MH/s'}}</text>
 				<text class="sub_tip">{{$t('算力')}}</text>
 			</view>
 			<view class="middle_item">
-				<text class="up_tip">87 W/h</text>
+				<text class="up_tip">{{item.powerWaste}} W/h</text>
 				<text class="sub_tip">{{$t('功率')}}</text>
 			</view>
 			<view class="middle_item">
-				<text class="up_tip">已生效</text>
+				<text class="up_tip" :style="{color: getStateColor()}">{{getStateStr()}}</text>
 				<text class="sub_tip">{{$t('状态')}}</text>
 			</view>
 		</view>
 		<view class="line" style="margin-bottom: 15px;" />
 		<view class="bottom">
 			<text>{{$t('下单时间：')}}</text>
-			<text>{{formatDate('2022-11-09')}}</text>
+			<text>{{formatDate(item.createdAt)}}</text>
 		</view>
 		<view class="bottom">
 			<text>{{$t('生效时间：')}}</text>
-			<text>{{formatDate('2022-11-09')}}</text>
+			<text>{{formatDate(item.activatedAt)}}</text>
 		</view>
 		<view class="bottom">
 			<text>{{$t('实付款：')}}</text>
-			<text class="pay_sum">999.00 U</text>
+			<text class="pay_sum">{{Number(item.totalPrice).toFixed(2)}} U</text>
 		</view>
 	</view>
 </template>
@@ -57,7 +57,6 @@
 	} from '@/services/cloud.js';
 
 	import {
-		accMul,
 		formatDate,
 		unroundNumber
 	} from '@/utils/index.js';
@@ -67,7 +66,7 @@
 	} = defineProps({
 		item: Object
 	})
-	const px = uni.getLocale() === 'cn' ? '12px' : '4px';
+	const px = uni.getLocale() === 'zh' ? '12px' : '4px';
 
 	function getStateStr() {
 		switch (item.status) {
