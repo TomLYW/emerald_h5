@@ -89,7 +89,7 @@
 
 	const handleClick = () => {
 		uni.navigateTo({
-			url: '/pages/Home/description/index'
+			url: `/pages/Home/description/index?id=${item.id}`
 		})
 	}
 </script>

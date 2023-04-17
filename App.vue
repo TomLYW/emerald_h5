@@ -6,6 +6,7 @@
 	import 'vant/lib/text-ellipsis/style';
 	import 'vant/lib/circle/style';
 	import 'vant/lib/dialog/style';
+	import 'vant/lib/progress/style';
 
 
 	export default {

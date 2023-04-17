@@ -74,3 +74,18 @@ $uni-color-subtitle: #555555; // 二级标题颜色
 $uni-font-size-subtitle:26px;
 $uni-color-paragraph: #3F536E; // 文章段落颜色
 $uni-font-size-paragraph:15px;
+
+
+/* flex布局 */
+@mixin flex($a: null, $j: null, $d: null) {
+  display: flex;
+  @if $d {
+     flex-direction: $d;
+  }
+  @if $j {
+     justify-content: $j;
+  }
+  @if $a {
+     align-items: $a;
+  }
+}
