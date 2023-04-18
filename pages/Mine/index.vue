@@ -7,15 +7,15 @@
 					<text class="fee">12331.00</text>
 				</template>
 			</SelectCell>
-			<SelectCell :options="options3">
+			<SelectCell :options="options3" class="invite">
 				<template #bottom>
 					<view class="map">
 						<text class="empty">{{$t('暂无数据')}}</text>
 					</view>
 				</template>
 			</SelectCell>
-			<SelectCell :options="options2" class="invite" />
-			<SelectCell :options="options1" />
+			<SelectCell :options="options2" class="invite" v-show="isLogin" />
+			<SelectCell :options="options1" class="invite" />
 		</view>
 	</scroll-view>
 </template>
@@ -23,6 +23,8 @@
 <script setup>
 	import SelectCell from '@/pages/component/SelectCell/index.vue';
 	import I18t from '@/hooks/useLocale.js';
+	import { useUserStore } from '@/store/user.js';
+	const { isLogin } = useUserStore();
 
 	const options1 = [{
 			label: '帮助中心',
@@ -70,7 +72,6 @@
 
 		.invite {
 			margin-top: 15px;
-			margin-bottom: 15px;
 		}
 
 		.fee {

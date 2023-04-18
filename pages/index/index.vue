@@ -11,6 +11,7 @@
 </template>
 
 <script>
+	import { ref } from 'vue';
 	export default {
 		data() {
 			return {
@@ -45,7 +46,7 @@
 			onLocaleChange(e) {
 				if (this.isAndroid) {
 					uni.showModal({
-						content:'确定',
+						content: '确定',
 						success: (res) => {
 							if (res.confirm) {
 								uni.setLocale(e.code);
