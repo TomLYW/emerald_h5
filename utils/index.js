@@ -3,20 +3,26 @@ import {
 } from '@/store/user.js';
 import moment from 'moment';
 
+const user = useUserStore();
+
 /*判断是否登录*/
-export function whetherLogin(navigation) {
-	const isLogin = store.getState().user.isLogin;
-	if (isLogin === false) {
-		navigation.push('Login');
+export function whetherLogin() {
+	const isLogin = user.isLogin;
+	if (!isLogin) {
+		uni.navigateTo({
+			url:'/pages/Login/index'
+		})
 	}
 	return isLogin;
 }
 
 /*判断是否设置支付密码*/
-export function whetherSetPin(navigation) {
-	const isSetPin = store.getState().user.userInfo.isSetPin;
-	if (isSetPin === false) {
-		navigation.push('SettingPayPassword');
+export function whetherSetPin() {
+	const isSetPin = user.userInfo.isSetPin;
+	if (!isSetPin) {
+		uni.navigateTo({
+			url:'/pages/Login/index'
+		})
 	}
 	return isSetPin;
 }

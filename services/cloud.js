@@ -12,6 +12,11 @@ export const getMinerDetails = (data) => {
 	return http.get('/v1/cloud-miner/details', data);
 }
 
+// 购买云算力
+export const buyCloudMiner = (data) => {
+	return http.post('/v1/cloud-miner/buy', data);
+}
+
 
 // 获取套餐类型
 export function getMealType(type) {

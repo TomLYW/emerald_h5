@@ -7,7 +7,7 @@
 	import 'vant/lib/circle/style';
 	import 'vant/lib/dialog/style';
 	import 'vant/lib/progress/style';
-
+	import 'vant/lib/popup/style';
 
 	export default {
 		onLaunch: function() {

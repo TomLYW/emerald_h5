@@ -8,46 +8,101 @@
 				</text>
 				<view class="side_1">
 					<text class="item_1">{{$t('已售')}}</text>
-					<text
-						class="item_2">{{((pageData.sold / (pageData.sold + pageData.stock)) * 100).toFixed(0)}}%</text>
+					<text class="item_2">{{percent.toFixed(0)}}%</text>
 				</view>
-				<view class="progress">
-					<Progress :percentage="(pageData.sold / (pageData.sold + pageData.stock)) * 100" stroke-width="7"
-						track-color="#ECEFFF" color="#05AA84" :show-pivot='false' />
+				<view class="progress" v-if="percent > -1">
+					<Progress :percentage="percent" stroke-width="7" track-color="#ECEFFF" color="#05AA84"
+						:show-pivot='false' />
+				</view>
+				<view class="side_2">
+					<view>
+						<text class="left_1">{{accMul(pageData.yieldRate,100).toFixed(2)}}%</text>
+						<text class="common">{{$t('历史产出率')}}</text>
+					</view>
+					<view>
+						<text class="right_1">{{Number(pageData.price).toFixed(2)}} U</text>
+						<text class="common tar">{{$t('价格')}}</text>
+					</view>
 				</view>
 			</view>
-			<view class="second-card">
-
-			</view>
-
+			<SelectAmount :stock="pageData.stock" v-model="amount" v-if="pageData.stock > -1" />
 			<CustomTitle :title="$t('算力详情')" />
-			<view class="last-card" v-for="i  in 3" :key="i">
-
+			<view class="last-card">
+				<view class="card_item">
+					<text>{{$t('套餐类型')}}</text>
+					<text class="item_right c5A">{{getMealType(pageData.type).text}}</text>
+				</view>
+				<view class="card_item">
+					<text>{{$t('产出币种')}}</text>
+					<view class="item_right">
+						<image
+							:src="pageData.currency === 'BTC' ? '/static/home/home_icon_btc.png' : '/static/home/home_icon_eth.png'"
+							class="icon" />
+						<text>{{pageData.currency}}</text>
+					</view>
+				</view>
+				<view class="card_item">
+					<text>{{$t('服务费用')}}</text>
+					<text class="item_right">{{accMul(pageData.serviceFees,100).toFixed(2)}}%</text>
+				</view>
+				<view class="card_item">
+					<text>{{$t('周期')}}</text>
+					<text class="item_right">{{pageData.duration + $t('天')}}</text>
+				</view>
+				<view class="card_item">
+					<text>{{$t('规格')}}</text>
+					<text class="item_right">{{pageData.power}} {{pageData.currency === 'BTC' ? 'TH/s' : 'MH/s'}}</text>
+				</view>
+				<view class="card_item">
+					<text>{{$t('发售日期')}}</text>
+					<text class="item_right">{{formatDate(pageData.saleTime)}}</text>
+				</view>
+				<view class="card_item">
+					<text>{{$t('部署日期')}}</text>
+					<text class="item_right">{{formatDate(pageData.deployTime)}}</text>
+				</view>
+				<view class="card_item">
+					<text>{{$t('生效日期')}}</text>
+					<text class="item_right">{{formatDate(pageData.effectTime)}}</text>
+				</view>
 			</view>
-
+			<BottomTips />
 			<view class="buy">
 				<view class="left">
-					<text class="price">0.00 U</text>
+					<text class="price">{{accMul(pageData.price,amount).toFixed(2)}} U</text>
 					<text class="text">{{$t('价格')}}</text>
 				</view>
-				<text class="right_btn" @click="handleBuy">{{$t('立即购买')}}</text>
+				<text class="right_btn" :style="{backgroundColor:!buyButtonState() ? '#ADDAD0' : '#05AA84'}"
+					@click="handleBuy">{{$t('立即购买')}}</text>
 			</view>
 		</view>
+		<InputModel :options="options" />
 	</scroll-view>
-
 </template>
 
 <script setup>
 	import CustomTitle from '@/pages/component/CustomTitle/index.vue';
+	import SelectAmount from '@/pages/Home/description/selectAmount.vue';
+	import BottomTips from '@/pages/Home/description/bottomTips.vue';
 	import I18n from '@/hooks/useLocale.js';
+	import Toast from '@/hooks/useToast.js';
+	import InputModel from '@/pages/component/InputModel/index.vue';
 	import {
-		getMinerDetails
+		getMinerDetails,
+		getMealType,
+		buyCloudMiner
 	} from '@/services/cloud.js';
 	import {
-		accMul
+		accMul,
+		formatDate,
+		whetherLogin,
+		whetherSetPin,
+		whetherExceedDate
 	} from '@/utils/index.js';
 	import {
-		ref
+		ref,
+		computed,
+		reactive
 	} from 'vue';
 	import {
 		onLoad
@@ -58,10 +113,82 @@
 
 	let flag = ref(false);
 	let pageData = ref({});
-	const percent = (pageData.sold / (pageData.sold + pageData.stock)) * 100;
+	let amount = ref(0);
+	let id = ref(0);
+
+	let options = reactive({
+		isShow: false,
+		type: 'password',
+		title: '',
+		amount: '',
+		callback: callback
+	})
+
+	const percent = computed(() => {
+		return (pageData.value.sold / (pageData.value.sold + pageData.value.stock)) * 100;
+	})
+
+	function buyButtonState() {
+		if (pageData.value.stock === 0 || whetherExceedDate(pageData.value.saleTime) === false || whetherExceedDate(
+				pageData.value.deployTime) === true) {
+			return false;
+		}
+		return true;
+	}
 
 	function handleBuy() {
-		console.log('look')
+		if (whetherLogin() === false) {
+			return;
+		}
+
+		if (pageData.value.stock === 0) {
+			Toast.show(I18n.t("已售罄"))
+			return;
+		}
+
+		//判断是否发售
+		if (whetherExceedDate(pageData.value.saleTime) === false) {
+			Toast.show(I18n.t("即将发售"))
+			return;
+		}
+
+		//判断是否结束出售
+		if (whetherExceedDate(pageData.value.deployTime)) {
+			Toast.show(I18n.t("已过发售时间"))
+			return;
+		}
+
+		// if (Number(pageData.value.price) * amount.value > Number(asset.available)) {
+		if (pageData.value.price * amount.value > 10) {
+			Toast.show(I18n.t("USDT余额不足"))
+			return;
+		}
+
+		if (whetherSetPin() === false) {
+			return;
+		}
+
+		options.isShow = true;
+		options.title = I18n.t('购买云算力');
+		options.amount = accMul(pageData.value.price, amount.value).toFixed(2) + ' USDT';
+	}
+
+	function callback(val) {
+		buyCloudMiner({
+			id: id.value,
+			numbers: amount.value,
+			pin: val
+		}).then(res => {
+			if (res.code === 0) {
+				options.isShow = false;
+				getData(id.value);
+				// navigation.push('RechargeSuccess', {
+				// 	title: I18n.t('购买成功')
+				// });
+			} else {
+				Toast.show(res.message);
+			}
+		})
 	}
 
 	function handleScroll(e) {
@@ -94,10 +221,15 @@
 
 	onLoad((option) => {
 		getData(option.id);
+		id.value = option.id;
 	})
 </script>
 
 <style lang="scss" scoped>
+	.c5A {
+		color: #05AA84 !important;
+	}
+
 	.container {
 		padding: 15px;
 
@@ -141,18 +273,59 @@
 				margin-top: 10px;
 				margin-bottom: 10px;
 			}
-		}
 
-		.second-card {
-			height: 170px;
-			border-radius: 15px;
-			box-shadow: 0px 0px 10px -8px;
+			.side_2 {
+				@include flex(center, space-between);
+
+				.common {
+					display: block;
+					color: #999;
+					font-size: 12px;
+					margin-top: 8px;
+				}
+
+				.tar {
+					text-align: right;
+				}
+
+				.left_1 {
+					font-size: 18px;
+					color: #05AA84;
+					font-weight: bold;
+				}
+
+				.right_1 {
+					color: #FF8519;
+					font-weight: bold;
+					font-size: 18px;
+				}
+			}
 		}
 
 		.last-card {
-			height: 170px;
 			border-radius: 15px;
 			box-shadow: 0px 0px 10px -8px;
+			padding: 15px 15px 1px;
+			background-color: #fff;
+
+			.card_item {
+				font-size: 14px;
+				color: #808080;
+				margin-bottom: 15px;
+				@include flex(center, space-between);
+
+				.item_right {
+					font-weight: bold;
+					color: #333;
+
+					.icon {
+						width: 17px;
+						height: 17px;
+						vertical-align: top;
+						margin-right: 5px;
+					}
+				}
+			}
 		}
 
 		.buy {
@@ -182,7 +355,7 @@
 
 			.right_btn {
 				margin-right: 15px;
-				background-color: #ADDAD0;
+				// background-color: #ADDAD0;
 				padding: 9px 42px;
 				color: #fff;
 				border-radius: 12px;
