@@ -134,7 +134,6 @@
 		.ipt {
 			position: absolute;
 			bottom: 0;
-			left: 15px;
 			color: transparent;
 			z-index: -10;
 		}

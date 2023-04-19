@@ -1,8 +1,8 @@
 <template>
 	<view class="login">
-		<text class="login-title">{{$t('找回密码')}}</text>
+		<text class="login-title">{{$t('修改登录密码')}}</text>
+		<view class="second_tip">{{$t('验证码将发送到：')}}{{emailEncryption(userInfo.email)}}</view>
 		<Form @submit="handleSubmit">
-			<Field center :placeholder="$t('请输入邮箱')" class="ipt" name='account' v-model='submitInfo.account' />
 			<Field center :placeholder="$t('请输入验证码')" class="ipt" v-model="submitInfo.code" name='code' maxlength='6'>
 				<template #button>
 					<text class="code" @click="handleSend">{{count=== 61 ? $t('获取验证码') : count + $t('s后获取')}}</text>
@@ -34,10 +34,12 @@
 		resetPwd
 	} from '@/services/user.js';
 	import {
-		isEmailAddress,
-		checkPassword
+		checkPassword,
+		emailEncryption
 	} from '@/utils/index.js';
 	import Toast from '@/hooks/useToast.js';
+	import { useUserStore } from '@/store/user.js';
+	const { userInfo } = useUserStore();
 	const {
 		$t: t
 	} = getCurrentInstance().proxy;
@@ -54,11 +56,6 @@
 	});
 
 	const handleSubmit = (value) => {
-		if (!isEmailAddress(value.account)) {
-			Toast.show(t('请输入正确格式的邮箱'));
-			return;
-		}
-
 		if (!checkPassword(value.password)) {
 			Toast.show(t("登录密码为8-16位，数字字母组合"), {
 				type: 'fail',
@@ -66,6 +63,7 @@
 			});
 			return;
 		}
+		submitInfo.account = userInfo.email;
 
 		resetPwd(submitInfo).then(res => {
 			if (res.code === 0) {
@@ -73,7 +71,7 @@
 					type: 'success'
 				})
 				uni.redirectTo({
-					url: 'login/index'
+					url: '/pages/Mine/setting/index'
 				});
 			} else {
 				Toast.show(res.message);
@@ -96,20 +94,10 @@
 	}
 	//获取验证码
 	const handleSend = () => {
-		if (!submitInfo.account) {
-			Toast.show(t('请输入邮箱'));
-			return;
-		}
-
-		if (!isEmailAddress(submitInfo.account)) {
-			Toast.show(t('请输入正确格式的邮箱'));
-			return;
-		}
-
 		const parmas = {
 			accountType: 'email',
-			authType: 'login',
-			account: submitInfo.account
+			authType: 'retrieve',
+			account: userInfo.email
 		}
 		if (count.value !== 61) return;
 
@@ -130,7 +118,7 @@
 	}
 
 	watch(submitInfo, (value) => {
-		if (value.account && value.password.length > 5 && value.code.length > 5) {
+		if (value.password.length > 5 && value.code.length > 5) {
 			btnState.value = false;
 		} else {
 			btnState.value = true;
@@ -149,6 +137,12 @@
 			font-size: 18px;
 			font-weight: bold;
 			padding: 20px 0;
+		}
+
+		.second_tip {
+			color: #666;
+			font-weight: bold;
+			margin-bottom: 20px;
 		}
 
 		.ipt {

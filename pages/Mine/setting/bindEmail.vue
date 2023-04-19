@@ -1,6 +1,6 @@
 <template>
-	<view class="login">
-		<text class="login-title">{{$t('找回密码')}}</text>
+	<view class="bind">
+		<text class="bind-title">{{$t('绑定邮箱')}}</text>
 		<Form @submit="handleSubmit">
 			<Field center :placeholder="$t('请输入邮箱')" class="ipt" name='account' v-model='submitInfo.account' />
 			<Field center :placeholder="$t('请输入验证码')" class="ipt" v-model="submitInfo.code" name='code' maxlength='6'>
@@ -8,10 +8,7 @@
 					<text class="code" @click="handleSend">{{count=== 61 ? $t('获取验证码') : count + $t('s后获取')}}</text>
 				</template>
 			</Field>
-			<Field center :placeholder="$t('请设置密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'"
-				:right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
-				@click-right-icon='handleEyes' v-model="submitInfo.password" name='password' />
-			<Button native-type="submit" block class="btn" :disabled="btnState">{{$t('重置密码')}}</Button>
+			<Button native-type="submit" block class="btn" :disabled="btnState">{{$t('确认')}}</Button>
 		</Form>
 	</view>
 </template>
@@ -31,25 +28,22 @@
 	} from 'vant';
 	import {
 		sendCode,
-		resetPwd
+		bindEmail
 	} from '@/services/user.js';
-	import {
-		isEmailAddress,
-		checkPassword
-	} from '@/utils/index.js';
+	import { isEmailAddress } from '@/utils/index.js';
 	import Toast from '@/hooks/useToast.js';
 	const {
 		$t: t
 	} = getCurrentInstance().proxy;
 
 	let count = ref(61);
-	let pwdEyes = ref(false);
 	let btnState = ref(true);
 	let submitInfo = reactive({
 		areaCode: '86',
 		account: '',
 		code: '',
 		password: '',
+		authMethod: 'password', // password/code
 		accountType: 'email', // 默认手机好注册 email/tel
 	});
 
@@ -59,22 +53,14 @@
 			return;
 		}
 
-		if (!checkPassword(value.password)) {
-			Toast.show(t("登录密码为8-16位，数字字母组合"), {
-				type: 'fail',
-				duration: 3000
-			});
-			return;
-		}
-
-		resetPwd(submitInfo).then(res => {
+		bindEmail({ email: value.account, code: value.code }).then(res => {
 			if (res.code === 0) {
-				Toast.show(t('重置成功'), {
+				Toast.show(t('绑定成功'), {
 					type: 'success'
 				})
 				uni.redirectTo({
-					url: 'login/index'
-				});
+					url: '/pages/Mine/setting/index'
+				})
 			} else {
 				Toast.show(res.message);
 			}
@@ -108,14 +94,14 @@
 
 		const parmas = {
 			accountType: 'email',
-			authType: 'login',
+			authType: 'bind',
 			account: submitInfo.account
 		}
 		if (count.value !== 61) return;
 
 		sendCode(parmas).then(res => {
 			if (res.code === 0) {
-				Toast.show(t('发送成功'), {
+				Toast.show(t('验证码已发送'), {
 					type: 'success'
 				})
 				startTimer();
@@ -124,13 +110,9 @@
 			}
 		})
 	}
-	// 密码框
-	const handleEyes = () => {
-		pwdEyes.value = !pwdEyes.value;
-	}
 
 	watch(submitInfo, (value) => {
-		if (value.account && value.password.length > 5 && value.code.length > 5) {
+		if (value.account && value.code.length > 5) {
 			btnState.value = false;
 		} else {
 			btnState.value = true;
@@ -139,11 +121,11 @@
 </script>
 
 <style lang="scss" scoped>
-	.login {
+	.bind {
 		padding-left: 15px;
 		padding-right: 15px;
 
-		.login-title {
+		.bind-title {
 			display: inline-block;
 			color: #000;
 			font-size: 18px;

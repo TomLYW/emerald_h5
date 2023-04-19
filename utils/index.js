@@ -10,7 +10,7 @@ export function whetherLogin() {
 	const isLogin = user.isLogin;
 	if (!isLogin) {
 		uni.navigateTo({
-			url:'/pages/Login/index'
+			url: '/pages/Login/index'
 		})
 	}
 	return isLogin;
@@ -21,7 +21,7 @@ export function whetherSetPin() {
 	const isSetPin = user.userInfo.isSetPin;
 	if (!isSetPin) {
 		uni.navigateTo({
-			url:'/pages/Login/index'
+			url: '/pages/Mine/setting/setPayPassword'
 		})
 	}
 	return isSetPin;
@@ -71,7 +71,7 @@ export function algorithm() {
 
 /*手机号加密*/
 export function phoneEncryption(phone) {
-	if(!phone) return '-';
+	if (!phone) return '-';
 	return phone.substring(0, 3) + '****' + phone.substring(7);
 }
 

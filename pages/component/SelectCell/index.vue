@@ -7,8 +7,8 @@
 				<text>{{$t(item.label)}}</text>
 			</view>
 			<view class="right">
-				<slot name="right"></slot>
-				<image src="/static/base/next_right_arrow.png" class="arrow" />
+				<slot :name="`right${i + 1}`"></slot>
+				<image src=" /static/base/next_right_arrow.png" class="arrow" v-show="!item.hideArrow" />
 			</view>
 		</view>
 		<slot name="bottom"></slot>
@@ -29,6 +29,8 @@
 	}
 
 	function handleJump(val) {
+		if (val.hideArrow) return;
+
 		if (val.url) {
 			uni.navigateTo({
 				url: val.url

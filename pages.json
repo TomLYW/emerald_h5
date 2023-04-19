@@ -108,6 +108,76 @@
 				"enablePullDownRefresh": false,
 				"navigationBarTitleText": "%invite%"
 			}
+		},
+		{
+			"path": "pages/Mine/electric/index",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": "%electric%"
+			}
+		},
+		{
+			"path": "pages/Mine/setting/setPayPassword",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/Mine/electric/remindSuccess",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": "%ok%"
+			}
+		},
+		{
+			"path": "pages/Mine/setting/index",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": "%set%"
+			}
+		},
+		{
+			"path": "pages/Mine/setting/setLanguage",
+			"style": {
+				"enablePullDownRefresh": false,
+				"titleNView": false
+			}
+		},
+		{
+			"path": "pages/Mine/setting/bindEmail",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/Mine/setting/modifyPassword",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/Mine/setting/changePayPassword",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/Mine/setting/setNickname",
+			"style": {
+				"enablePullDownRefresh": false,
+				"titleNView": false
+			}
+		},
+		{
+			"path": "pages/Mine/setting/bindGoogle",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": ""
+			}
 		}
 	],
 	"tabBar": {

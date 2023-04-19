@@ -3,8 +3,7 @@
 		<text class="login-title">{{$t('登录')}}</text>
 		<Form @submit="handleSubmit">
 			<Field center :placeholder="$t('请输入邮箱')" class="ipt" name='account' v-model='submitInfo.account' />
-			<Field center :placeholder="$t('请输入验证码')" class="ipt" v-model="submitInfo.code" name='code' maxlength='6'
-				v-if="showCode">
+			<Field center :placeholder="$t('请输入验证码')" class="ipt" v-model="submitInfo.code" name='code' maxlength='6' v-if="showCode">
 				<template #button>
 					<text class="code" @click="handleSend">{{count=== 61 ? $t('获取验证码') : count + $t('s后获取')}}</text>
 				</template>
@@ -66,14 +65,14 @@
 	});
 
 	const handleSubmit = (value) => {
-		if (!isEmailAddress(submitInfo.account)) {
+		if (!isEmailAddress(value.account)) {
 			Toast.show(t('请输入正确格式的邮箱'));
 			return;
 		}
 
-		if (submitInfo.password) {
+		if (value.password) {
 			submitInfo.authMethod = 'password';
-		} else if (submitInfo.code) {
+		} else if (value.code) {
 			submitInfo.authMethod = 'code';
 		}
 
@@ -84,9 +83,7 @@
 				Toast.show(t('登录成功'), {
 					type: 'success'
 				})
-				uni.switchTab({
-					url: '/pages/Home/index'
-				});
+				uni.navigateBack();
 			} else {
 				Toast.show(res.message);
 			}
@@ -184,13 +181,13 @@
 			border: 1px solid #ccc;
 			padding: 10px;
 			border-radius: 10px;
-
 		}
 
 		.btn {
 			background-color: #05AA84;
 			color: #fff;
 			border-radius: 10px;
+			font-size: 18px;
 		}
 
 		.forget {

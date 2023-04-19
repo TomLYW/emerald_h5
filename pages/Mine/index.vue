@@ -3,7 +3,7 @@
 		<view class="mine">
 			<SelectCell :options="options5" />
 			<SelectCell :options="options4" class="invite">
-				<template #right>
+				<template #right1>
 					<text class="fee">12331.00</text>
 				</template>
 			</SelectCell>
@@ -56,13 +56,14 @@
 	const options4 = [{
 		label: '电费(USDT)',
 		icon: '/static/mine/profile_icon_fee.png',
-		url: '/pages/Mine/invite/index'
+		url: '/pages/Mine/electric/index'
 	}]
 
 	const options5 = [{
 		label: '我的钱包',
 		icon: '/static/mine/profile_icon_wallet.png',
-		url: '/pages/Login/index'
+		// url: '/pages/Mine/setting/setLanguage'
+		url: '/pages/Mine/setting/bindGoogle'
 	}]
 </script>
 

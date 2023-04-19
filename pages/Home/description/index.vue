@@ -11,8 +11,7 @@
 					<text class="item_2">{{percent.toFixed(0)}}%</text>
 				</view>
 				<view class="progress" v-if="percent > -1">
-					<Progress :percentage="percent" stroke-width="7" track-color="#ECEFFF" color="#05AA84"
-						:show-pivot='false' />
+					<Progress :percentage="percent" stroke-width="7" track-color="#ECEFFF" color="#05AA84" :show-pivot='false' />
 				</view>
 				<view class="side_2">
 					<view>
@@ -35,8 +34,7 @@
 				<view class="card_item">
 					<text>{{$t('产出币种')}}</text>
 					<view class="item_right">
-						<image
-							:src="pageData.currency === 'BTC' ? '/static/home/home_icon_btc.png' : '/static/home/home_icon_eth.png'"
+						<image :src="pageData.currency === 'BTC' ? '/static/home/home_icon_btc.png' : '/static/home/home_icon_eth.png'"
 							class="icon" />
 						<text>{{pageData.currency}}</text>
 					</view>
@@ -72,8 +70,7 @@
 					<text class="price">{{accMul(pageData.price,amount).toFixed(2)}} U</text>
 					<text class="text">{{$t('价格')}}</text>
 				</view>
-				<text class="right_btn" :style="{backgroundColor:!buyButtonState() ? '#ADDAD0' : '#05AA84'}"
-					@click="handleBuy">{{$t('立即购买')}}</text>
+				<text class="right_btn" :style="{backgroundColor:!buyButtonState() ? '#ADDAD0' : '#05AA84'}" @click="handleBuy">{{$t('立即购买')}}</text>
 			</view>
 		</view>
 		<InputModel :options="options" />
@@ -182,9 +179,9 @@
 			if (res.code === 0) {
 				options.isShow = false;
 				getData(id.value);
-				// navigation.push('RechargeSuccess', {
-				// 	title: I18n.t('购买成功')
-				// });
+				uni.navigateTo({
+					url: `/pages/Mine/electric/remindSuccess?title=${I18t.t('购买成功')}`
+				})
 			} else {
 				Toast.show(res.message);
 			}

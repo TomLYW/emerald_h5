@@ -1,0 +1,79 @@
+<template>
+	<view class="set_pay">
+		<view class="title">
+			{{$t('设置支付密码')}}
+		</view>
+		<InputBox v-model="password" />
+		<view class="btn" @click="handleClick" :style="{backgroundColor:password.length > 5 ? '#05AA84' : '#ADDAD0'}">
+			{{$t('确认')}}
+		</view>
+	</view>
+</template>
+
+<script setup>
+	import InputBox from '@/pages/component/InputBox/index.vue';
+	import { checkNumber } from '@/utils/index.js';
+	import Toast from '@/hooks/useToast.js';
+	import I18n from '@/hooks/useLocale.js';
+	import { setPayPassword } from '@/services/user.js';
+	import { ref } from 'vue';
+	let password = ref('');
+
+	function handleClick() {
+		if (password.value.length === 6) {
+			if (!checkNumber(password.value)) {
+				Toast.show(I18n.t("支付密码为6位纯数字"));
+				return;
+			}
+
+			Toast.show(I18n.t('正在设置'), {
+				type: 'loading'
+			})
+
+			setPayPassword({ password: password.value }).then((res) => {
+				if (res.code === 0) {
+					Toast.show(I18n.t('设置成功'), {
+						type: 'success'
+					});
+					uni.navigateBack();
+				} else {
+					Toast.show(res.message);
+				}
+			})
+		}
+
+	}
+</script>
+
+<style lang="scss" scoped>
+	.set_pay {
+		height: 100%;
+		padding: 15px;
+		background-color: #fff;
+
+		.title {
+			font-weight: bold;
+			font-size: 26px;
+			color: #333;
+			margin-bottom: 10px;
+		}
+
+		.btn {
+			margin-left: 15px;
+			margin-right: 15px;
+			margin-top: 25px;
+			padding-top: 12px;
+			padding-bottom: 12px;
+			border-radius: 12px;
+			text-align: center;
+			color: #fff;
+			font-size: 18px;
+			font-weight: bold;
+			box-shadow: 0px 0px 10px -6px #000;
+
+			&:active {
+				opacity: 0.7;
+			}
+		}
+	}
+</style>
