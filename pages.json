@@ -185,6 +185,13 @@
 				"enablePullDownRefresh": false,
 				"navigationBarTitleText": ""
 			}
+		},
+		{
+			"path": "pages/Mine/census/index",
+			"style": {
+				"enablePullDownRefresh": false,
+				"titleNView": false
+			}
 		}
 	],
 	"tabBar": {

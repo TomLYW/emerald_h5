@@ -1,7 +1,6 @@
 <template>
 	<view class="tabs">
-		<image src="../../../static/base/title_leftarrow_white.png" class="left_back" @click="handleBack"
-			v-show="showBack" />
+		<image src="../../../static/base/title_leftarrow_white.png" class="left_back" @click="callback" v-show="showBack" />
 		<view class="tab_content">
 			<view class="tab" @click="handleChange(1)">
 				<text :class="tabIndex === 1 ? 'cf' : ''"> {{tab1}} </text>
@@ -16,25 +15,17 @@
 </template>
 
 <script setup>
-	import {
-		ref
-	} from 'vue';
-	const {
-		tab1,
-		tab2
-	} = defineProps({
+	import { ref } from 'vue';
+	defineProps({
 		tab1: String,
 		tab2: String,
-		showBack: Boolean
+		showBack: Boolean,
+		callback: Function
 	})
 
 	const emit = defineEmits(['onChange']);
 
 	let tabIndex = ref(1);
-
-	function handleBack() {
-		uni.navigateBack();
-	}
 
 	function handleChange(val) {
 		tabIndex.value = val;
@@ -71,9 +62,7 @@
 					border-radius: 2px;
 					margin-top: 6px;
 				}
-
 			}
-
 		}
 
 		.cf {
