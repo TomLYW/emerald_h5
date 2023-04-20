@@ -56,15 +56,29 @@
 	const options4 = [{
 		label: '电费(USDT)',
 		icon: '/static/mine/profile_icon_fee.png',
-		url: '/pages/Mine/electric/index'
+		callback: handleJump('electric')
 	}]
 
 	const options5 = [{
 		label: '我的钱包',
 		icon: '/static/mine/profile_icon_wallet.png',
 		// url: '/pages/Mine/setting/setLanguage'
-		url: '/pages/Mine/setting/bindGoogle'
+		url: '/pages/Mine/setting/index'
 	}]
+
+	function handleJump(path) {
+		return () => {
+			if (isLogin) {
+				uni.navigateTo({
+					url: `/pages/Mine/${path}/index`
+				})
+			} else {
+				uni.navigateTo({
+					url: '/pages/Login/index'
+				})
+			}
+		}
+	}
 </script>
 
 <style lang="scss" scoped>

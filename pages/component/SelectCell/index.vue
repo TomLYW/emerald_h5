@@ -31,6 +31,11 @@
 	function handleJump(val) {
 		if (val.hideArrow) return;
 
+		if (val.callback) {
+			val.callback();
+			return;
+		}
+
 		if (val.url) {
 			uni.navigateTo({
 				url: val.url

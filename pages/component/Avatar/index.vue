@@ -15,7 +15,7 @@
 		size
 	} = defineProps({
 		src: String,
-		size: Number || String
+		size: [Number, String]
 	})
 
 	onMounted(() => {

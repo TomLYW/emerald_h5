@@ -73,7 +73,7 @@
 					type: 'success'
 				})
 				uni.redirectTo({
-					url: 'login/index'
+					url: '/pages/Login/index'
 				});
 			} else {
 				Toast.show(res.message);

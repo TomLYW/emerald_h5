@@ -1,4 +1,5 @@
 import http from '@/http/request.js';
+import config from '@/http/config.js';
 
 // 发送验证码
 export const sendCode = (data) => {
@@ -43,4 +44,28 @@ export const setGoogleSecret = (data) => {
 // 获取谷歌验证
 export const getGoogleSecret = (data) => {
 	return http.get('/v1/user/google-secret', data);
+}
+
+
+// 修改头像
+export const updateAvatar = (data) => {
+	return http.post('/v1/user/update-avatar', data);
+}
+
+
+/*上传图片*/
+export const uploadImage = (file) => {
+	const url = config.baseUrl + '/v1/user/upload';
+
+	let formData = new FormData();
+	formData.append('file', file);
+
+	return fetch(url, {
+		method: 'POST',
+		headers: {
+			'X-Access-Token': uni.getStorageSync('token'),
+			'X-Lang': uni.getLocale() === 'zh' ? 'zh_CN' : 'en_US',
+		},
+		body: formData,
+	});
 }

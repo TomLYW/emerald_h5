@@ -1,6 +1,8 @@
 <template>
 	<view class="custom_nav">
-		<image src="/static/base/title_left_arrow.png" class="left_arrow" @click="callback" />
+		<slot name='left'>
+			<image src="/static/base/title_left_arrow.png" class="left_arrow" @click="callback" />
+		</slot>
 		<text class="title" :style="titleStyle">{{title}}</text>
 		<slot name="right"></slot>
 	</view>

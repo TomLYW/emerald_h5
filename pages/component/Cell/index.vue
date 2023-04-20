@@ -14,9 +14,8 @@
 	import {
 		formatDate
 	} from '@/utils/index.js';
-	const {
-		item
-	} = defineProps({
+
+	defineProps({
 		item: Object
 	})
 </script>

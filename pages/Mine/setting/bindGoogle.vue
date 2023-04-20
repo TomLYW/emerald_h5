@@ -3,10 +3,8 @@
 		<view class="title">{{$t('绑定谷歌身份认证器')}}</view>
 		<view class="qr_box">
 			<text class="tip">{{$t('请妥善备份密钥以防遗失')}}</text>
-			<view class="qr_code">
-				<uqrcode ref="uqrcode" canvas-id="qrcode" :value="data.uri" :options="{ margin: 10 }"></uqrcode>
-			</view>
-			<view class="secret">{{data.secret}}</view>
+			<uqrcode ref="uqrcode" canvas-id="qrcode" :value="data.uri" :options="{ margin: 25 }" :hide="!data.uri"></uqrcode>
+			<view class="secret" v-show="data.secret">{{data.secret}}</view>
 			<view class="copy" @click="copy">{{$t('复制')}}</view>
 			<view class="next" @click="handleSet">{{$t('下一步')}}</view>
 			<view class="tip">{{$t('保存二维码到手机或复制密钥到剪贴板可能会有安全风险，请妥善保存')}}</view>
@@ -27,28 +25,26 @@
 
 	let options = reactive({
 		isShow: false,
-		type: '',
-		title: '',
-		amount: '',
+		type: 'google',
 		callback: callback
 	})
 
 	function callback(val) {
-		// buyCloudMiner({
-		// 	id: id.value,
-		// 	numbers: amount.value,
-		// 	pin: val
-		// }).then(res => {
-		// 	if (res.code === 0) {
-		// 		options.isShow = false;
-		// 		getData(id.value);
-		// 		uni.navigateTo({
-		// 			url: `/pages/Mine/electric/remindSuccess?title=${I18t.t('购买成功')}`
-		// 		})
-		// 	} else {
-		// 		Toast.show(res.message);
-		// 	}
-		// })
+		Toast.show(I18n.t('正在绑定'), {
+			type: 'loading'
+		})
+		setGoogleSecret({ secret: data.value.secret, code: val }).then(res => {
+			if (res.code === 0) {
+				Toast.show(I18n.t('正在绑定'), {
+					type: 'success'
+				});
+				uni.redirectTo({
+					url: '/pages/Mine/setting/index'
+				})
+			} else {
+				Toast.show(res.message)
+			}
+		})
 	}
 
 	function handleSet() {
@@ -56,16 +52,17 @@
 	}
 
 	function copy() {
-		uni.setClipboardData({
-			data: data.value.secret,
-			showToast: false,
-			success: function() {
-				Toast.show(I18n.t('复制成功'), {
-					type: 'success'
-				});
-			}
-		});
-
+		if (data.value.secret) {
+			uni.setClipboardData({
+				data: data.value.secret,
+				showToast: false,
+				success: function() {
+					Toast.show(I18n.t('复制成功'), {
+						type: 'success'
+					});
+				}
+			});
+		}
 	}
 
 	onMounted(() => {
@@ -99,6 +96,7 @@
 			.tip {
 				font-size: 13px;
 				color: #666;
+				text-align: center;
 			}
 
 			.next {
@@ -127,11 +125,7 @@
 
 			.secret {
 				color: #333;
-				margin-top: 15px;
-			}
-
-			.qr_code {
-				// margin-top: 15px;
+				text-align: center;
 			}
 		}
 	}

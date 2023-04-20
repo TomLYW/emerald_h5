@@ -76,6 +76,9 @@
 			submitInfo.authMethod = 'code';
 		}
 
+		Toast.show(t('正在登录'), {
+			type: 'loading'
+		})
 		login(submitInfo).then(res => {
 			if (res.code === 0) {
 				uni.setStorageSync('token', res.data.token);
@@ -93,7 +96,7 @@
 	// 忘记密码
 	const handleForget = () => {
 		uni.navigateTo({
-			url: 'resetPwd/index'
+			url: '/pages/Login/resetPwd/index'
 		});
 	}
 

@@ -34,15 +34,17 @@
 	})
 
 	function handleCopy() {
-		uni.setClipboardData({
-			data: I18n.t('欢迎使用Emerald，邀请用户注册得奖励！您得邀请码是：') + copy.number,
-			showToast: false,
-			success: () => {
-				Toast.show(I18n.t('复制成功'), {
-					type: 'success'
-				});
-			}
-		});
+		if (copy.number) {
+			uni.setClipboardData({
+				data: I18n.t('欢迎使用Emerald，邀请用户注册得奖励！您得邀请码是：') + copy.number,
+				showToast: false,
+				success: () => {
+					Toast.show(I18n.t('复制成功'), {
+						type: 'success'
+					});
+				}
+			});
+		}
 	}
 
 	function getData() {
