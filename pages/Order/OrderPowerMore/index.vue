@@ -1,5 +1,5 @@
 <template>
-	<scroll-view scroll-y="true" height="100%">
+	<scroll-view scroll-y="true" style="height: 100%;">
 		<view class="output_record">
 			<OrderPowerDetails :item="pageData.details" v-if="'status' in pageData.details" />
 			<CustomTitle :title="$t('output_r')" />

@@ -19,7 +19,6 @@
 	import Toast from '@/hooks/useToast.js';
 	import I18n from '@/hooks/useLocale.js';
 	import InputModel from '@/pages/component/InputModel/index.vue';
-	import UQRCode from '@/uni_modules/Sansnn-uQRCode/js_sdk/uqrcode/uqrcode.js';
 
 	let data = ref({ secret: '', uri: '' });
 

@@ -1,5 +1,5 @@
 <template>
-	<scroll-view scroll-y="true" height="100%">
+	<scroll-view scroll-y="true" style="height: 100%;">
 		<view class="setting">
 			<view class="caption">{{$t('基本信息')}}</view>
 			<SelectCell :options="options1" class="mb15">

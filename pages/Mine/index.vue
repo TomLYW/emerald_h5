@@ -1,9 +1,11 @@
 <template>
-	<scroll-view scroll-y="true" height="100%">
+	<scroll-view scroll-y="true" style="height: 100%;">
 		<view class="mine">
 			<view class="header">
 				<view class="left" @click="handleLeft">
-					<Avatar size="50" :src="userInfo.avatar" class="left_avatar" />
+					<view class="circle">
+						<Avatar size="52" :src="userInfo.avatar" />
+					</view>
 					<view class="left_text">
 						<text class="top">{{!isLogin ? $t('立即登录') : userInfo.nickname}}</text>
 						<text class="bottom">{{!isLogin ? $t('欢迎来到Emerald') : emailEncryption(userInfo.email)}}</text>
@@ -13,7 +15,25 @@
 					<image src="/static/mine/profile_icon_set.png" class="icon" @click="handleClick" />
 				</view>
 			</view>
-			<SelectCell :options="options5" />
+			<SelectCell :options="options5">
+				<template #bottom>
+					<view class="wallet">
+						<view class="wallet_item">
+							<text class="sum">0.00000000</text>
+							<text>ETH</text>
+						</view>
+						<view class="wallet_item">
+							<text class="sum">0.00000000</text>
+							<text>BTC</text>
+						</view>
+						<view class="wallet_item">
+							<text class="sum">0.01206200</text>
+							<text>USDT</text>
+						</view>
+
+					</view>
+				</template>
+			</SelectCell>
 			<SelectCell :options="options4" class="invite">
 				<template #right1>
 					<text class="fee">12331.00</text>
@@ -35,7 +55,7 @@
 <script setup>
 	import SelectCell from '@/pages/component/SelectCell/index.vue';
 	import Avatar from '@/pages/component/Avatar/index.vue';
-	import I18t from '@/hooks/useLocale.js';
+	import I18n from '@/hooks/useLocale.js';
 	import { useUserStore } from '@/store/user.js';
 	import { emailEncryption } from '@/utils/index.js';
 	const { isLogin, userInfo } = useUserStore();
@@ -65,7 +85,6 @@
 		label: '数据统计',
 		icon: '/static/mine/profile_icon_data.png',
 		callback: handleJump('census')
-		// url: '/pages/Mine/census/index'
 	}]
 
 	const options4 = [{
@@ -77,7 +96,7 @@
 	const options5 = [{
 		label: '我的钱包',
 		icon: '/static/mine/profile_icon_wallet.png',
-		url: '/pages/Mine/setting/index'
+		callback: handleJump('wallet')
 	}]
 
 	function handleClick() {
@@ -111,7 +130,9 @@
 
 <style lang="scss" scoped>
 	.mine {
-		padding: 0px 15px 15px;
+		height: 100%;
+		overflow-y: auto;
+		padding: 0px 15px 20px;
 		background-image: url('/static/mine/header_image.png');
 		background-repeat: no-repeat;
 		background-size: 100% 136px;
@@ -152,9 +173,11 @@
 					}
 				}
 
-				.left_avatar {
-					border: 1px solid #fff;
-					border-radius: 53%;
+				.circle {
+					width: 52px;
+					height: 52px;
+					border-radius: 50%;
+					border: 2px solid #fff;
 				}
 			}
 		}
@@ -177,6 +200,26 @@
 
 			.empty {
 				color: #6F6F6F;
+			}
+		}
+
+		.wallet {
+			display: flex;
+			margin-top: 22px;
+
+			.wallet_item {
+				flex: 1;
+				@include flex(null, space-between, column);
+				color: #666;
+				font-size: 13px;
+				font-weight: bold;
+				word-break: break-all;
+
+				.sum {
+					margin-bottom: 9px;
+					color: #333;
+					font-size: 16px;
+				}
 			}
 		}
 	}

@@ -24,3 +24,13 @@ export const getElectricList = (data) => {
 export const rechargeFees = (data) => {
 	return http.post('/v1/electric/recharge', data);
 }
+
+// 获取资产记录
+export const getAssetLogs = (data) => {
+	return http.get('/v1/wallet/logs', data);
+}
+
+// 获取充值地址
+export const getRechargePath = (data) => {
+	return http.get('/v1/wallet/deposit', data);
+}

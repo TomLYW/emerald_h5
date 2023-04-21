@@ -1,11 +1,10 @@
 <template>
-	<scroll-view scroll-y="true" height="100%">
+	<scroll-view scroll-y="true" style="height: 100%;">
 		<view class="output_record">
 			<OrderMinerList :item="pageData.details" v-if="'status' in pageData.details" />
 			<CustomTitle :title="$t('output_r')" />
 			<view v-if="pageData.records.length">
-				<Cell v-for="item in pageData.records" :key="item.id" style="margin-bottom: 15px;" :item="item"
-					@click="handleClick(item)" />
+				<Cell v-for="item in pageData.records" :key="item.id" style="margin-bottom: 15px;" :item="item" @click="handleClick(item)" />
 			</view>
 			<NoData hideBtn v-else />
 		</view>
