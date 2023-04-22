@@ -1,32 +1,36 @@
 <template>
 	<view class="census">
 		<Tabs v-model="tab" tab1="BTC" tab2="ETH" showBack :callback="onBack" />
-		<!-- <view class="main">
-
-		</view> -->
-		<NoData hideBtn />
+		<view class="main" v-if="(list.tab1.length && tab === 1) || (list.tab2.length && tab === 2)">
+			<CensusCell v-for="item  in (tab === 1 ? list.tab1 : list.tab2)" :key="item.id" :item="item" class="census_cell_item" />
+		</view>
+		<NoData hideBtn v-else />
 	</view>
 </template>
 
 <script setup>
-	import { onBackPress } from '@dcloudio/uni-app';
 	import Tabs from '@/pages/component/Tabs/index.vue';
 	import CensusCell from '@/pages/component/CensusCell/index.vue';
 	import NoData from '@/pages/component/NoData/index.vue';
-	import { ref, onMounted } from 'vue';
+	import { getYields } from '@/services/mine.js';
+	import { ref, reactive, onMounted } from 'vue';
 	let tab = ref(1);
+	let list = reactive({ tab1: [], tab2: [] });
 
-	onBackPress((e) => {
-		// console.log('xx', e)
-		// if (e.from === 'backbutton') {
-		// 	history.back();
-		// 	return true;
-		// }
-	})
+	function getData1() {
+		getYields({ currency: "BTC", page: 1, limit: 100 }).then(res => {
+			if (res.code === 0) {
+				list.tab1 = res.data;
+			}
+		})
+	}
 
-
-	function getDta() {
-
+	function getData2() {
+		getYields({ currency: "ETH", page: 1, limit: 100 }).then(res => {
+			if (res.code === 0) {
+				list.tab2 = res.data;
+			}
+		})
 	}
 
 	function onBack() {
@@ -36,7 +40,8 @@
 	}
 
 	onMounted(() => {
-		getDta();
+		getData1();
+		getData2();
 	})
 </script>
 
@@ -48,7 +53,11 @@
 		.main {
 			flex: 1;
 			overflow-y: auto;
-			background-color: blue;
+			padding: 15px;
+
+			.census_cell_item {
+				margin-bottom: 15px;
+			}
 		}
 	}
 </style>

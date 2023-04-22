@@ -1,6 +1,5 @@
 <template>
-	<Popup v-model:show="data.isShow" round position="bottom" :close-on-click-overlay="modelShow"
-		:style="{padding:'15px'}">
+	<Popup v-model:show="data.isShow" round position="bottom" :close-on-click-overlay="modelShow" :style="{padding:'15px'}">
 		<view class="content">
 			<view class="content_top">
 				<text class="top_left">{{data.type === 'password' ? '请输入支付密码' : '请输入谷歌验证码'}}</text>
@@ -30,25 +29,17 @@
 					<text>{{input.length > 5  ? '●' : ''}}</text>
 				</view>
 			</view>
-			<input type="number" :maxlength='6' @input="handleChange" class="ipt" :focus="focus"
-				@blur="focus = false" />
+			<input type="number" :maxlength='6' @input="handleChange" class="ipt" :focus="focus" @blur="focus = false" />
 		</view>
 	</Popup>
 </template>
 
 <script setup>
-	import {
-		Popup
-	} from 'vant';
-	import {
-		ref,
-		watch
-	} from 'vue';
+	import { Popup } from 'vant';
+	import { ref, watch } from 'vue';
 	const props = defineProps({
 		options: Object,
 	})
-
-
 
 	let data = ref({});
 	let modelShow = ref(false);
@@ -56,6 +47,7 @@
 	let focus = ref(false);
 
 	function handleClose() {
+		input.value = '';
 		data.value.isShow = false;
 	}
 

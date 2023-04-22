@@ -20,7 +20,7 @@
 			console.log('App Hide')
 		},
 		onBackPress: function(e) {
-			console.log('xx', e)
+			console.log('loooks', e)
 		}
 	}
 </script>

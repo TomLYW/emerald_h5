@@ -1,30 +1,32 @@
 <template>
-	<view class="home">
-		<view class='header'>
-			<image class='left-img' src='/static/home/home_logo.png' />
-			<image class='right-img' src='/static/home/home_icon_news.png' @click="handleNotice" />
-		</view>
-		<swiper class="banner" circular indicator-dots autoplay :interval="3500">
-			<swiper-item v-for="v in current.bannerList" :key="v.id">
-				<image :src="v.image" class="img" />
-			</swiper-item>
-		</swiper>
+	<scroll-view scroll-y="true" style="height: 100%;">
+		<view class="home">
+			<view class='header'>
+				<image class='left-img' src='/static/home/home_logo.png' />
+				<image class='right-img' src='/static/home/home_icon_news.png' @click="handleNotice" />
+			</view>
+			<swiper class="banner" circular indicator-dots autoplay :interval="3500">
+				<swiper-item v-for="v in current.bannerList" :key="v.id">
+					<image :src="v.image" class="img" />
+				</swiper-item>
+			</swiper>
 
-		<view class="middle" @click="handleMiddle" v-if="current.noticeList.length > 0">
-			<image class="midl-img" src='/static/home/home_icon_notice.png' />
-			<view class="mid-content">
-				<text class="title">{{current.noticeList[0]?.title}}</text>
-				<text class="date">{{formatDate(current.noticeList[0]?.createdAt)}}</text>
-			</View>
-			<image class="midr-img" src='/static/home/home_icon_rightarrow.png' />
+			<view class="middle" @click="handleMiddle" v-if="current.noticeList.length > 0">
+				<image class="midl-img" src='/static/home/home_icon_notice.png' />
+				<view class="mid-content">
+					<text class="title">{{current.noticeList[0]?.title}}</text>
+					<text class="date">{{formatDate(current.noticeList[0]?.createdAt)}}</text>
+				</View>
+				<image class="midr-img" src='/static/home/home_icon_rightarrow.png' />
+			</view>
+			<CustomTitle :title="$t('推荐矿机共享服务')" />
+			<YunCell :item='current.cloudData' v-if="'sold' in current.cloudData" />
+			<view class="footer">
+				<image class="icon" src='/static/base/base_bottom_title.png'></image>
+				<text class="title">{{$t('值得信赖的矿机服务平台')}}</text>
+			</view>
 		</view>
-		<CustomTitle :title="$t('推荐矿机共享服务')" />
-		<YunCell :item='current.cloudData' v-if="'sold' in current.cloudData" />
-		<view class="footer">
-			<image class="icon" src='/static/base/base_bottom_title.png'></image>
-			<text class="title">{{$t('值得信赖的矿机服务平台')}}</text>
-		</view>
-	</view>
+	</scroll-view>
 </template>
 
 

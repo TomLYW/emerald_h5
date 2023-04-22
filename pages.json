@@ -32,75 +32,108 @@
 			"path": "pages/Login/resetPwd/index",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": ""
+				// "navigationBarTitleText": "",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		}, {
 			"path": "pages/Login/index",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": ""
+				// "navigationBarTitleText": "",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Home/details/index",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": "%detail%"
+				"navigationBarTitleText": "%detail%",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Home/notice/index",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": "%notice_list%"
+				"navigationBarTitleText": "%notice_list%",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Home/description/index",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": ""
+				// "navigationBarTitleText": "",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Order/components/OutputDetails",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": "%output_d%"
+				"navigationBarTitleText": "%output_d%",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Order/OrderPowerMore/index",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": "%output_r%"
+				"navigationBarTitleText": "%output_r%",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Order/OrderMinerMore/index",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": "%output_r%"
+				"navigationBarTitleText": "%output_r%",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Mine/webview/index",
 			"style": {
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Mine/AboutUs/index",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": "%about_us%"
+				"navigationBarTitleText": "%about_us%",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Mine/invite/index",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": "%invite%"
+				"navigationBarTitleText": "%invite%",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
@@ -114,21 +147,30 @@
 			"path": "pages/Mine/setting/setPayPassword",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": ""
+				// "navigationBarTitleText": "",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Mine/electric/remindSuccess",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": "%ok%"
+				"navigationBarTitleText": "%ok%",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Mine/setting/index",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": "%set%"
+				"navigationBarTitleText": "%set%",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
@@ -142,21 +184,30 @@
 			"path": "pages/Mine/setting/bindEmail",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": ""
+				// "navigationBarTitleText": "",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Mine/setting/modifyPassword",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": ""
+				// "navigationBarTitleText": "",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Mine/setting/changePayPassword",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": ""
+				// "navigationBarTitleText": "",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
@@ -170,14 +221,20 @@
 			"path": "pages/Mine/setting/bindGoogle",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": ""
+				// "navigationBarTitleText": "",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Mine/electric/rechargeFees",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": ""
+				// "navigationBarTitleText": "",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
@@ -198,21 +255,30 @@
 			"path": "pages/Mine/wallet/assetRecords",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": "%asset_r%"
+				"navigationBarTitleText": "%asset_r%",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Mine/wallet/rechargeUsdt",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": ""
+				// "navigationBarTitleText": "",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		},
 		{
 			"path": "pages/Mine/wallet/cashPage",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": ""
+				// "navigationBarTitleText": "",
+				"h5": {
+					"titleNView": false
+				}
 			}
 		}
 	],

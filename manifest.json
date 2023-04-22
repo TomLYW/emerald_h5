@@ -69,5 +69,10 @@
         "enable" : false
     },
     "vueVersion" : "3",
-    "locale" : "zh"
+    "locale" : "zh",
+    "h5" : {
+        "router" : {
+            "mode" : "hash"
+        }
+    }
 }

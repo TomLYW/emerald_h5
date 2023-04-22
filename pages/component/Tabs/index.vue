@@ -20,16 +20,17 @@
 		tab1: String,
 		tab2: String,
 		showBack: Boolean,
-		callback: Function
+		callback: Function,
+		modelValue: Number
 	})
 
-	const emit = defineEmits(['onChange']);
+	const emit = defineEmits(['update:modelValue']);
 
 	let tabIndex = ref(1);
 
 	function handleChange(val) {
 		tabIndex.value = val;
-		emit('onChange', val);
+		emit('update:modelValue', val);
 	}
 </script>
 

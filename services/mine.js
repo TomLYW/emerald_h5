@@ -34,3 +34,18 @@ export const getAssetLogs = (data) => {
 export const getRechargePath = (data) => {
 	return http.get('/v1/wallet/deposit', data);
 }
+
+// 获取产出记录
+export const getYields = (data) => {
+	return http.get('/v1/user/yields', data);
+}
+
+// 提现
+export const withdrawWallet = (data) => {
+	return http.post('/v1/wallet/withdraw', data);
+}
+
+// 获取走势图产出记录
+export const getYieldLines = (data) => {
+	return http.get('/v1/user/yield-lines', data);
+}
