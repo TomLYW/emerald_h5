@@ -41,7 +41,7 @@
 			</SelectCell>
 			<SelectCell :options="options3" class="invite">
 				<template #bottom>
-					<view class="map">
+					<view class="map" v-if="'BTC' in data.lines">
 						<!-- <text class="empty">{{$t('暂无数据')}}</text> -->
 						<Echarts :data='data.lines' />
 					</view>

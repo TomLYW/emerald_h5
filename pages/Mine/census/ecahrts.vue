@@ -1,7 +1,7 @@
 <template>
 	<view class="echarts">
 		<view class="main">
-			<qiun-data-charts type="area" :opts="opts" :chartData="renderData" />
+			<qiun-data-charts type="area" :opts="opts" :chartData="tab === 1 ? btcLines : ethLines" tooltipFormat="pieDemo" />
 		</view>
 		<view class="btns">
 			<view :class="['btn',tab === 1 ? 'selectBtn' : '']" @click="handleChange(1)">
@@ -13,12 +13,11 @@
 				<text class="">ETH</text>
 			</view>
 		</view>
-
 	</view>
 </template>
 
 <script setup>
-	import { ref, reactive, computed, watch } from 'vue';
+	import { ref, reactive, computed } from 'vue';
 	import { formatDate } from '@/utils/index.js';
 	const props = defineProps({
 		data: Object
@@ -26,10 +25,9 @@
 
 	let tab = ref(1);
 
-	let opts = {
-		// height: '200',
+	let opts = reactive({
 		color: ['#05AA84'],
-		padding: [35, 0, 0, 0],
+		padding: [35, 0, 10, 0],
 		enableScroll: false,
 		dataLabel: false,
 		dataPointShapeType: 'hollow',
@@ -38,11 +36,12 @@
 		},
 		xAxis: {
 			axisLine: false,
-			// axisLineColor:'transparent'
+			axisLineColor: 'transparent'
 		},
 		yAxis: {
 			gridType: "dash",
-			dashLength: 2
+			data: [],
+			// format: "yAxisDemo2"
 		},
 		extra: {
 			area: {
@@ -53,59 +52,67 @@
 			},
 			tooltip: {
 				showCategory: true,
-				legendShape: 'circle',
-			},
-			// markLine.data[i]:{
-			// 	value:10
-			// }
+				legendShape: 'circle'
+			}
 		}
-	}
-
-	let renderData = reactive({
-		categories: [],
-		series: [{
-			name: "",
-			data: []
-		}, ]
 	})
 
-	const xx = computed(() => {
-		let categories;
-		if (tab.value === 1) {
-			categories = props.data.BTC.filter(v => v.yieldDate);
+	const btcLines = computed(() => {
+		let arr = [];
+		let categories = props.data.BTC.map(v => {
+			arr.unshift(v.amount);
+			return formatDate(v.yieldDate, 'MM-DD');
+		});
+
+		return {
+			categories: categories.reverse(),
+			series: [{
+				name: "BTC",
+				data: arr
+			}]
 		}
-		console.log('loooks', categories)
-		return categories;
-		// return props.data;
 	})
 
-	// watch(props.data, (newVal, old) => {
-	// 	console.log('xx', newVal, old)
-	// })
+	const ethLines = computed(() => {
+		let arr = [];
+		let categories = props.data.ETH.map(v => {
+			arr.unshift(v.amount);
+			return formatDate(v.yieldDate, 'MM-DD');
+		});
+
+		return {
+			categories: categories.reverse(),
+			series: [{
+				name: "ETH",
+				data: arr
+			}]
+		}
+	})
 
 	function handleChange(val) {
 		tab.value = val;
 
-		let categories;
-		let series;
+		// y轴刻度调整
 		if (val === 1) {
-			categories = props.data.BTC.map(v => formatDate(v.yieldDate, 'MM-DD')).reverse();
-			let arr = props.data.BTC.map(v => v.amount).reverse();
-			renderData.series = [{
-				name: 'BTC',
-				data: arr
-			}]
+			let arr = btcLines.value.series[0].data;
+			let max = Math.max(...arr);
+			if (max > 10) {
+				opts.yAxis.data = [{ max: max.toFixed(0), min: 0 }];
+			} else {
+				opts.yAxis.data = [];
+			}
 		} else if (val === 2) {
-			categories = props.data.ETH.map(v => formatDate(v.yieldDate, 'MM-DD')).reverse();
-			let arr = props.data.ETH.map(v => v.amount).reverse();
-			renderData.series = [{
-				name: 'ETH',
-				data: arr
-			}]
+			let arr = ethLines.value.series[0].data;
+			let max = Math.max(...arr);
+			if (max > 10) {
+				opts.yAxis.data = [{ max: max.toFixed(0), min: 0 }];
+			} else {
+				opts.yAxis.data = [];
+			}
 		}
-		renderData.categories = categories
-		// console.log('xx', categories)
 	}
+
+	handleChange(1);
 </script>
 
 <style lang="scss" scoped>
