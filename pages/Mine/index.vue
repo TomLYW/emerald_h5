@@ -42,7 +42,8 @@
 			<SelectCell :options="options3" class="invite">
 				<template #bottom>
 					<view class="map">
-						<text class="empty">{{$t('暂无数据')}}</text>
+						<!-- <text class="empty">{{$t('暂无数据')}}</text> -->
+						<Echarts :data='data.lines' />
 					</view>
 				</template>
 			</SelectCell>
@@ -53,12 +54,19 @@
 </template>
 
 <script setup>
+	import { reactive, onMounted } from 'vue';
 	import SelectCell from '@/pages/component/SelectCell/index.vue';
 	import Avatar from '@/pages/component/Avatar/index.vue';
+	import Echarts from '@/pages/Mine/census/ecahrts.vue';
 	import I18n from '@/hooks/useLocale.js';
 	import { useUserStore } from '@/store/user.js';
 	import { emailEncryption } from '@/utils/index.js';
+	import { getYieldLines } from '@/services/mine.js';
 	const { isLogin, userInfo } = useUserStore();
+
+	let data = reactive({
+		lines: {}
+	})
 
 	const options1 = [{
 			label: '帮助中心',
@@ -126,6 +134,18 @@
 			}
 		}
 	}
+
+	function getLines() {
+		getYieldLines().then(res => {
+			if (res.code === 0) {
+				data.lines = res.data;
+			}
+		})
+	}
+
+	onMounted(() => {
+		getLines();
+	})
 </script>
 
 <style lang="scss" scoped>
@@ -193,10 +213,10 @@
 		}
 
 		.map {
-			height: 150px;
-			margin-top: 15px;
-			text-align: center;
-			line-height: 150px;
+			// height: 150px;
+			// margin-top: 15px;
+			// text-align: center;
+			// line-height: 150px;
 
 			.empty {
 				color: #6F6F6F;

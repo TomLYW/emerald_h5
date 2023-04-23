@@ -36,13 +36,15 @@
 		</view>
 		<InputModel :options="options" />
 		<InputModel :options="options1" />
+		<SmsVerify v-model:show="show" :options="options2" />
 	</scroll-view>
 </template>
 
 <script setup>
 	import { onLoad } from '@dcloudio/uni-app';
-	import { dealNumber } from '@/utils/index.js';
+	import { dealNumber, unroundNumber } from '@/utils/index.js';
 	import InputModel from '@/pages/component/InputModel/index.vue';
+	import SmsVerify from '@/pages/Mine/wallet/SmsVerify.vue';
 	import I18n from '@/hooks/useLocale.js';
 	import Toast from '@/hooks/useToast.js';
 	import { useUserStore } from '@/store/user.js';
@@ -59,6 +61,8 @@
 	let type = ref('');
 	let state = ref(false);
 	let pin = ref('');
+	let show = ref(false);
+	let code = ref('');
 
 	let data = reactive({
 		address: '',
@@ -79,6 +83,11 @@
 		callback: callback1
 	})
 
+	let options2 = reactive({
+		authType: 'withdraw',
+		accountType: 'email'
+	})
+
 	function canSubmit() {
 		if (data.address && Number(data.num) > 0) {
 			return true;
@@ -88,9 +97,9 @@
 
 	function getDidCount() {
 		if (Number(asset.fees) > 0) {
-			return (Number(data.num) - Number(asset.fees)) > 0 ? (Number(data.num) - Number(asset.fees)).toFixed(6) : 0;
+			return (Number(data.num) - Number(asset.fees)) > 0 ? unroundNumber(Number(data.num) - Number(asset.fees), 8) : 0;
 		} else {
-			return (Number(data.num) * (1 - Number(asset.feesRate))).toFixed(6);
+			return unroundNumber(Number(data.num) * (1 - Number(asset.feesRate)), 8);
 		}
 	}
 
@@ -102,19 +111,30 @@
 		if (!canSubmit()) return;
 
 		// 提出地址校验 
-		// if (type.value === 'BTC') {
-		// 	if (!(btctest.test(data.address) && btctest1.test(data.address))) {
-		// 		state.value = true;
-		// 		return;
-		// 	}
-		// } else if (type.value === 'ETH') {
-		// 	if (!ethtest.test(data.address)) {
-		// 		state.value = true;
-		// 		return;
-		// 	}
-		// }
+		if (type.value === 'BTC') {
+			if (!(btctest.test(data.address) && btctest1.test(data.address))) {
+				state.value = true;
+				return;
+			}
+		} else if (type.value === 'ETH') {
+			if (!ethtest.test(data.address)) {
+				state.value = true;
+				return;
+			}
+		}
 
 		if (state.value) state.value = false;
+
+		if (Number(data.num) > Number(asset.available)) {
+			Toast.show(I18n.t("余额不足"));
+			return;
+		}
+
+		// 比较最小提现额
+		if (Number(asset.minWithdraw) > Number(data.num)) {
+			Toast.show(`${I18n.t('小于最小提现金额')}${asset.minWithdraw} ${type.value}`);
+			return;
+		}
 
 		options.isShow = true;
 		options.title = I18n.t('提现') + type.value;
@@ -124,43 +144,43 @@
 	function callback(val) {
 		options.isShow = false;
 		pin.value = val;
-		options1.isShow = true;
+		if (userInfo.isSet2fa) {
+			options1.isShow = true;
+		} else {
+			show.value = true;
+			options2.callback = callback2(val);
+		}
 	}
 
 	function callback1(val) {
-		console.log('google', googlePin.value)
+		//设置了谷歌验证
+		Toast.show(I18n.t('正在提交'), { type: 'loading' })
+		withdrawWallet({ currency: type.value, amount: data.num, toAddress: data.address, pin: pin.value, googleCode: val }).then(res => {
+			if (res.code === 0) {
+				Toast.show(I18n.t("提交成功"), { type: 'success' })
+				uni.navigateBack();
+			} else {
+				Toast.show(res.message)
+			}
+		})
+	}
 
-		if (userInfo.isSet2fa) {
-			//设置了谷歌验证
+	function callback2(pin) {
+		return (code) => {
 			Toast.show(I18n.t('正在提交'), { type: 'loading' })
-			withdrawWallet({ currency: type.value, amount: data.num, toAddress: data.address, pin: pin.value, googleCode: val }).then(res => {
+			withdrawWallet({
+				currency: type.value,
+				amount: data.num,
+				toAddress: data.address,
+				pin: pin,
+				accountType: options2.accountType,
+				code: code
+			}).then(res => {
 				if (res.code === 0) {
-					Toast.show(I18n.t("提交成功"), {
-						type: 'success'
-					})
+					Toast.show(I18n.t("提交成功"), { type: 'success' })
 					uni.navigateBack();
 				} else {
 					Toast.show(res.message)
-				}
-			})
-
-		} else {
-			//短信验证
-			AuthCodeModel.showAuthCodeModel({
-				callBack: (data) => {
-					BToast.showLoading(I18n.t('正在提交'))
-					withdrawWallet({ currency: type, amount: value.count, toAddress: value.address, pin: password, accountType: data.accountType, code: data.code }).then(response => {
-						if (response.data.code === 0) {
-							BToast.showSuccess(I18n.t("提交成功"))
-							refreshData();
-							navigation.pop();
-						} else {
-							BToast.showAlert(response.data.message)
-						}
-					}).catch(error => {
-						console.log(error);
-					})
-
 				}
 			})
 		}

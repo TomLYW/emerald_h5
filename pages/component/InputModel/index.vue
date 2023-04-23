@@ -29,7 +29,7 @@
 					<text>{{input.length > 5  ? '●' : ''}}</text>
 				</view>
 			</view>
-			<input type="number" :maxlength='6' @input="handleChange" class="ipt" :focus="focus" @blur="focus = false" />
+			<input type="number" :maxlength='6' @input="handleChange" class="ipt" :focus="focus" @blur="focus = false" :value="input" />
 		</view>
 	</Popup>
 </template>
@@ -57,8 +57,10 @@
 
 	function handleChange(e) {
 		input.value = e.detail.value;
-		if (e.detail.value.length === 6 && data.value.callback) {
-			data.value.callback(e.detail.value)
+
+		if (e.detail.value.length > 5 && data.value.callback) {
+			data.value.callback(e.detail.value);
+			input.value = '';
 		}
 	}
 
