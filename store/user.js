@@ -8,7 +8,10 @@ export const useUserStore = defineStore('user', {
 	state: () => {
 		return {
 			isLogin: false,
-			userInfo: {}
+			userInfo: {},
+			assets: [],
+			threshold: {},
+			balance: {}
 		};
 	},
 
@@ -20,6 +23,21 @@ export const useUserStore = defineStore('user', {
 		loginOut() {
 			this.isLogin = false;
 			this.userInfo = {};
+			this.assets = [];
+			this.threshold = {};
+			this.balance = {};
+		},
+		setUserInfo(payload) {
+			this.userInfo = payload;
+		},
+		setAssets(payload) {
+			this.assets = payload;
+		},
+		setThreshold(payload) {
+			this.threshold = payload;
+		},
+		setBalance(payload) {
+			this.balance = payload;
 		},
 	},
 });

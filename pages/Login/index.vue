@@ -24,31 +24,13 @@
 
 
 <script setup>
-	import {
-		reactive,
-		ref,
-		watch,
-		getCurrentInstance
-	} from 'vue';
-	import {
-		Field,
-		Button,
-		Form
-	} from 'vant';
-	import {
-		sendCode,
-		login
-	} from '@/services/user.js';
-	import {
-		isEmailAddress
-	} from '@/utils/index.js';
+	import { reactive, ref, watch, getCurrentInstance } from 'vue';
+	import { Field, Button, Form } from 'vant';
+	import { sendCode, login } from '@/services/user.js';
+	import { isEmailAddress } from '@/utils/index.js';
 	import Toast from '@/hooks/useToast.js';
-	import {
-		useUserStore
-	} from '@/store/user.js';
-	const {
-		$t: t
-	} = getCurrentInstance().proxy;
+	const { $t: t } = getCurrentInstance().proxy;
+	import { useUserStore } from '@/store/user.js';
 	let user = useUserStore();
 
 	let count = ref(61);

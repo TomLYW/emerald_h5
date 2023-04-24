@@ -7,7 +7,7 @@
 		</Nav>
 		<view class="card">
 			<text class="card_1">{{$t('电费余额(USDT)')}}</text>
-			<view class="card_2">{{dealNumber(123.455,2)}}</view>
+			<view class="card_2">{{dealNumber(data.balance.available, 2)}}</view>
 			<text class="card_3" @click="handleRecharge">{{$t('充值')}}</text>
 		</view>
 		<CustomTitle :title="$t('消费记录')" class="mid_title" />
@@ -25,15 +25,23 @@
 	import Toast from '@/hooks/useToast.js';
 	import I18n from '@/hooks/useLocale.js';
 	import { getElectricList } from '@/services/mine.js';
+	import { getElectricBalance } from '@/services/other.js';
 	import { dealNumber } from '@/utils/index.js';
 	let data = reactive({
-		list: []
+		list: [],
+		balance: {}
 	});
 
 	function getData() {
 		getElectricList({ page: 1, limit: 100 }).then(res => {
 			if (res.code === 0) {
 				data.list = res.data;
+			}
+		})
+
+		getElectricBalance().then(res => {
+			if (res.code === 0) {
+				data.balance = res.data;
 			}
 		})
 	}

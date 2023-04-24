@@ -9,6 +9,7 @@
 	import 'vant/lib/progress/style';
 	import 'vant/lib/popup/style';
 
+
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
@@ -19,9 +20,6 @@
 		onHide: function() {
 			console.log('App Hide')
 		},
-		onBackPress: function(e) {
-			console.log('loooks', e)
-		}
 	}
 </script>
 

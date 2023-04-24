@@ -18,33 +18,24 @@
 			<SelectCell :options="options5">
 				<template #bottom>
 					<view class="wallet">
-						<view class="wallet_item">
-							<text class="sum">0.00000000</text>
-							<text>ETH</text>
+						<view class="wallet_item" v-for="item in data.assets" :key="item.currency">
+							<text class="sum">{{isLogin ? unroundNumber(item.available, (item.currency === 'USDT' ? 2 : 8)) : '0.000000'}}</text>
+							<text>{{item.currency}}</text>
 						</view>
-						<view class="wallet_item">
-							<text class="sum">0.00000000</text>
-							<text>BTC</text>
-						</view>
-						<view class="wallet_item">
-							<text class="sum">0.01206200</text>
-							<text>USDT</text>
-						</view>
-
 					</view>
 				</template>
 			</SelectCell>
 			<SelectCell :options="options4" class="invite">
 				<template #right1>
-					<text class="fee">12331.00</text>
+					<text class="fee">{{isLogin ? dealNumber(data.balance.available,2) : '0.00'}}</text>
 				</template>
 			</SelectCell>
 			<SelectCell :options="options3" class="invite">
 				<template #bottom>
 					<view class="map" v-if="'BTC' in data.lines">
-						<!-- <text class="empty">{{$t('暂无数据')}}</text> -->
 						<Echarts :data='data.lines' />
 					</view>
+					<view class="echarts_empty" v-else>{{$t('暂无数据')}}</view>
 				</template>
 			</SelectCell>
 			<SelectCell :options="options2" class="invite" v-show="isLogin" />
@@ -60,12 +51,15 @@
 	import Echarts from '@/pages/Mine/census/ecahrts.vue';
 	import I18n from '@/hooks/useLocale.js';
 	import { useUserStore } from '@/store/user.js';
-	import { emailEncryption } from '@/utils/index.js';
+	import { emailEncryption, dealNumber, unroundNumber } from '@/utils/index.js';
 	import { getYieldLines } from '@/services/mine.js';
+	import { getElectricBalance, getAssets } from '@/services/other.js';
 	const { isLogin, userInfo } = useUserStore();
 
 	let data = reactive({
-		lines: {}
+		lines: {},
+		balance: {},
+		assets: []
 	})
 
 	const options1 = [{
@@ -135,16 +129,30 @@
 		}
 	}
 
-	function getLines() {
+	function loadData() {
 		getYieldLines().then(res => {
 			if (res.code === 0) {
 				data.lines = res.data;
 			}
 		})
+
+		getElectricBalance().then(res => {
+			if (res.code === 0) {
+				data.balance = res.data;
+			}
+		})
+
+		getAssets().then(res => {
+			if (res.code === 0) {
+				data.assets = res.data;
+			}
+		})
 	}
 
 	onMounted(() => {
-		getLines();
+		if (isLogin) {
+			loadData();
+		}
 	})
 </script>
 
@@ -212,15 +220,12 @@
 			font-weight: bold;
 		}
 
-		.map {
-			// height: 150px;
-			// margin-top: 15px;
-			// text-align: center;
-			// line-height: 150px;
-
-			.empty {
-				color: #6F6F6F;
-			}
+		.echarts_empty {
+			height: 170px;
+			text-align: center;
+			line-height: 170px;
+			color: #6F6F6F;
+			font-size: 15px;
 		}
 
 		.wallet {

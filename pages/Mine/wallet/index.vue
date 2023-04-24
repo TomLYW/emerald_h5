@@ -7,7 +7,7 @@
 		</Nav>
 		<view class="card">
 			<text class="card_1">{{$t('账户余额(USDT)')}}</text>
-			<view class="card_2">≈{{dealNumber(123.455,2)}}</view>
+			<view class="card_2">≈{{getBalance()}}</view>
 			<view>
 				<text class="btn_1" @click="handleRecharge">{{$t('充值')}}</text>
 				<text class="btn_2" @click="handleCash">{{$t('提现')}}</text>
@@ -16,12 +16,12 @@
 		<view class="wallet_content">
 			<CustomTitle :title="$t('资产列表')" class="mid_title" />
 			<view class="asset_list">
-				<view class="list_item" v-for="i in 3" :key="i">
+				<view class="list_item" v-for="item in data.assets" :key="item.currency">
 					<view class="item_left">
-						<image src="/static/mine/wallet_icon_btc.png" class="img" />
-						<text>ETH</text>
+						<image :src="getImg(item.currency)" class="img" />
+						<text>{{item.currency}}</text>
 					</view>
-					<text>0.6173671678</text>
+					<text>{{unroundNumber(item.available,(item.currency === 'USDT' ? 2 : 8))}}</text>
 				</view>
 			</view>
 			<view class="bottom_title">
@@ -46,18 +46,52 @@
 	import Toast from '@/hooks/useToast.js';
 	import I18n from '@/hooks/useLocale.js';
 	import { getAssetLogs } from '@/services/mine.js';
-	import { dealNumber } from '@/utils/index.js';
+	import { dealNumber, unroundNumber } from '@/utils/index.js';
 	import DialogModel from '@/pages/Mine/wallet/dialogModel.vue';
+	import { getAssets } from '@/services/other.js';
 	let data = reactive({
 		list: [],
+		assets: [],
 		open: false,
 		type: '',
 	});
+
+	function getBalance() {
+		let amount = 0;
+
+		for (let i = 0; i < data.assets.length; i++) {
+			let item = data.assets[i];
+			if (item.currency === 'USDT') {
+				amount += Number(item.available);
+			} else {
+				amount += Number(item.available) * item.price;
+			}
+		}
+
+		return dealNumber(amount, 2);
+	};
+
+	function getImg(type) {
+		switch (type) {
+			case 'USDT':
+				return '/static/mine/wallet_icon_usdt.png';
+			case 'BTC':
+				return '/static/mine/wallet_icon_btc.png';
+			default:
+				return '/static/mine/wallet_icon_eth.png';
+		}
+	}
 
 	function getData() {
 		getAssetLogs({ page: 1, limit: 3 }).then(res => {
 			if (res.code === 0) {
 				data.list = res.data;
+			}
+		})
+
+		getAssets().then(res => {
+			if (res.code === 0) {
+				data.assets = res.data;
 			}
 		})
 	}
@@ -175,6 +209,7 @@
 					padding: 15px;
 					@include flex(center, space-between);
 					color: #7D7D7D;
+					margin-top: 18px;
 
 					.item_left {
 						@include flex(center);

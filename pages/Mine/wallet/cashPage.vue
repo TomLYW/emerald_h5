@@ -18,13 +18,13 @@
 						</template>
 					</Field>
 					<view class="item_tip">
-						<text>{{$t('您有')}} {{dealNumber(1.34,8)}} {{type + $t('可用')}}, </text>
-						<text class="mr10">{{$t('最小提现金额')}} {{0.1}} {{type}}</text>
+						<text>{{$t('您有')}} {{dealNumber(data.assets.available, 8)}} {{type + $t('可用')}}, </text>
+						<text class="mr10">{{$t('最小提现金额')}} {{data.assets.minWithdraw}} {{type}}</text>
 						<text class="all_btn" @click="onAll">{{$t('全部')}}</text>
 					</view>
 				</view>
 				<view class="sure_btn" @click="handleOk" :style="{backgroundColor:canSubmit() ?'#05AA84' : '#ADDAD0' }">{{$t('确认')}}</view>
-				<view class="receipt">{{$t('实际到账')}} {{2.3}} {{type}}</view>
+				<view class="receipt">{{$t('实际到账')}} {{getDidCount()}} {{type}}</view>
 			</view>
 			<view class="cash_tips">
 				<text class="tips_item general_title">{{$t('温馨提示')}}</text>
@@ -49,8 +49,9 @@
 	import Toast from '@/hooks/useToast.js';
 	import { useUserStore } from '@/store/user.js';
 	import { withdrawWallet } from '@/services/mine.js';
+	import { getAssets, getElectricBalance } from '@/services/other.js';
 	import { Field } from 'vant';
-	import { ref, reactive, watch } from 'vue';
+	import { ref, reactive, watch, toRef } from 'vue';
 	const { userInfo } = useUserStore();
 
 	// 校验正则
@@ -66,7 +67,9 @@
 
 	let data = reactive({
 		address: '',
-		num: ''
+		num: '',
+		assets: {},
+		balance: {}
 	})
 
 	let options = reactive({
@@ -96,15 +99,20 @@
 	}
 
 	function getDidCount() {
-		if (Number(asset.fees) > 0) {
-			return (Number(data.num) - Number(asset.fees)) > 0 ? unroundNumber(Number(data.num) - Number(asset.fees), 8) : 0;
-		} else {
-			return unroundNumber(Number(data.num) * (1 - Number(asset.feesRate)), 8);
+		let { fees } = toRef(data, 'assets').value;
+		let num = toRef(data, 'num').value;
+
+		if (fees && num) {
+			if (fees > 0) {
+				return (num - fees) > 0 ? unroundNumber(num - fees, 8) : 0;
+			} else {
+				return unroundNumber(num * (1 - data.assets.feesRate), 8);
+			}
 		}
 	}
 
 	function onAll() {
-
+		data.num = dealNumber(data.assets.available, 8);
 	}
 
 	function handleOk() {
@@ -125,20 +133,25 @@
 
 		if (state.value) state.value = false;
 
-		if (Number(data.num) > Number(asset.available)) {
+		if (data.balance.available < 0) {
+			Toast.show(I18n.t("您的电费账户已欠费，为避免造成收益损失，请及时充值电费"));
+			return;
+		}
+
+		if (Number(data.num) > Number(data.assets.available)) {
 			Toast.show(I18n.t("余额不足"));
 			return;
 		}
 
 		// 比较最小提现额
-		if (Number(asset.minWithdraw) > Number(data.num)) {
-			Toast.show(`${I18n.t('小于最小提现金额')}${asset.minWithdraw} ${type.value}`);
+		if (Number(data.assets.minWithdraw) > Number(data.num)) {
+			Toast.show(`${I18n.t('小于最小提现金额')}${data.assets.minWithdraw} ${type.value}`);
 			return;
 		}
 
 		options.isShow = true;
 		options.title = I18n.t('提现') + type.value;
-		options.amount = 1.44 + " " + type.value;
+		options.amount = data.num + " " + type.value;
 	}
 
 	function callback(val) {
@@ -157,7 +170,9 @@
 		Toast.show(I18n.t('正在提交'), { type: 'loading' })
 		withdrawWallet({ currency: type.value, amount: data.num, toAddress: data.address, pin: pin.value, googleCode: val }).then(res => {
 			if (res.code === 0) {
-				Toast.show(I18n.t("提交成功"), { type: 'success' })
+				Toast.show(I18n.t("提交成功"), { type: 'success' });
+				data.address = '';
+				data.num = '';
 				uni.navigateBack();
 			} else {
 				Toast.show(res.message)
@@ -177,7 +192,9 @@
 				code: code
 			}).then(res => {
 				if (res.code === 0) {
-					Toast.show(I18n.t("提交成功"), { type: 'success' })
+					Toast.show(I18n.t("提交成功"), { type: 'success' });
+					data.address = '';
+					data.num = '';
 					uni.navigateBack();
 				} else {
 					Toast.show(res.message)
@@ -186,8 +203,23 @@
 		}
 	}
 
+	function loadData(type) {
+		getAssets().then(res => {
+			if (res.code === 0) {
+				data.assets = res.data.find(item => item.currency === type);
+			}
+		})
+
+		getElectricBalance().then(res => {
+			if (res.code === 0) {
+				data.balance = res.data;
+			}
+		})
+	}
+
 	onLoad((option) => {
 		type.value = option.type;
+		loadData(option.type);
 	})
 
 	watch(() => data.address, (newVal) => {

@@ -1,8 +1,6 @@
 <template>
 	<view class="echarts">
-		<view class="main">
-			<qiun-data-charts type="area" :opts="opts" :chartData="tab === 1 ? btcLines : ethLines" tooltipFormat="pieDemo" />
-		</view>
+		<qiun-data-charts type="area" :opts="opts" :chartData="tab === 1 ? btcLines : ethLines" tooltipFormat="pieDemo" />
 		<view class="btns">
 			<view :class="['btn',tab === 1 ? 'selectBtn' : '']" @click="handleChange(1)">
 				<image src="/static/home/home_icon_btc.png" class="img" />
@@ -27,7 +25,7 @@
 
 	let opts = reactive({
 		color: ['#05AA84'],
-		padding: [35, 0, 10, 0],
+		padding: [25, 0, 10, 0],
 		enableScroll: false,
 		dataLabel: false,
 		dataPointShapeType: 'hollow',
@@ -41,7 +39,7 @@
 		yAxis: {
 			gridType: "dash",
 			data: [],
-			// format: "yAxisDemo2"
+			format: "yAxisDemo2"
 		},
 		extra: {
 			area: {
@@ -97,7 +95,7 @@
 			let arr = btcLines.value.series[0].data;
 			let max = Math.max(...arr);
 			if (max > 10) {
-				opts.yAxis.data = [{ max: max.toFixed(0), min: 0 }];
+				opts.yAxis.data = [{ max: Math.ceil(max), min: 0 }];
 			} else {
 				opts.yAxis.data = [];
 			}
@@ -105,21 +103,18 @@
 			let arr = ethLines.value.series[0].data;
 			let max = Math.max(...arr);
 			if (max > 10) {
-				opts.yAxis.data = [{ max: max.toFixed(0), min: 0 }];
+				opts.yAxis.data = [{ max: Math.ceil(max), min: 0 }];
 			} else {
 				opts.yAxis.data = [];
 			}
 		}
 	}
 
-	handleChange(1);
+	// handleChange(1);
 </script>
 
 <style lang="scss" scoped>
 	.echarts {
-		.main {
-			// height: 200px;
-		}
 
 		.btns {
 			margin-top: 12px;

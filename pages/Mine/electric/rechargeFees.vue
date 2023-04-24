@@ -10,7 +10,7 @@
 			</Field>
 			<view class="info">
 				<text>{{$t('您有')}}</text>
-				<text class="usable">{{dealNumber(123.3234,2)}}</text>
+				<text class="usable">{{dealNumber(rest.available, 2)}}</text>
 				<text>{{$t('USDT可用')}}</text>
 				<text class="all" @click="handleAll">{{$t('全部')}}</text>
 			</view>
@@ -21,14 +21,16 @@
 </template>
 
 <script setup>
-	import { ref, reactive } from 'vue';
+	import { ref, reactive, onMounted } from 'vue';
 	import { Field } from 'vant';
 	import { dealNumber } from '@/utils/index.js';
 	import InputModel from '@/pages/component/InputModel/index.vue';
 	import I18n from '@/hooks/useLocale.js';
 	import Toast from '@/hooks/useToast.js';
 	import { rechargeFees } from '@/services/mine.js';
+	import { getAssets } from '@/services/other.js';
 	let amount = ref('');
+	let rest = ref({});
 
 	let options = reactive({
 		isShow: false,
@@ -39,11 +41,13 @@
 	})
 
 	function handleAll() {
-		amount.value = 100;
+		amount.value = dealNumber(rest.value.available, 2);
 	}
 
 	function handleSure() {
-		if (amount.value > 100) {
+		if (!amount.value) return;
+
+		if (amount.value > rest.value.available) {
 			Toast.show(I18n.t('余额不足'))
 			return;
 		}
@@ -59,6 +63,8 @@
 		})
 		rechargeFees({ amount: Number(amount.value), pin: password }).then(res => {
 			if (res.code === 0) {
+				amount.value = '';
+				Toast.closeToast();
 				uni.navigateTo({
 					url: `/pages/Mine/electric/remindSuccess?title=${I18n.t('充值成功')}`
 				})
@@ -67,6 +73,18 @@
 			}
 		})
 	}
+
+	function loadData() {
+		getAssets().then(res => {
+			if (res.code === 0) {
+				rest.value = res.data.find(item => item.currency === 'USDT');
+			}
+		})
+	}
+
+	onMounted(() => {
+		loadData();
+	})
 </script>
 
 <style lang="scss" scoped>

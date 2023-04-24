@@ -15,7 +15,13 @@
 	let title = ref('');
 
 	function handleClick() {
-		uni.navigateBack();
+		if (title.value === I18n.t('充值成功')) {
+			uni.reLaunch({
+				url: '/pages/Mine/electric/index'
+			})
+		} else {
+			uni.navigateBack();
+		}
 	}
 
 	onLoad((option) => {
