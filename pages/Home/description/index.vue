@@ -34,8 +34,7 @@
 				<view class="card_item">
 					<text>{{$t('产出币种')}}</text>
 					<view class="item_right">
-						<image :src="pageData.currency === 'BTC' ? '/static/home/home_icon_btc.png' : '/static/home/home_icon_eth.png'"
-							class="icon" />
+						<image :src="pageData.currency === 'BTC' ? '/static/home/home_icon_btc.png' : '/static/home/home_icon_eth.png'" class="icon" />
 						<text>{{pageData.currency}}</text>
 					</view>
 				</view>
@@ -84,6 +83,7 @@
 	import I18n from '@/hooks/useLocale.js';
 	import Toast from '@/hooks/useToast.js';
 	import InputModel from '@/pages/component/InputModel/index.vue';
+	import { getAssets } from '@/services/other.js';
 	import {
 		getMinerDetails,
 		getMealType,
@@ -112,6 +112,7 @@
 	let pageData = ref({});
 	let amount = ref(0);
 	let id = ref(0);
+	let asset = ref({});
 
 	let options = reactive({
 		isShow: false,
@@ -155,8 +156,7 @@
 			return;
 		}
 
-		// if (Number(pageData.value.price) * amount.value > Number(asset.available)) {
-		if (pageData.value.price * amount.value > 10) {
+		if ((pageData.value.price * amount.value) > asset.value.available) {
 			Toast.show(I18n.t("USDT余额不足"))
 			return;
 		}
@@ -207,11 +207,15 @@
 	}
 
 	function getData(id) {
-		getMinerDetails({
-			id
-		}).then(res => {
+		getMinerDetails({ id }).then(res => {
 			if (res.code === 0) {
 				pageData.value = res.data;
+			}
+		})
+
+		getAssets().then(res => {
+			if (res.code === 0) {
+				asset.value = res.data.find(item => item.currency === 'USDT');
 			}
 		})
 	}

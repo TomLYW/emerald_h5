@@ -1,26 +1,20 @@
 <template>
 	<view class="cloud">
-		<Tabs tab1="BTC" tab2="ETH" @onChange="handleChange" />
-		<view class="main" v-if="cloudList.ethData.length || cloudList.btcData.length">
-			<YunCell :item="item" v-for="item  in  (tab === 1 ? cloudList.btcData : cloudList.ethData)" :key="item.id"
-				style="margin-bottom: 15px;" />
+		<Tabs tab1="BTC" tab2="ETH" v-model="tab" />
+		<view class="main" v-if="(cloudList.ethData.length && tab === 2) || (cloudList.btcData.length && tab === 1)">
+			<YunCell :item="item" v-for="item  in  (tab === 1 ? cloudList.btcData : cloudList.ethData)" :key="item.id" style="margin-bottom: 15px;" />
 		</view>
 		<NoData v-else hideBtn />
 	</view>
 </template>
 
 <script setup>
+	import { onShow } from "@dcloudio/uni-app";
 	import YunCell from '@/pages/Home/YunList/index.vue';
 	import Tabs from '@/pages/component/Tabs/index.vue';
 	import NoData from '@/pages/component/NoData/index.vue';
-	import {
-		getMinerList
-	} from '@/services/cloud.js';
-	import {
-		ref,
-		reactive,
-		onMounted
-	} from 'vue';
+	import { getMinerList } from '@/services/cloud.js';
+	import { ref, reactive } from 'vue';
 
 	let tab = ref(1);
 	let cloudList = reactive({
@@ -48,12 +42,7 @@
 		})
 	}
 
-
-	function handleChange(val) {
-		tab.value = val;
-	}
-
-	onMounted(() => {
+	onShow(() => {
 		getBtcList();
 		getEthList();
 	})

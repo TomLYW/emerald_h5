@@ -7,6 +7,11 @@ let i18nConfig = {
 	locale: uni.getLocale(),
 	messages
 }
+console.log('mainjs文件', uni.getLocale())
+uni.onLocaleChange((val) => {
+	i18nConfig.locale = val.locale;
+	console.log('xx行行行')
+})
 
 // #ifndef VUE3
 import Vue from 'vue';

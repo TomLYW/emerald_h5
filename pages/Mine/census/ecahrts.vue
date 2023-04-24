@@ -110,7 +110,7 @@
 		}
 	}
 
-	// handleChange(1);
+	handleChange(1);
 </script>
 
 <style lang="scss" scoped>

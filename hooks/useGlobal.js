@@ -1,37 +1,22 @@
-import { getAssets, getElectricBalance, getThreshold, getUserInfo } from '@/services/other.js';
+import { getUserInfo } from '@/services/other.js';
 import { useUserStore } from '@/store/user.js';
 const user = useUserStore();
 
-function loadAssets() {
-	getAssets().then(res => {
-		if (res.code === 0) {
-			user.setAssets(res.data);
-		}
-	})
-}
-
-function loadBalance() {
-	getElectricBalance().then(res => {
-		if (res.code === 0) {
-			user.setBalance(res.data);
-		}
-	})
-}
-
-function loadThreshold() {
-	getThreshold().then(res => {
-		if (res.code === 0) {
-			user.setThreshold(res.data);
-		}
-	})
-}
-
-function loadUserInfo() {
+export function loadUserInfo() {
 	getUserInfo().then(res => {
 		if (res.code === 0) {
-			user.setThreshold(res.data);
+			user.setUserInfo(res.data);
 		}
 	})
 }
 
-export default { loadAssets, loadBalance, loadThreshold, loadUserInfo };
+export function savePath() {
+	const pages = getCurrentPages();
+	user.setBackPath(pages[pages.length - 2].route);
+}
+
+export function linkJump() {
+	uni.reLaunch({
+		url: `/${user.backPath}`
+	})
+}

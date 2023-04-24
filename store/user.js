@@ -1,6 +1,4 @@
-import {
-	defineStore
-} from 'pinia';
+import { defineStore } from 'pinia';
 
 export const useUserStore = defineStore('user', {
 	unistorage: true,
@@ -9,9 +7,7 @@ export const useUserStore = defineStore('user', {
 		return {
 			isLogin: false,
 			userInfo: {},
-			assets: [],
-			threshold: {},
-			balance: {}
+			backPath: ''
 		};
 	},
 
@@ -20,24 +16,24 @@ export const useUserStore = defineStore('user', {
 			this.isLogin = true;
 			this.userInfo = payload;
 		},
+
 		loginOut() {
 			this.isLogin = false;
 			this.userInfo = {};
-			this.assets = [];
-			this.threshold = {};
-			this.balance = {};
+			this.backPath = '';
 		},
+
 		setUserInfo(payload) {
 			this.userInfo = payload;
 		},
-		setAssets(payload) {
-			this.assets = payload;
+
+		setBackPath(payload) {
+			this.backPath = payload;
 		},
-		setThreshold(payload) {
-			this.threshold = payload;
-		},
-		setBalance(payload) {
-			this.balance = payload;
-		},
+
+		clearBackPath() {
+			this.backPath = '';
+		}
+
 	},
 });

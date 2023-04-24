@@ -17,10 +17,16 @@
 			</view>
 			<SelectCell :options="options5">
 				<template #bottom>
-					<view class="wallet">
+					<view class="wallet" v-if="isLogin">
 						<view class="wallet_item" v-for="item in data.assets" :key="item.currency">
-							<text class="sum">{{isLogin ? unroundNumber(item.available, (item.currency === 'USDT' ? 2 : 8)) : '0.000000'}}</text>
+							<text class="sum">{{unroundNumber(item.available, (item.currency === 'USDT' ? 2 : 8))}}</text>
 							<text>{{item.currency}}</text>
+						</view>
+					</view>
+					<view class="wallet" v-else>
+						<view class="wallet_item" v-for="item in ['ETH','BTC','USDT']" :key="item">
+							<text class="sum">0.000000</text>
+							<text>{{item}}</text>
 						</view>
 					</view>
 				</template>

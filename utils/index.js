@@ -1,6 +1,4 @@
-import {
-	useUserStore
-} from '@/store/user.js';
+import { useUserStore } from '@/store/user.js';
 import moment from 'moment';
 
 const user = useUserStore();

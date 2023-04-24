@@ -8,8 +8,7 @@
 					<text class="code" @click="handleSend">{{count=== 61 ? $t('获取验证码') : count + $t('s后获取')}}</text>
 				</template>
 			</Field>
-			<Field center :placeholder="$t('请输入密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'"
-				:right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
+			<Field center :placeholder="$t('请输入密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'" :right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
 				@click-right-icon='handleEyes' v-model="submitInfo.password" name='password' v-else />
 			<view class="login-code">
 				<text @click="handleCode">{{$t('验证码登录')}}</text>
@@ -24,7 +23,7 @@
 
 
 <script setup>
-	import { reactive, ref, watch, getCurrentInstance } from 'vue';
+	import { reactive, ref, watch, getCurrentInstance, onMounted } from 'vue';
 	import { Field, Button, Form } from 'vant';
 	import { sendCode, login } from '@/services/user.js';
 	import { isEmailAddress } from '@/utils/index.js';
@@ -68,7 +67,9 @@
 				Toast.show(t('登录成功'), {
 					type: 'success'
 				})
-				uni.navigateBack();
+				uni.reLaunch({
+					url: '/' + user.backPath
+				})
 			} else {
 				Toast.show(res.message);
 			}
@@ -145,6 +146,11 @@
 		} else {
 			btnState.value = true;
 		}
+	})
+
+	onMounted(() => {
+		const pages = getCurrentPages();
+		user.setBackPath(pages[pages.length - 2].route);
 	})
 </script>
 

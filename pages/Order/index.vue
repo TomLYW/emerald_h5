@@ -14,7 +14,8 @@
 </template>
 
 <script setup>
-	import { ref, reactive, onMounted } from 'vue';
+	import { onShow } from "@dcloudio/uni-app";
+	import { ref, reactive } from 'vue';
 	import OrderMinerList from '@/pages/Order/components/OrderMinerList.vue';
 	import OrderPowerList from '@/pages/Order/components/OrderPowerList.vue';
 	import Tabs from '@/pages/component/Tabs/index.vue';
@@ -45,7 +46,7 @@
 		})
 	}
 
-	onMounted(() => {
+	onShow(() => {
 		if (isLogin) {
 			getPowerData();
 			getMinerData();

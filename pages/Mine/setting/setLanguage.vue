@@ -23,19 +23,26 @@
 	let language = ref(uni.getLocale());
 
 	function handleFinish() {
-		uni.setLocale(language.value);
-		uni.switchTab({
-			url: '/pages/Mine/index'
-		});
-		Toast.show(I18n.t('设置成功'), {
-			type: 'success'
-		})
+		if (language.value !== uni.getLocale()) {
+			uni.setLocale(language.value);
+			uni.switchTab({
+				url: '/pages/Mine/index',
+				success: function(e) {
+					var page = getCurrentPages().pop();
+					console.log('page', page.$forceUpdate)
+					// if (page == undefined || page == null) return;
+					page.$forceUpdate()
+				}
+			});
+
+			Toast.show(I18n.t('设置成功'), {
+				type: 'success'
+			})
+		}
 	}
 
 	function handleBack() {
-		uni.redirectTo({
-			url: '/pages/Mine/setting/index'
-		});
+		history.back();
 	}
 </script>
 
