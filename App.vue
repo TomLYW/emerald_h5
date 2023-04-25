@@ -11,14 +11,15 @@
 	import '@/styles/index.scss';
 
 
-	// import WarnPop from '@/pages/Other/warnPop.vue';
 	import Toast from '@/hooks/useCustomPop.js';
 	import { useUserStore } from '@/store/user.js';
 	// const user = useUserStore();
 
 	export default {
 		setup() {
-			Toast.showPop('你身边的你的爸爸你', { title: '提示' })
+			// Toast.showPop('你身边的你的爸爸你', { title: '提示'},(e)=>{
+			// 	console.log('急急急',e)
+			// })
 
 		},
 		onLaunch: function() {

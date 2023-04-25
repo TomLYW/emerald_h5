@@ -44,6 +44,7 @@
 	import config from '@/http/config.js';
 	import { updateAvatar } from '@/services/user.js';
 	import Toast from '@/hooks/useToast.js';
+	import Popup from '@/hooks/useCustomPop.js';
 	import I18n from '@/hooks/useLocale.js';
 	const user = useUserStore();
 
@@ -83,11 +84,17 @@
 	}, ]
 
 	function handleOut() {
-		user.loginOut();
-		uni.reLaunch({
-			url: '/pages/Home/index'
-		});
-
+		Popup.showPop(I18n.t('是否退出登录？'), {
+			title: I18n.t("提示"),
+			showCancel: true,
+			confirm: (close) => {
+				user.loginOut();
+				uni.reLaunch({
+					url: '/pages/Home/index'
+				});
+				close();
+			}
+		})
 	}
 
 	function updataAvatar() {

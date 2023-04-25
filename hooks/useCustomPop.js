@@ -1,10 +1,10 @@
 import { createApp } from 'vue';
 import WarnPop from '@/pages/Other/warnPop.vue';
 
+
 const showPop = (message, option = {}) => {
 	const mountNode = document.createElement('div');
 	const Instance = createApp(WarnPop, {
-		show: true,
 		message,
 		...option,
 		close: () => {
