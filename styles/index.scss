@@ -1,0 +1,10 @@
+.custom-vant-toast {
+	background-color: rgba(0, 0, 0, 0.8);
+	max-width: 45%;
+	min-height: initial;
+	width: fit-content;
+	
+	.van-toast__text{
+		margin-top: 12px;
+	}
+}

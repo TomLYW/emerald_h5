@@ -17,22 +17,20 @@
 </template>
 
 <script setup>
-	import { ref } from 'vue';
+	import { ref, getCurrentInstance } from 'vue';
 	import Toast from '@/hooks/useToast.js';
 	import I18n from '@/hooks/useLocale.js';
+	const { proxy } = getCurrentInstance();
 	let language = ref(uni.getLocale());
 
 	function handleFinish() {
 		if (language.value !== uni.getLocale()) {
 			uni.setLocale(language.value);
+			proxy.$i18n.locale = language.value;
+			I18n.locale = language.value;
+
 			uni.switchTab({
 				url: '/pages/Mine/index',
-				success: function(e) {
-					var page = getCurrentPages().pop();
-					console.log('page', page.$forceUpdate)
-					// if (page == undefined || page == null) return;
-					page.$forceUpdate()
-				}
 			});
 
 			Toast.show(I18n.t('设置成功'), {

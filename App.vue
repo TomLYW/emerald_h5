@@ -8,9 +8,19 @@
 	import 'vant/lib/dialog/style';
 	import 'vant/lib/progress/style';
 	import 'vant/lib/popup/style';
+	import '@/styles/index.scss';
 
+
+	// import WarnPop from '@/pages/Other/warnPop.vue';
+	import Toast from '@/hooks/useCustomPop.js';
+	import { useUserStore } from '@/store/user.js';
+	// const user = useUserStore();
 
 	export default {
+		setup() {
+			Toast.showPop('你身边的你的爸爸你', { title: '提示' })
+
+		},
 		onLaunch: function() {
 			console.log('App Launch')
 		},

@@ -1,14 +1,22 @@
-import {
-	showToast,
-	closeToast
-} from 'vant';
+import { showToast, closeToast } from 'vant';
 
-function show(message, option = {
-	type: 'fail'
-}) {
+
+function getImg(type) {
+	switch (type) {
+		case 'success':
+			return '/static/toast/toast_success.png';
+		case 'fail':
+			return '/static/toast/toast_error.png';
+		default:
+			return '/static/toast/toast_alert.png';
+	}
+}
+
+function show(message, option = {}) {
 	showToast({
 		message,
-		icon: option.type === 'fail' ? '/static/base/warn.png' : '',
+		className: 'custom-vant-toast',
+		icon: getImg(option.type),
 		wordBreak: 'break-word',
 		...option
 	});

@@ -55,7 +55,6 @@
 	import SelectCell from '@/pages/component/SelectCell/index.vue';
 	import Avatar from '@/pages/component/Avatar/index.vue';
 	import Echarts from '@/pages/Mine/census/ecahrts.vue';
-	import I18n from '@/hooks/useLocale.js';
 	import { useUserStore } from '@/store/user.js';
 	import { emailEncryption, dealNumber, unroundNumber } from '@/utils/index.js';
 	import { getYieldLines } from '@/services/mine.js';

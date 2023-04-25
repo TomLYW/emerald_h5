@@ -280,7 +280,30 @@
 					"titleNView": false
 				}
 			}
+		},
+
+
+		// {
+		// 	"path": "pages/Other/warnPop",
+		// 	"style": {
+		// 		"enablePullDownRefresh": false,
+		// 		// "navigationBarTitleText": "",
+		// 		"h5": {
+		// 			"titleNView": false
+		// 		}
+		// 	}
+		// },
+		{
+			"path": "pages/Other/poweTips",
+			"style": {
+				"enablePullDownRefresh": false,
+				// "navigationBarTitleText": "",
+				"h5": {
+					"titleNView": false
+				}
+			}
 		}
+
 	],
 	"tabBar": {
 		"color": "#8D8D8D",
@@ -288,7 +311,8 @@
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
 		"list": [{
-				"pagePath": "pages/Home/index",
+				"pagePath": "pages/Other/poweTips",
+				// "pagePath": "pages/Home/index",
 				"text": "%home%",
 				"iconPath": "static/tab/tab_home.png",
 				"selectedIconPath": "static/tab/tab_home_s.png"

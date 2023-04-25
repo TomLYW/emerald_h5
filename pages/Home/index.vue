@@ -98,7 +98,7 @@
 			isRecommend: 1
 		}).then(res => {
 			if (res.code === 0) {
-				current.cloudData = res.data[0];
+				current.cloudData = res.data[0] ?? {};
 			}
 		})
 	}
