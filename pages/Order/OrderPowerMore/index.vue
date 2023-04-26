@@ -1,14 +1,17 @@
 <template>
-	<scroll-view scroll-y="true" style="height: 100%;">
+	<view class="power_main">
+		<Nav class="power_nav" :title="$t('output_r')">
+			<template #left>
+				<image src="/static/base/title_left_arrow.png" class="icon" @click="handleClick" />
+			</template>
+		</Nav>
 		<view class="output_record">
 			<OrderPowerDetails :item="pageData.details" v-if="'status' in pageData.details" />
 			<CustomTitle :title="$t('output_r')" />
-			<view v-if="pageData.records.length">
-				<Cell v-for="item in pageData.records" :key="item.id" style="margin-bottom: 15px;" :item="item" />
-			</view>
-			<NoData hideBtn v-else />
+			<Cell v-for="item in pageData.records" :key="item.id" style="margin-bottom: 15px;" :item="item" />
+			<NoData hideBtn v-show="!pageData.records.length" class="empty" />
 		</view>
-	</scroll-view>
+	</view>
 </template>
 
 <script setup>
@@ -16,21 +19,19 @@
 	import CustomTitle from '@/pages/component/CustomTitle/index.vue';
 	import NoData from '@/pages/component/NoData/index.vue';
 	import Cell from '@/pages/component/Cell/index.vue';
-	import {
-		reactive
-	} from 'vue';
-	import {
-		onLoad
-	} from '@dcloudio/uni-app';
-	import {
-		getPowerRecord,
-		getPowerOrderDetails
-	} from '@/services/order.js';
+	import Nav from '@/pages/component/Nav/index.vue';
+	import { reactive } from 'vue';
+	import { onLoad } from '@dcloudio/uni-app';
+	import { getPowerRecord, getPowerOrderDetails } from '@/services/order.js';
 
 	let pageData = reactive({
 		records: [],
 		details: {}
 	})
+
+	function handleClick() {
+		history.back();
+	}
 
 	function getOrderDetails(id) {
 		getPowerOrderDetails({
@@ -61,7 +62,26 @@
 </script>
 
 <style lang="scss" scoped>
-	.output_record {
-		padding: 15px;
+	.power_main {
+		height: 100%;
+		@include flex(null, null, column);
+
+		.power_nav {
+			.icon {
+				width: 23px;
+				height: 17px;
+			}
+		}
+
+		.output_record {
+			flex: 1;
+			overflow-y: auto;
+			padding: 6px 15px 15px;
+
+			.empty {
+				height: fit-content;
+				margin-top: 60px;
+			}
+		}
 	}
 </style>

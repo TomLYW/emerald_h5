@@ -33,10 +33,7 @@
 		Button,
 		Form
 	} from 'vant';
-	import {
-		sendCode,
-		bindEmail
-	} from '@/services/user.js';
+	import { sendCode, bindEmail } from '@/services/user.js';
 	import { isEmailAddress } from '@/utils/index.js';
 	import Toast from '@/hooks/useToast.js';
 	import Nav from '@/pages/component/Nav/index.vue';

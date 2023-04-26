@@ -1,5 +1,10 @@
 <template>
-	<scroll-view scroll-y="true" style="height: 100%;">
+	<view class="setting_main">
+		<Nav class="setting_nav" :title="$t('set')">
+			<template #left>
+				<image src="/static/base/title_left_arrow.png" class="icon" @click="handleClick" />
+			</template>
+		</Nav>
 		<view class="setting">
 			<view class="caption">{{$t('基本信息')}}</view>
 			<SelectCell :options="options1" class="mb15">
@@ -34,13 +39,14 @@
 				{{$t('退出登录')}}
 			</view>
 		</view>
-	</scroll-view>
+	</view>
 </template>
 
 <script setup>
 	import SelectCell from '@/pages/component/SelectCell/index.vue';
-	import { useUserStore } from '@/store/user.js';
 	import Avatar from '@/pages/component/Avatar/index.vue';
+	import Nav from '@/pages/component/Nav/index.vue';
+	import { useUserStore } from '@/store/user.js';
 	import config from '@/http/config.js';
 	import { updateAvatar } from '@/services/user.js';
 	import Toast from '@/hooks/useToast.js';
@@ -129,45 +135,63 @@
 			}
 		});
 	}
+
+	function handleClick() {
+		history.back();
+	}
 </script>
 
 <style lang="scss" scoped>
-	.setting {
-		padding: 15px;
+	.setting_main {
+		height: 100%;
+		@include flex(null, null, column);
 
-		.mb15 {
-			margin-bottom: 15px;
+		.setting_nav {
+			.icon {
+				width: 23px;
+				height: 17px;
+			}
 		}
 
-		.caption {
-			margin-bottom: 12px;
-			font-size: 13px;
-			color: #666;
-		}
+		.setting {
+			flex: 1;
+			overflow-y: auto;
+			padding: 0px 15px 15px;
 
-		.mr10 {
-			margin-right: 10px;
-		}
+			.mb15 {
+				margin-bottom: 15px;
+			}
 
-		.rcs {
-			color: #666;
-			font-size: 15px;
-		}
+			.caption {
+				margin-bottom: 12px;
+				font-size: 13px;
+				color: #666;
+			}
 
-		.login_out {
-			background-color: red;
-			color: #fff;
-			font-size: 18px;
-			font-weight: bold;
-			text-align: center;
-			padding-top: 12px;
-			padding-bottom: 12px;
-			border-radius: 12px;
-			box-shadow: 0px 0px 10px -6px #000;
-			margin-top: 35px;
+			.mr10 {
+				margin-right: 10px;
+			}
 
-			&:active {
-				opacity: 0.7;
+			.rcs {
+				color: #666;
+				font-size: 15px;
+			}
+
+			.login_out {
+				background-color: red;
+				color: #fff;
+				font-size: 18px;
+				font-weight: bold;
+				text-align: center;
+				padding-top: 12px;
+				padding-bottom: 12px;
+				border-radius: 12px;
+				box-shadow: 0px 0px 10px -6px #000;
+				margin-top: 35px;
+
+				&:active {
+					opacity: 0.7;
+				}
 			}
 		}
 	}
