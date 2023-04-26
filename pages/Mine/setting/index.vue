@@ -87,12 +87,11 @@
 		Popup.showPop(I18n.t('是否退出登录？'), {
 			title: I18n.t("提示"),
 			showCancel: true,
-			confirm: (close) => {
+			confirm: () => {
 				user.loginOut();
 				uni.reLaunch({
 					url: '/pages/Home/index'
 				});
-				close();
 			}
 		})
 	}

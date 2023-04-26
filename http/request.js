@@ -1,7 +1,7 @@
 import config from '@/http/config.js';
-import i18n from '@/hooks/useLocale.js';
-import { useUserStore } from '@/store/user.js';
-const user = useUserStore();
+import I18n from '@/hooks/useLocale.js';
+import Popup from '@/hooks/useCustomPop.js';
+import Toast from '@/hooks/useToast.js';
 
 
 /* 1.请求拦截器 */
@@ -34,28 +34,37 @@ let Responder = (res) => {
 	if (res?.data) {
 		switch (res.data.code) {
 			case 1000:
-				user.loginOut();
-				uni.showToast({
-					icon: 'error',
-					title: i18n.t('用户认证失效'),
-					duration: 2000,
+				Popup.showPop(I18n.t('用户认证失效'), {
+					title: I18n.t('提示'),
+					confirm: () => {
+						if (uni.getStorageSync('token')) {
+							location.reload();
+						}
+					}
 				});
+				uni.clearStorageSync();
 				return;
 			case 1001:
-				user.loginOut();
-				uni.showToast({
-					icon: 'none',
-					title: i18n.t("此账户已被禁用，请联系管理员了解"),
-					duration: 2000,
+				Popup.showPop(I18n.t('此账户已被禁用，请联系管理员了解'), {
+					title: I18n.t('提示'),
+					confirm: () => {
+						if (uni.getStorageSync('token')) {
+							location.reload();
+						}
+					}
 				});
+				uni.clearStorageSync();
 				return;
 			case 1002:
-				user.loginOut();
-				uni.showToast({
-					icon: 'error',
-					title: i18n.t("此账户已登录其他设备"),
-					duration: 2000,
+				Popup.showPop(I18n.t('此账户已登录其他设备'), {
+					title: I18n.t('提示'),
+					confirm: () => {
+						if (uni.getStorageSync('token')) {
+							location.reload();
+						}
+					}
 				});
+				uni.clearStorageSync();
 				return;
 			default:
 				return Promise.resolve(res.data);
@@ -74,10 +83,7 @@ let request = (configOptions = {}) => {
 				networkType
 			}) => {
 				if (networkType === 'none') {
-					uni.showToast({
-						title: i18n.t('网络错误'),
-						icon: 'error'
-					});
+					Toast.show(I18n.t('网络错误'), { type: 'fail' });
 				} else {
 					uni.request({
 						...options,

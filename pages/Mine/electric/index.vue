@@ -13,12 +13,14 @@
 		<CustomTitle :title="$t('消费记录')" class="mid_title" />
 		<view class="main">
 			<CensusCell v-for="item in data.list" :key="item.id" :item="item" type='electric' class="main_item" />
+			<NoData hideBtn v-show="!data.list.length" />
 		</view>
 	</view>
 </template>
 
 <script setup>
 	import Nav from '@/pages/component/Nav/index.vue';
+	import NoData from '@/pages/component/NoData/index.vue';
 	import CustomTitle from '@/pages/component/CustomTitle/index.vue';
 	import CensusCell from '@/pages/component/CensusCell/index.vue';
 	import { reactive, onMounted } from 'vue';

@@ -1,19 +1,25 @@
 <template>
-	<view class="invite">
-		<view class="invite_header">
-			<text class="title">{{$t('邀请码')}}</text>
-			<text class="copy_num">{{copy.number}}</text>
-			<text class="copy_btn" @click="handleCopy">{{$t('复制')}}</text>
-		</view>
-		<CustomTitle :title="$t('invite')" />
-		<view v-if="copy.list.length > 0">
+	<view class="invite_main">
+		<Nav :title="$t('invite')" class="invite_nav">
+			<template #left>
+				<image src="/static/base/title_left_arrow.png" class="icon" @click="handleClick" />
+			</template>
+		</Nav>
+		<view class="invite">
+			<view class="invite_header">
+				<text class="title">{{$t('邀请码')}}</text>
+				<text class="copy_num">{{copy.number}}</text>
+				<text class="copy_btn" @click="handleCopy">{{$t('复制')}}</text>
+			</view>
+			<CustomTitle :title="$t('invite')" />
 			<RecordCell v-for="item in copy.list" :key="item.id" :item="item" />
+			<NoData hideBtn class="empty" v-show="!copy.list.length" />
 		</view>
-		<NoData hideBtn class="empty" v-else />
 	</view>
 </template>
 
 <script setup>
+	import Nav from '@/pages/component/Nav/index.vue';
 	import CustomTitle from '@/pages/component/CustomTitle/index.vue';
 	import NoData from '@/pages/component/NoData/index.vue';
 	import RecordCell from '@/pages/Mine/invite/RecordCell.vue';
@@ -32,6 +38,10 @@
 		number: '',
 		list: []
 	})
+
+	function handleClick() {
+		history.back();
+	}
 
 	function handleCopy() {
 		if (copy.number) {
@@ -67,49 +77,64 @@
 </script>
 
 <style lang="scss" scoped>
-	.invite {
-		padding: 15px;
+	.invite_main {
+		height: 100%;
+		@include flex(null, null, column);
 
-		.empty {
-			margin-top: 100px;
+		.invite_nav {
+			.icon {
+				width: 23px;
+				height: 17px;
+			}
 		}
 
-		.invite_header {
-			height: 140px;
-			box-shadow: 0px 0px 10px -8px;
-			border-radius: 15px;
-			background-color: #05AA84;
-			background-image: url('/static/mine/refferal_icon_bg.png');
-			background-repeat: no-repeat;
-			background-size: cover;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
+		.invite {
+			flex: 1;
+			padding: 15px;
+			overflow-y: auto;
 
-			.title {
-				color: #E3F9F4;
-				font-size: 14px;
+			.empty {
+				margin-top: 100px;
+				height: fit-content;
 			}
 
-			.copy_num {
-				margin-top: 10px;
-				margin-bottom: 10px;
-				color: #fff;
-				font-size: 30px;
-				font-weight: bold;
-				letter-spacing: 9px;
-			}
+			.invite_header {
+				height: 140px;
+				box-shadow: 0px 0px 10px -8px;
+				border-radius: 15px;
+				background-color: #05AA84;
+				background-image: url('/static/mine/refferal_icon_bg.png');
+				background-repeat: no-repeat;
+				background-size: cover;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
 
-			.copy_btn {
-				background-color: #fff;
-				color: #05AA84;
-				border-radius: 3px;
-				padding: 3px 30px;
-				box-shadow: 0px 0px 10px -6px #000;
+				.title {
+					color: #E3F9F4;
+					font-size: 14px;
+				}
 
-				&:active {
-					opacity: 0;
+				.copy_num {
+					margin-top: 10px;
+					margin-bottom: 10px;
+					color: #fff;
+					font-size: 30px;
+					font-weight: bold;
+					letter-spacing: 9px;
+				}
+
+				.copy_btn {
+					background-color: #fff;
+					color: #05AA84;
+					border-radius: 3px;
+					padding: 3px 30px;
+					box-shadow: 0px 0px 10px -6px #000;
+
+					&:active {
+						opacity: 0;
+					}
 				}
 			}
 		}

@@ -1,20 +1,27 @@
 <template>
-	<view class="recharge_fees">
-		<view class="title">{{$t('充值电费')}}</view>
-		<view class="box">
-			<text class="num">{{$t('数量')}}</text>
-			<Field v-model="amount" type="number" :placeholder="$t('请输入')" class="ipt">
-				<template #button>
-					<text>USDT</text>
-				</template>
-			</Field>
-			<view class="info">
-				<text>{{$t('您有')}}</text>
-				<text class="usable">{{dealNumber(rest.available, 2)}}</text>
-				<text>{{$t('USDT可用')}}</text>
-				<text class="all" @click="handleAll">{{$t('全部')}}</text>
+	<view class="recharge_main">
+		<Nav class="recharge_header">
+			<template #left>
+				<image src="/static/base/title_left_arrow.png" class="icon" @click="handleClick" />
+			</template>
+		</Nav>
+		<view class="recharge_fees">
+			<view class="title">{{$t('充值电费')}}</view>
+			<view class="box">
+				<text class="num">{{$t('数量')}}</text>
+				<Field v-model="amount" type="number" :placeholder="$t('请输入')" class="ipt">
+					<template #button>
+						<text>USDT</text>
+					</template>
+				</Field>
+				<view class="info">
+					<text>{{$t('您有')}}</text>
+					<text class="usable">{{dealNumber(rest.available, 2)}}</text>
+					<text>{{$t('USDT可用')}}</text>
+					<text class="all" @click="handleAll">{{$t('全部')}}</text>
+				</view>
+				<view class="sure" @click="handleSure" :style="{backgroundColor:amount ? '#05AA84' :'#ADDAD0'}">{{$t('确认充值')}}</view>
 			</view>
-			<view class="sure" @click="handleSure" :style="{backgroundColor:amount ? '#05AA84' :'#ADDAD0'}">{{$t('确认充值')}}</view>
 		</view>
 		<InputModel :options="options" />
 	</view>
@@ -25,6 +32,7 @@
 	import { Field } from 'vant';
 	import { dealNumber } from '@/utils/index.js';
 	import InputModel from '@/pages/component/InputModel/index.vue';
+	import Nav from '@/pages/component/Nav/index.vue';
 	import I18n from '@/hooks/useLocale.js';
 	import Toast from '@/hooks/useToast.js';
 	import { rechargeFees } from '@/services/mine.js';
@@ -82,75 +90,93 @@
 		})
 	}
 
+	function handleClick() {
+		history.back();
+	}
+
 	onMounted(() => {
 		loadData();
 	})
 </script>
 
 <style lang="scss" scoped>
-	.recharge_fees {
-		padding: 15px;
+	.recharge_main {
+		height: 100%;
+		@include flex(null, null, column);
 
-		.title {
-			font-size: 25px;
-			font-weight: bold;
-			color: #333;
+		.recharge_header {
+			.icon {
+				width: 23px;
+				height: 17px;
+			}
 		}
 
-		.box {
-			box-shadow: 0px 0px 10px -6px #000;
-			border-radius: 15px;
+		.recharge_fees {
+			flex: 1;
 			padding: 15px;
-			background-color: #fff;
-			margin-top: 20px;
+			overflow-y: auto;
 
-			.ipt {
-				border: 1px solid #DFDFDF;
-				border-radius: 12px;
-				padding-top: 12px;
-				padding-bottom: 12px;
-				margin-top: 10px;
-				margin-bottom: 12px;
+			.title {
+				font-size: 25px;
+				font-weight: bold;
+				color: #333;
 			}
 
-			.num {
-				font-size: 14px;
-				color: #666;
-			}
+			.box {
+				box-shadow: 0px 0px 10px -6px #000;
+				border-radius: 15px;
+				padding: 15px;
+				background-color: #fff;
+				margin-top: 20px;
 
-			.info {
-				color: #666;
-				font-size: 15px;
-
-				.usable {
-					color: green;
-					font-weight: bold;
-					margin-left: 4px;
-					margin-right: 4px;
+				.ipt {
+					border: 1px solid #DFDFDF;
+					border-radius: 12px;
+					padding-top: 12px;
+					padding-bottom: 12px;
+					margin-top: 10px;
+					margin-bottom: 12px;
 				}
 
-				.all {
-					color: #05AA84;
-					margin-left: 15px;
-					font-weight: 800;
+				.num {
+					font-size: 14px;
+					color: #666;
+				}
 
-					&:active {
-						opacity: 0.6;
+				.info {
+					color: #666;
+					font-size: 15px;
+
+					.usable {
+						color: green;
+						font-weight: bold;
+						margin-left: 4px;
+						margin-right: 4px;
+					}
+
+					.all {
+						color: #05AA84;
+						margin-left: 15px;
+						font-weight: 800;
+
+						&:active {
+							opacity: 0.6;
+						}
 					}
 				}
-			}
 
-			.sure {
-				text-align: center;
-				color: #fff;
-				padding: 14px 0;
-				margin: 25px 30px 15px;
-				border-radius: 15px;
-				box-shadow: 0px 0px 10px -6px #000;
-				font-size: 17px;
+				.sure {
+					text-align: center;
+					color: #fff;
+					padding: 14px 0;
+					margin: 25px 30px 15px;
+					border-radius: 15px;
+					box-shadow: 0px 0px 10px -6px #000;
+					font-size: 17px;
 
-				&:active {
-					opacity: 0.7;
+					&:active {
+						opacity: 0.7;
+					}
 				}
 			}
 		}

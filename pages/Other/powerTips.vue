@@ -1,51 +1,50 @@
 <template>
-	<view class="reminder" v-if="false">
+	<view class="reminder">
 		<view class="box">
 			<view class="caption">
-				<!-- <text>{{$t('账户已欠费')}}</text> -->
-				<text>{{$t('电费不足提醒')}}</text>
+				<text v-show="threshold.status === 2">{{I18n.t('账户已欠费')}}</text>
+				<text v-show="threshold.status === 1">{{I18n.t('电费不足提醒')}}</text>
 			</view>
 			<view class="msg">
-				<view>
-					{{$t('根据您昨日消耗估算，您的电费余额可能不足以支持未来')}}
-					<text class="day">2</text>
-					{{$t('天的消耗')}}
+				<view v-show="threshold.status === 1">
+					{{I18n.t('根据您昨日消耗估算，您的电费余额可能不足以支持未来')}}
+					<text class="day">{{threshold.balance_time}}</text>
+					{{I18n.t('天的消耗')}}
 				</view>
-				<!-- <text>{{$t('您的电费账户已欠费，为避免造成收益损失，请及时充值电费')}}</text> -->
+				<text v-show="threshold.status === 2">{{I18n.t('您的电费账户已欠费，为避免造成收益损失，请及时充值电费')}}</text>
 			</view>
 			<view class="btn">
-				<text class="btn_item" @click="confirm">{{$t('我已知晓')}}</text>
+				<text class="btn_item" @click="close">{{I18n.t('我已知晓')}}</text>
 			</view>
 		</view>
-	</view>
-	<view>
-		<button @click="confirm">点我啊</button>
 	</view>
 </template>
 
 <script setup>
-	import Toast from '@/hooks/useCustomPop.js';
-	import { ref } from 'vue';
-	let show = ref(true);
+	import { ref, onMounted } from 'vue';
+	import { getThreshold } from '@/services/other.js';
+	import I18n from '@/hooks/useLocale.js';
+	const props = defineProps({
+		close: Function
+	})
 
-	// defineProps({
-	// 	show: Boolean,
-	// })
+	let threshold = ref({});
 
-
-	function cancel() {
-
-	}
-
-	function confirm() {
-		Toast.showPop('你身边的你的爸爸你', {
-			title: '提示',
-			confirm: (e) => {
-				location.reload();
-				e();
+	function getData() {
+		getThreshold().then(res => {
+			if (res.code === 0) {
+				if (res.data.status > 0) {
+					threshold.value = res.data;
+				} else {
+					props.close();
+				}
 			}
 		})
 	}
+
+	onMounted(() => {
+		getData();
+	})
 </script>
 
 <style lang="scss" scoped>

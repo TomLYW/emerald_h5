@@ -4,26 +4,33 @@
 			<view class="caption">{{title}}</view>
 			<view class="msg">{{message}}</view>
 			<view class="btns">
-				<text v-show="showCancel" @click="close">取消</text>
-				<text class="ok" @click="confirm(close)">确定</text>
+				<text v-show="showCancel" @click="close">{{I18n.t('取消')}}</text>
+				<text class="ok" @click="handleOk">{{I18n.t('确定')}}</text>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script setup>
-	defineProps({
+	import I18n from '@/hooks/useLocale.js';
+
+	const props = defineProps({
 		showCancel: Boolean,
 		message: String,
 		title: String,
 		close: Function,
 		confirm: Function
 	})
+
+	function handleOk() {
+		props.confirm();
+		props.close();
+	}
 </script>
 
 <style lang="scss" scoped>
 	.custom-overlay {
-		background-color: rgba(0, 0, 0, 0.7);
+		background-color: rgba(0, 0, 0, 0.6);
 		position: fixed;
 		top: 0;
 		bottom: 0;
@@ -52,6 +59,7 @@
 
 			.btns {
 				text-align: right;
+				color: #666;
 
 				.ok {
 					color: #05AA84;

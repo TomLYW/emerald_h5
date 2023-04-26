@@ -1,5 +1,10 @@
 <template>
-	<scroll-view scroll-y="true" style="height: 100%;">
+	<view class="cash_main">
+		<Nav class="cash_header">
+			<template #left>
+				<image src="/static/base/title_left_arrow.png" class="icon" @click="handleClick" />
+			</template>
+		</Nav>
 		<view class="cash_page">
 			<view class="title">{{$t('提现')}} {{type}}</view>
 			<view class="box">
@@ -37,7 +42,7 @@
 		<InputModel :options="options" />
 		<InputModel :options="options1" />
 		<SmsVerify v-model:show="show" :options="options2" />
-	</scroll-view>
+	</view>
 </template>
 
 <script setup>
@@ -45,6 +50,7 @@
 	import { dealNumber, unroundNumber } from '@/utils/index.js';
 	import InputModel from '@/pages/component/InputModel/index.vue';
 	import SmsVerify from '@/pages/Mine/wallet/SmsVerify.vue';
+	import Nav from '@/pages/component/Nav/index.vue';
 	import I18n from '@/hooks/useLocale.js';
 	import Toast from '@/hooks/useToast.js';
 	import { useUserStore } from '@/store/user.js';
@@ -217,6 +223,10 @@
 		})
 	}
 
+	function handleClick() {
+		history.back();
+	}
+
 	onLoad((option) => {
 		type.value = option.type;
 		loadData(option.type);
@@ -230,109 +240,123 @@
 </script>
 
 <style lang="scss" scoped>
-	.cash_page {
-		padding: 15px;
+	.cash_main {
+		height: 100%;
+		@include flex(null, null, column);
 
-		.title {
-			font-weight: bold;
-			font-size: 24px;
-			color: #333;
+		.cash_header {
+			.icon {
+				width: 23px;
+				height: 17px;
+			}
 		}
 
-		.box {
-			background-color: #fff;
+		.cash_page {
+			flex: 1;
 			padding: 15px;
-			border-radius: 15px;
-			box-shadow: 0px 0px 10px -8px #ccc;
-			margin-top: 20px;
+			overflow-y: auto;
 
-			.box_item {
-				margin-bottom: 20px;
-				color: #777;
+			.title {
+				font-weight: bold;
+				font-size: 24px;
+				color: #333;
+			}
 
-				.item_title {
-					font-size: 15px;
-				}
+			.box {
+				background-color: #fff;
+				padding: 15px;
+				border-radius: 15px;
+				box-shadow: 0px 0px 10px -8px #ccc;
+				margin-top: 20px;
 
-				.item_tip {
-					font-size: 13px;
-					line-height: 22px;
+				.box_item {
+					margin-bottom: 20px;
+					color: #777;
 
-					.all_btn {
-						display: inline-block;
-						color: #05AA84;
-						font-size: 14px;
-						font-weight: bold;
+					.item_title {
+						font-size: 15px;
+					}
 
-						&:active {
-							opacity: 0.6;
+					.item_tip {
+						font-size: 13px;
+						line-height: 22px;
+
+						.all_btn {
+							display: inline-block;
+							color: #05AA84;
+							font-size: 14px;
+							font-weight: bold;
+
+							&:active {
+								opacity: 0.6;
+							}
+						}
+
+						.mr10 {
+							margin-right: 10px;
 						}
 					}
 
-					.mr10 {
-						margin-right: 10px;
+					.warn_text {
+						color: red;
+						margin-top: 8px;
+						font-size: 14px;
+					}
+
+					.ipt {
+						border-radius: 12px;
+						border: 1px solid #cdcdcd;
+						padding-top: 12px;
+						padding-bottom: 12px;
+						margin-top: 10px;
+						margin-bottom: 12px;
+					}
+
+					.suffix {
+						font-size: 17px;
+						font-weight: bold;
+						color: #333;
+
 					}
 				}
 
-				.warn_text {
-					color: red;
-					margin-top: 8px;
+				.sure_btn {
+					color: #fff;
+					background-color: #05AA84;
+					border-radius: 15px;
+					box-shadow: 0px 0px 10px -6px #000;
+					text-align: center;
+					padding-top: 13px;
+					padding-bottom: 13px;
+					margin-top: 45px;
+					margin-bottom: 15px;
+
+					&:active {
+						opacity: 0.6;
+					}
+				}
+
+				.receipt {
+					color: #666;
+					font-size: 13px;
+					text-align: center;
+				}
+			}
+
+			.cash_tips {
+				color: #666;
+				margin-top: 20px;
+
+				.tips_item {
+					display: block;
+					margin-bottom: 8px;
+					line-height: 22px;
 					font-size: 14px;
 				}
 
-				.ipt {
-					border-radius: 12px;
-					border: 1px solid #cdcdcd;
-					padding-top: 12px;
-					padding-bottom: 12px;
-					margin-top: 10px;
-					margin-bottom: 12px;
-				}
-
-				.suffix {
+				.general_title {
 					font-size: 17px;
-					font-weight: bold;
-					color: #333;
-
 				}
-			}
-
-			.sure_btn {
-				color: #fff;
-				background-color: #05AA84;
-				border-radius: 15px;
-				box-shadow: 0px 0px 10px -6px #000;
-				text-align: center;
-				padding-top: 13px;
-				padding-bottom: 13px;
-				margin-top: 45px;
-				margin-bottom: 15px;
-
-				&:active {
-					opacity: 0.6;
-				}
-			}
-
-			.receipt {
-				color: #666;
-				font-size: 13px;
-				text-align: center;
-			}
-		}
-
-		.cash_tips {
-			color: #666;
-			margin-top: 20px;
-
-			.tips_item {
-				display: block;
-				margin-bottom: 8px;
-				line-height: 22px;
-				font-size: 14px;
-			}
-
-			.general_title {
-				font-size: 17px;
 			}
 		}
 	}

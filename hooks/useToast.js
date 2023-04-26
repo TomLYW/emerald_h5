@@ -7,6 +7,8 @@ function getImg(type) {
 			return '/static/toast/toast_success.png';
 		case 'fail':
 			return '/static/toast/toast_error.png';
+		case 'loading':
+			return '';
 		default:
 			return '/static/toast/toast_alert.png';
 	}

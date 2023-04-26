@@ -280,30 +280,7 @@
 					"titleNView": false
 				}
 			}
-		},
-
-
-		// {
-		// 	"path": "pages/Other/warnPop",
-		// 	"style": {
-		// 		"enablePullDownRefresh": false,
-		// 		// "navigationBarTitleText": "",
-		// 		"h5": {
-		// 			"titleNView": false
-		// 		}
-		// 	}
-		// },
-		{
-			"path": "pages/Other/powerTips",
-			"style": {
-				"enablePullDownRefresh": false,
-				// "navigationBarTitleText": "",
-				"h5": {
-					"titleNView": false
-				}
-			}
 		}
-
 	],
 	"tabBar": {
 		"color": "#8D8D8D",
@@ -317,8 +294,7 @@
 				"selectedIconPath": "static/tab/tab_home_s.png"
 			},
 			{
-				"pagePath": "pages/Other/powerTips",
-				// "pagePath": "pages/Cloud/index",
+				"pagePath": "pages/Cloud/index",
 				"text": "%cloud%",
 				"iconPath": "static/tab/tab_yun.png",
 				"selectedIconPath": "static/tab/tab_yun_s.png"

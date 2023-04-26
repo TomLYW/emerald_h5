@@ -8,7 +8,8 @@
 					<text class="code" @click="handleSend">{{count=== 61 ? $t('获取验证码') : count + $t('s后获取')}}</text>
 				</template>
 			</Field>
-			<Field center :placeholder="$t('请输入密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'" :right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
+			<Field center :placeholder="$t('请输入密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'"
+				:right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
 				@click-right-icon='handleEyes' v-model="submitInfo.password" name='password' v-else />
 			<view class="login-code">
 				<text @click="handleCode">{{$t('验证码登录')}}</text>
@@ -28,8 +29,9 @@
 	import { sendCode, login } from '@/services/user.js';
 	import { isEmailAddress } from '@/utils/index.js';
 	import Toast from '@/hooks/useToast.js';
-	const { $t: t } = getCurrentInstance().proxy;
+	import Popup from '@/hooks/useCustomPop.js';
 	import { useUserStore } from '@/store/user.js';
+	const { $t: t } = getCurrentInstance().proxy;
 	let user = useUserStore();
 
 	let count = ref(61);
@@ -70,8 +72,9 @@
 				uni.reLaunch({
 					url: '/' + user.backPath
 				})
+				Popup.showTips();
 			} else {
-				Toast.show(res.message);
+				Toast.show(res.message, { type: 'fail' });
 			}
 		})
 
@@ -150,6 +153,7 @@
 
 	onMounted(() => {
 		const pages = getCurrentPages();
+		if (pages.length === 1) return;
 		user.setBackPath(pages[pages.length - 2].route);
 	})
 </script>
