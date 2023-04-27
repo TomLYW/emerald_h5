@@ -1,6 +1,11 @@
 <template>
-	<scroll-view scroll-y="true" style="height: 100%;" @scroll="handleScroll">
-		<view class="container">
+	<view class="desc_main">
+		<Nav class="desc_nav" :title="$t('goods_d')">
+			<template #left>
+				<image src="/static/base/title_left_arrow.png" class="icon" @click="handleBack" />
+			</template>
+		</Nav>
+		<view class="desc_content">
 			<text class="topic">{{$t('goods_d')}}</text>
 			<view class="first-card">
 				<text class="title">
@@ -34,7 +39,8 @@
 				<view class="card_item">
 					<text>{{$t('产出币种')}}</text>
 					<view class="item_right">
-						<image :src="pageData.currency === 'BTC' ? '/static/home/home_icon_btc.png' : '/static/home/home_icon_eth.png'" class="icon" />
+						<image :src="pageData.currency === 'BTC' ? '/static/home/home_icon_btc.png' : '/static/home/home_icon_eth.png'"
+							class="icon" />
 						<text>{{pageData.currency}}</text>
 					</view>
 				</view>
@@ -73,13 +79,14 @@
 			</view>
 		</view>
 		<InputModel :options="options" />
-	</scroll-view>
+	</view>
 </template>
 
 <script setup>
 	import CustomTitle from '@/pages/component/CustomTitle/index.vue';
 	import SelectAmount from '@/pages/Home/description/selectAmount.vue';
 	import BottomTips from '@/pages/Home/description/bottomTips.vue';
+	import Nav from '@/pages/component/Nav/index.vue';
 	import I18n from '@/hooks/useLocale.js';
 	import Toast from '@/hooks/useToast.js';
 	import InputModel from '@/pages/component/InputModel/index.vue';
@@ -96,17 +103,12 @@
 		whetherSetPin,
 		whetherExceedDate
 	} from '@/utils/index.js';
-	import {
-		ref,
-		computed,
-		reactive
-	} from 'vue';
-	import {
-		onLoad
-	} from '@dcloudio/uni-app';
-	import {
-		Progress
-	} from 'vant';
+	import { ref, computed, reactive } from 'vue';
+	import { onLoad } from '@dcloudio/uni-app';
+	import { Progress } from 'vant';
+	import { useUserStore } from '@/store/user.js';
+
+	const user = useUserStore();
 
 	let flag = ref(false);
 	let pageData = ref({});
@@ -188,22 +190,26 @@
 		})
 	}
 
-	function handleScroll(e) {
-		if (e.detail.scrollTop === 0) {
-			uni.setNavigationBarTitle({
-				title: ''
-			});
+	// function handleScroll(e) {
+	// 	if (e.detail.scrollTop === 0) {
+	// 		uni.setNavigationBarTitle({
+	// 			title: ''
+	// 		});
 
-			flag.value = false;
-		} else {
-			if (!flag.value) {
-				uni.setNavigationBarTitle({
-					title: I18n.t('goods_d')
-				});
+	// 		flag.value = false;
+	// 	} else {
+	// 		if (!flag.value) {
+	// 			uni.setNavigationBarTitle({
+	// 				title: I18n.t('goods_d')
+	// 			});
 
-				flag.value = true;
-			}
-		}
+	// 			flag.value = true;
+	// 		}
+	// 	}
+	// }
+
+	function handleBack() {
+		history.back();
 	}
 
 	function getData(id) {
@@ -223,6 +229,7 @@
 	onLoad((option) => {
 		getData(option.id);
 		id.value = option.id;
+		user.setMark(option.id);
 	})
 </script>
 
@@ -231,135 +238,148 @@
 		color: #05AA84 !important;
 	}
 
-	.container {
-		padding: 15px;
+	.desc_main {
+		height: 100%;
+		@include flex(null, null, column);
 
-		.topic {
-			font-weight: bold;
-			font-size: 24px;
+		.desc_nav {
+			.icon {
+				width: 23px;
+				height: 17px;
+			}
 		}
 
+		.desc_content {
+			flex: 1;
+			overflow-y: auto;
+			padding: 15px;
 
-		.first-card {
-			border-radius: 15px;
-			box-shadow: 0px 0px 10px -8px;
-			margin-top: 15px;
-			margin-bottom: 15px;
-			background-color: #fff;
-			padding: 12px;
-
-			.title {
-				color: #333;
+			.topic {
 				font-weight: bold;
-				font-size: 20px;
+				font-size: 24px;
 			}
 
-			.side_1 {
-				text-align: right;
-				@include flex(center, flex-end);
 
-				.item_1 {
-					color: #999;
-					font-size: 11px;
-				}
-
-				.item_2 {
-					color: #05AA84;
-					font-size: 15px;
-					font-weight: bold;
-				}
-			}
-
-			.progress {
-				margin-top: 10px;
-				margin-bottom: 10px;
-			}
-
-			.side_2 {
-				@include flex(center, space-between);
-
-				.common {
-					display: block;
-					color: #999;
-					font-size: 12px;
-					margin-top: 8px;
-				}
-
-				.tar {
-					text-align: right;
-				}
-
-				.left_1 {
-					font-size: 18px;
-					color: #05AA84;
-					font-weight: bold;
-				}
-
-				.right_1 {
-					color: #FF8519;
-					font-weight: bold;
-					font-size: 18px;
-				}
-			}
-		}
-
-		.last-card {
-			border-radius: 15px;
-			box-shadow: 0px 0px 10px -8px;
-			padding: 15px 15px 1px;
-			background-color: #fff;
-
-			.card_item {
-				font-size: 14px;
-				color: #808080;
+			.first-card {
+				border-radius: 15px;
+				box-shadow: 0px 0px 10px -8px;
+				margin-top: 15px;
 				margin-bottom: 15px;
-				@include flex(center, space-between);
+				background-color: #fff;
+				padding: 12px;
 
-				.item_right {
-					font-weight: bold;
+				.title {
 					color: #333;
-
-					.icon {
-						width: 17px;
-						height: 17px;
-						vertical-align: top;
-						margin-right: 5px;
-					}
-				}
-			}
-		}
-
-		.buy {
-			height: 60px;
-			width: 100%;
-			background-color: #fff;
-			position: fixed;
-			bottom: 0;
-			left: 0;
-			@include flex(center, space-between);
-
-			.left {
-				margin-left: 15px;
-				@include flex(null, null, column);
-
-				.price {
-					color: #FF8519;
 					font-weight: bold;
 					font-size: 20px;
 				}
 
-				.text {
-					font-size: 13px;
-					color: #999;
+				.side_1 {
+					text-align: right;
+					@include flex(center, flex-end);
+
+					.item_1 {
+						color: #999;
+						font-size: 11px;
+					}
+
+					.item_2 {
+						color: #05AA84;
+						font-size: 15px;
+						font-weight: bold;
+					}
+				}
+
+				.progress {
+					margin-top: 10px;
+					margin-bottom: 10px;
+				}
+
+				.side_2 {
+					@include flex(center, space-between);
+
+					.common {
+						display: block;
+						color: #999;
+						font-size: 12px;
+						margin-top: 8px;
+					}
+
+					.tar {
+						text-align: right;
+					}
+
+					.left_1 {
+						font-size: 18px;
+						color: #05AA84;
+						font-weight: bold;
+					}
+
+					.right_1 {
+						color: #FF8519;
+						font-weight: bold;
+						font-size: 18px;
+					}
 				}
 			}
 
-			.right_btn {
-				margin-right: 15px;
-				// background-color: #ADDAD0;
-				padding: 9px 42px;
-				color: #fff;
-				border-radius: 12px;
+			.last-card {
+				border-radius: 15px;
+				box-shadow: 0px 0px 10px -8px;
+				padding: 15px 15px 1px;
+				background-color: #fff;
+
+				.card_item {
+					font-size: 14px;
+					color: #808080;
+					margin-bottom: 15px;
+					@include flex(center, space-between);
+
+					.item_right {
+						font-weight: bold;
+						color: #333;
+
+						.icon {
+							width: 17px;
+							height: 17px;
+							vertical-align: top;
+							margin-right: 5px;
+						}
+					}
+				}
+			}
+
+			.buy {
+				height: 60px;
+				width: 100%;
+				background-color: #fff;
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				@include flex(center, space-between);
+
+				.left {
+					margin-left: 15px;
+					@include flex(null, null, column);
+
+					.price {
+						color: #FF8519;
+						font-weight: bold;
+						font-size: 20px;
+					}
+
+					.text {
+						font-size: 13px;
+						color: #999;
+					}
+				}
+
+				.right_btn {
+					margin-right: 15px;
+					padding: 9px 42px;
+					color: #fff;
+					border-radius: 12px;
+				}
 			}
 		}
 	}

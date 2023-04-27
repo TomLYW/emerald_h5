@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', {
 			isLogin: false,
 			userInfo: {},
 			backPath: '',
+			mark: null
 		};
 	},
 
@@ -21,6 +22,7 @@ export const useUserStore = defineStore('user', {
 			this.isLogin = false;
 			this.userInfo = {};
 			this.backPath = '';
+			this.mark = null;
 		},
 
 		setUserInfo(payload) {
@@ -29,6 +31,10 @@ export const useUserStore = defineStore('user', {
 
 		setBackPath(payload) {
 			this.backPath = payload;
+		},
+
+		setMark(payload) {
+			this.mark = payload;
 		},
 
 	},

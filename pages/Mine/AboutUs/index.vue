@@ -9,7 +9,7 @@
 			<view class="about_header">
 				<image class="logo" src="/static//base/icon_android.png" />
 				<text class="name">Emerald</text>
-				<text class="version">{{version}}</text>
+				<text class="version">v{{version}}</text>
 			</view>
 			<SelectCell :options="options" />
 		</view>
@@ -19,7 +19,6 @@
 <script setup>
 	import SelectCell from '@/pages/component/SelectCell/index.vue';
 	import Nav from '@/pages/component/Nav/index.vue';
-	import { getVersion } from '@/services/mine.js';
 	import { ref, onMounted } from 'vue';
 	let version = ref('');
 
@@ -38,9 +37,9 @@
 	}
 
 	onMounted(() => {
-		getVersion().then(res => {
-			if (res.code === 0) {
-				version.value = res.data.vNum;
+		uni.getSystemInfo({
+			success: (e) => {
+				version.value = e.appVersion;
 			}
 		})
 	})

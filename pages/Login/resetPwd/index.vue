@@ -1,18 +1,25 @@
 <template>
-	<view class="login">
-		<text class="login-title">{{$t('找回密码')}}</text>
-		<Form @submit="handleSubmit">
-			<Field center :placeholder="$t('请输入邮箱')" class="ipt" name='account' v-model='submitInfo.account' />
-			<Field center :placeholder="$t('请输入验证码')" class="ipt" v-model="submitInfo.code" name='code' maxlength='6'>
-				<template #button>
-					<text class="code" @click="handleSend">{{count=== 61 ? $t('获取验证码') : count + $t('s后获取')}}</text>
-				</template>
-			</Field>
-			<Field center :placeholder="$t('请设置密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'"
-				:right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
-				@click-right-icon='handleEyes' v-model="submitInfo.password" name='password' />
-			<Button native-type="submit" block class="btn" :disabled="btnState">{{$t('重置密码')}}</Button>
-		</Form>
+	<view class="forget_main">
+		<Nav class="forget_nav">
+			<template #left>
+				<image src="/static/base/title_left_arrow.png" class="icon" @click="handleBack" />
+			</template>
+		</Nav>
+		<view class="login">
+			<text class="login-title">{{$t('找回密码')}}</text>
+			<Form @submit="handleSubmit">
+				<Field center :placeholder="$t('请输入邮箱')" class="ipt" name='account' v-model='submitInfo.account' />
+				<Field center :placeholder="$t('请输入验证码')" class="ipt" v-model="submitInfo.code" name='code' maxlength='6'>
+					<template #button>
+						<text class="code" @click="handleSend">{{count=== 61 ? $t('获取验证码') : count + $t('s后获取')}}</text>
+					</template>
+				</Field>
+				<Field center :placeholder="$t('请设置密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'"
+					:right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
+					@click-right-icon='handleEyes' v-model="submitInfo.password" name='password' />
+				<Button native-type="submit" block class="btn" :disabled="btnState">{{$t('重置密码')}}</Button>
+			</Form>
+		</view>
 	</view>
 </template>
 
@@ -29,18 +36,11 @@
 		Button,
 		Form
 	} from 'vant';
-	import {
-		sendCode,
-		resetPwd
-	} from '@/services/user.js';
-	import {
-		isEmailAddress,
-		checkPassword
-	} from '@/utils/index.js';
+	import { sendCode, resetPwd } from '@/services/user.js';
+	import { isEmailAddress, checkPassword } from '@/utils/index.js';
 	import Toast from '@/hooks/useToast.js';
-	const {
-		$t: t
-	} = getCurrentInstance().proxy;
+	import Nav from '@/pages/component/Nav/index.vue';
+	const { $t: t } = getCurrentInstance().proxy;
 
 	let count = ref(61);
 	let pwdEyes = ref(false);
@@ -129,6 +129,10 @@
 		pwdEyes.value = !pwdEyes.value;
 	}
 
+	const handleBack = () => {
+		history.back();
+	}
+
 	watch(submitInfo, (value) => {
 		if (value.account && value.password.length > 5 && value.code.length > 5) {
 			btnState.value = false;
@@ -139,34 +143,48 @@
 </script>
 
 <style lang="scss" scoped>
-	.login {
-		padding-left: 15px;
-		padding-right: 15px;
+	.forget_main {
+		height: 100%;
+		@include flex(null, null, column);
 
-		.login-title {
-			display: inline-block;
-			color: #000;
-			font-size: 18px;
-			font-weight: bold;
-			padding: 20px 0;
+		.forget_nav {
+			.icon {
+				width: 23px;
+				height: 17px;
+			}
 		}
 
-		.ipt {
-			margin-bottom: 24px;
-			border: 1px solid #ccc;
-			padding: 10px;
-			border-radius: 10px;
-		}
+		.login {
+			flex: 1;
+			overflow-y: auto;
+			padding-left: 15px;
+			padding-right: 15px;
 
-		.btn {
-			background-color: #05AA84;
-			color: #fff;
-			border-radius: 10px;
-			font-size: 18px;
-		}
+			.login-title {
+				display: inline-block;
+				color: #000;
+				font-size: 18px;
+				font-weight: bold;
+				padding: 20px 0;
+			}
 
-		.code {
-			color: #05AA84
+			.ipt {
+				margin-bottom: 24px;
+				border: 1px solid #ccc;
+				padding: 10px;
+				border-radius: 10px;
+			}
+
+			.btn {
+				background-color: #05AA84;
+				color: #fff;
+				border-radius: 10px;
+				font-size: 18px;
+			}
+
+			.code {
+				color: #05AA84
+			}
 		}
 	}
 </style>

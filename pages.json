@@ -111,8 +111,11 @@
 			"path": "pages/Mine/webview/index",
 			"style": {
 				"enablePullDownRefresh": false,
-				"h5": {
-					"titleNView": false
+				"titleNView": {
+					"buttons": [{
+						"type": "back",
+						"float": "left"
+					}]
 				}
 			}
 		},

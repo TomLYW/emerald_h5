@@ -1,23 +1,30 @@
 <template>
-	<view class="login">
-		<text class="login-title">{{$t('登录')}}</text>
-		<Form @submit="handleSubmit">
-			<Field center :placeholder="$t('请输入邮箱')" class="ipt" name='account' v-model='submitInfo.account' />
-			<Field center :placeholder="$t('请输入验证码')" class="ipt" v-model="submitInfo.code" name='code' maxlength='6' v-if="showCode">
-				<template #button>
-					<text class="code" @click="handleSend">{{count=== 61 ? $t('获取验证码') : count + $t('s后获取')}}</text>
-				</template>
-			</Field>
-			<Field center :placeholder="$t('请输入密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'"
-				:right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
-				@click-right-icon='handleEyes' v-model="submitInfo.password" name='password' v-else />
-			<view class="login-code">
-				<text @click="handleCode">{{$t('验证码登录')}}</text>
+	<view class="login_main">
+		<Nav class="page_nav">
+			<template #left>
+				<image src="/static/base/title_left_arrow.png" class="icon" @click="handleBack" />
+			</template>
+		</Nav>
+		<view class="login">
+			<text class="login-title">{{$t('登录')}}</text>
+			<Form @submit="handleSubmit">
+				<Field center :placeholder="$t('请输入邮箱')" class="ipt" name='account' v-model='submitInfo.account' />
+				<Field center :placeholder="$t('请输入验证码')" class="ipt" v-model="submitInfo.code" name='code' maxlength='6' v-if="showCode">
+					<template #button>
+						<text class="code" @click="handleSend">{{count=== 61 ? $t('获取验证码') : count + $t('s后获取')}}</text>
+					</template>
+				</Field>
+				<Field center :placeholder="$t('请输入密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'"
+					:right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
+					@click-right-icon='handleEyes' v-model="submitInfo.password" name='password' v-else />
+				<view class="login-code">
+					<text @click="handleCode">{{$t('验证码登录')}}</text>
+				</view>
+				<Button native-type="submit" block class="btn" :disabled="btnState">{{$t('登录')}}</Button>
+			</Form>
+			<view class="forget">
+				<text @click="handleForget">{{$t('忘记密码')}}</text>
 			</view>
-			<Button native-type="submit" block class="btn" :disabled="btnState">{{$t('登录')}}</Button>
-		</Form>
-		<view class="forget">
-			<text @click="handleForget">{{$t('忘记密码')}}</text>
 		</view>
 	</view>
 </template>
@@ -30,6 +37,7 @@
 	import { isEmailAddress } from '@/utils/index.js';
 	import Toast from '@/hooks/useToast.js';
 	import Popup from '@/hooks/useCustomPop.js';
+	import Nav from '@/pages/component/Nav/index.vue';
 	import { useUserStore } from '@/store/user.js';
 	const { $t: t } = getCurrentInstance().proxy;
 	let user = useUserStore();
@@ -70,7 +78,7 @@
 					type: 'success'
 				})
 				uni.reLaunch({
-					url: '/' + user.backPath
+					url: '/' + user.backPath + '?id=' + user.mark
 				})
 				Popup.showTips();
 			} else {
@@ -151,6 +159,10 @@
 		}
 	})
 
+	function handleBack() {
+		history.back();
+	}
+
 	onMounted(() => {
 		const pages = getCurrentPages();
 		if (pages.length === 1) return;
@@ -159,47 +171,61 @@
 </script>
 
 <style lang="scss" scoped>
-	.login {
-		padding-left: 15px;
-		padding-right: 15px;
+	.login_main {
+		height: 100%;
+		@include flex(null, null, column);
 
-		.login-title {
-			display: inline-block;
-			color: #000;
-			font-size: 18px;
-			font-weight: bold;
-			padding: 20px 0;
+		.page_nav {
+			.icon {
+				width: 23px;
+				height: 17px;
+			}
 		}
 
-		.ipt {
-			margin-bottom: 24px;
-			border: 1px solid #ccc;
-			padding: 10px;
-			border-radius: 10px;
-		}
+		.login {
+			flex: 1;
+			overflow-y: auto;
+			padding-left: 15px;
+			padding-right: 15px;
 
-		.btn {
-			background-color: #05AA84;
-			color: #fff;
-			border-radius: 10px;
-			font-size: 18px;
-		}
+			.login-title {
+				display: inline-block;
+				color: #000;
+				font-size: 18px;
+				font-weight: bold;
+				padding: 20px 0;
+			}
 
-		.forget {
-			text-align: center;
-			margin-top: 16px;
-		}
+			.ipt {
+				margin-bottom: 24px;
+				border: 1px solid #ccc;
+				padding: 10px;
+				border-radius: 10px;
+			}
 
-		.login-code {
-			text-align: right;
-			font-size: 14px;
-			margin-top: -8px;
-			margin-bottom: 14px;
-		}
+			.btn {
+				background-color: #05AA84;
+				color: #fff;
+				border-radius: 10px;
+				font-size: 18px;
+			}
 
-		.code {
-			color: #05AA84
-		}
+			.forget {
+				text-align: center;
+				margin-top: 16px;
+			}
 
+			.login-code {
+				text-align: right;
+				font-size: 14px;
+				margin-top: -8px;
+				margin-bottom: 14px;
+			}
+
+			.code {
+				color: #05AA84
+			}
+
+		}
 	}
 </style>
