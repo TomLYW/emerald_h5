@@ -1,12 +1,12 @@
 <template>
 	<view class="order">
 		<Tabs :tab1="$t('云算力')" :tab2="$t('矿机')" v-model="tab" />
-		<NoData v-if="!isLogin" />
-		<view class="main" v-else-if="isLogin && tab === 1">
+		<NoData v-if="!user.isLogin" />
+		<view class="main" v-else-if="user.isLogin && tab === 1">
 			<OrderPowerList :item="item" v-for="item  in  listData.power" :key="item.id" style="margin-bottom: 15px;" v-if="listData.power.length" />
 			<NoData hideBtn v-else />
 		</view>
-		<view class="main" v-else-if="isLogin && tab === 2">
+		<view class="main" v-else-if="user.isLogin && tab === 2">
 			<OrderMinerList :item="item" hideBtn v-for="item  in listData.miner" :key="item.id" style="margin-bottom: 15px;" v-if="listData.miner.length" />
 			<NoData hideBtn v-else />
 		</view>
@@ -22,7 +22,7 @@
 	import NoData from '@/pages/component/NoData/index.vue';
 	import { useUserStore } from '@/store/user.js';
 	import { getMinerOrder, getPowerOrder } from '@/services/order.js';
-	const { isLogin } = useUserStore();
+	const user = useUserStore();
 
 	let tab = ref(1);
 	let listData = reactive({
@@ -47,7 +47,7 @@
 	}
 
 	onShow(() => {
-		if (isLogin) {
+		if (user.isLogin) {
 			getPowerData();
 			getMinerData();
 		}

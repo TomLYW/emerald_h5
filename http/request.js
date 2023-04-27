@@ -2,6 +2,8 @@ import config from '@/http/config.js';
 import I18n from '@/hooks/useLocale.js';
 import Popup from '@/hooks/useCustomPop.js';
 import Toast from '@/hooks/useToast.js';
+import { useUserStore } from '@/store/user.js';
+const user = useUserStore();
 
 
 /* 1.请求拦截器 */
@@ -31,45 +33,44 @@ let Interceptor = ({
 
 /* 2.响应拦截器 */
 let Responder = (res) => {
-	if (res?.data) {
-		switch (res.data.code) {
-			case 1000:
-				Popup.showPop(I18n.t('用户认证失效'), {
-					title: I18n.t('提示'),
-					confirm: () => {
-						if (uni.getStorageSync('token')) {
-							location.reload();
-						}
-					}
-				});
-				uni.clearStorageSync();
-				return;
-			case 1001:
-				Popup.showPop(I18n.t('此账户已被禁用，请联系管理员了解'), {
-					title: I18n.t('提示'),
-					confirm: () => {
-						if (uni.getStorageSync('token')) {
-							location.reload();
-						}
-					}
-				});
-				uni.clearStorageSync();
-				return;
-			case 1002:
-				Popup.showPop(I18n.t('此账户已登录其他设备'), {
-					title: I18n.t('提示'),
-					confirm: () => {
-						if (uni.getStorageSync('token')) {
-							location.reload();
-						}
-					}
-				});
-				uni.clearStorageSync();
-				return;
-			default:
-				return Promise.resolve(res.data);
-		}
+	// if (!user.isLogin) return;
+
+	if (res.data.code === 1000) {
+		Popup.showPop(I18n.t('用户认证失效'), {
+			title: I18n.t('提示'),
+			confirm: () => {
+				if (!user.isLogin) {
+					// location.reload();
+				}
+			}
+		});
+		user.loginOut();
+		uni.setStorageSync('token', '');
+	} else if (res.data.code === 1001) {
+		Popup.showPop(I18n.t('此账户已被禁用，请联系管理员了解'), {
+			title: I18n.t('提示'),
+			confirm: () => {
+				if (!user.isLogin) {
+					// location.reload();
+				}
+			}
+		});
+		user.loginOut();
+		uni.setStorageSync('token', '');
+	} else if (res.data.code === 1002) {
+		Popup.showPop(I18n.t('此账户已登录其他设备'), {
+			title: I18n.t('提示'),
+			confirm: () => {
+				if (!user.isLogin) {
+					// location.reload();
+				}
+			}
+		});
+		user.loginOut();
+		uni.setStorageSync('token', '');
 	}
+
+	return Promise.resolve(res.data);
 };
 
 /* 3.请求 */

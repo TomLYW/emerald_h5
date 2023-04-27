@@ -4,11 +4,11 @@
 			<view class="header">
 				<view class="left" @click="handleLeft">
 					<view class="circle">
-						<Avatar size="52" :src="userInfo.avatar" />
+						<Avatar size="52" :src="user.userInfo.avatar" />
 					</view>
 					<view class="left_text">
-						<text class="top">{{!isLogin ? $t('立即登录') : userInfo.nickname}}</text>
-						<text class="bottom">{{!isLogin ? $t('欢迎来到Emerald') : emailEncryption(userInfo.email)}}</text>
+						<text class="top">{{!user.isLogin ? $t('立即登录') : user.userInfo.nickname}}</text>
+						<text class="bottom">{{!user.isLogin ? $t('欢迎来到Emerald') : emailEncryption(user.userInfo.email)}}</text>
 					</view>
 				</view>
 				<view class="right">
@@ -17,7 +17,7 @@
 			</view>
 			<SelectCell :options="options5">
 				<template #bottom>
-					<view class="wallet" v-if="isLogin">
+					<view class="wallet" v-if="user.isLogin">
 						<view class="wallet_item" v-for="item in data.assets" :key="item.currency">
 							<text class="sum">{{unroundNumber(item.available, (item.currency === 'USDT' ? 2 : 8))}}</text>
 							<text>{{item.currency}}</text>
@@ -33,7 +33,7 @@
 			</SelectCell>
 			<SelectCell :options="options4" class="invite">
 				<template #right1>
-					<text class="fee">{{isLogin ? dealNumber(data.balance.available,2) : '0.00'}}</text>
+					<text class="fee">{{user.isLogin ? dealNumber(data.balance.available,2) : '0.00'}}</text>
 				</template>
 			</SelectCell>
 			<SelectCell :options="options3" class="invite">
@@ -44,14 +44,15 @@
 					<view class="echarts_empty" v-else>{{$t('暂无数据')}}</view>
 				</template>
 			</SelectCell>
-			<SelectCell :options="options2" class="invite" v-show="isLogin" />
+			<SelectCell :options="options2" class="invite" v-show="user.isLogin" />
 			<SelectCell :options="options1" class="invite" />
 		</view>
 	</scroll-view>
 </template>
 
 <script setup>
-	import { reactive, onMounted } from 'vue';
+	import { onShow } from "@dcloudio/uni-app";
+	import { reactive, watch } from 'vue';
 	import SelectCell from '@/pages/component/SelectCell/index.vue';
 	import Avatar from '@/pages/component/Avatar/index.vue';
 	import Echarts from '@/pages/Mine/census/ecahrts.vue';
@@ -59,7 +60,7 @@
 	import { emailEncryption, dealNumber, unroundNumber } from '@/utils/index.js';
 	import { getYieldLines } from '@/services/mine.js';
 	import { getElectricBalance, getAssets } from '@/services/other.js';
-	const { isLogin, userInfo } = useUserStore();
+	const user = useUserStore();
 
 	let data = reactive({
 		lines: {},
@@ -108,12 +109,12 @@
 
 	function handleClick() {
 		uni.navigateTo({
-			url: isLogin ? '/pages/Mine/setting/index' : '/pages/Login/index'
+			url: user.isLogin ? '/pages/Mine/setting/index' : '/pages/Login/index'
 		})
 	}
 
 	function handleLeft() {
-		if (!isLogin) {
+		if (!user.isLogin) {
 			uni.navigateTo({
 				url: '/pages/Login/index'
 			})
@@ -122,7 +123,7 @@
 
 	function handleJump(path) {
 		return () => {
-			if (isLogin) {
+			if (user.isLogin) {
 				uni.navigateTo({
 					url: `/pages/Mine/${path}/index`
 				})
@@ -154,8 +155,12 @@
 		})
 	}
 
-	onMounted(() => {
-		if (isLogin) {
+	watch(() => user.isLogin, (newVal) => {
+       console.log('看看',newVal)
+	})
+
+	onShow(() => {
+		if (user.isLogin) {
 			loadData();
 		}
 	})
