@@ -38,7 +38,7 @@
 			</SelectCell>
 			<SelectCell :options="options3" class="invite">
 				<template #bottom>
-					<view class="map" v-if="'BTC' in data.lines">
+					<view class="map" v-if="('BTC' in data.lines) && user.isLogin">
 						<Echarts :data='data.lines' />
 					</view>
 					<view class="echarts_empty" v-else>{{$t('暂无数据')}}</view>
@@ -52,7 +52,7 @@
 
 <script setup>
 	import { onShow } from "@dcloudio/uni-app";
-	import { reactive, watch } from 'vue';
+	import { reactive } from 'vue';
 	import SelectCell from '@/pages/component/SelectCell/index.vue';
 	import Avatar from '@/pages/component/Avatar/index.vue';
 	import Echarts from '@/pages/Mine/census/ecahrts.vue';
@@ -154,10 +154,6 @@
 			}
 		})
 	}
-
-	watch(() => user.isLogin, (newVal) => {
-       console.log('看看',newVal)
-	})
 
 	onShow(() => {
 		if (user.isLogin) {

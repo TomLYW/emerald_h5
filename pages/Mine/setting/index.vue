@@ -9,7 +9,7 @@
 			<view class="caption">{{$t('基本信息')}}</view>
 			<SelectCell :options="options1" class="mb15">
 				<template #right1>
-					<Avatar size='36' :src="url" class="mr10" />
+					<Avatar size='36' :src="user.userInfo.avatar" class="mr10" />
 				</template>
 				<template #right2>
 					<text class="rcs mr10">{{user.userInfo.nickname}}</text>
@@ -53,18 +53,8 @@
 	import Popup from '@/hooks/useCustomPop.js';
 	import I18n from '@/hooks/useLocale.js';
 	import { loadUserInfo } from '@/hooks/useGlobal.js';
-	import { ref, computed, watch } from 'vue';
 	const user = useUserStore();
 
-	// let url = ref(user.userInfo.avatar);
-	// let url = computed(() => {
-	// 	return user.userInfo.avatar
-	// })
-	let url = ref('https://emerald-test.oss-cn-hongkong.aliyuncs.com/u/5/117/1682591151843871347.png');
-	watch(() => user.userInfo, (newVal) => {
-		console.log('看看', newVal)
-		url.value = newVal.avatar;
-	})
 
 	const options1 = [{
 			label: '头像',
@@ -135,11 +125,6 @@
 									Toast.show(I18n.t("修改成功"), {
 										type: 'success'
 									});
-									// uni.reLaunch({
-									// 	url: '/pages/Mine/setting/index'
-									// })
-									console.log('xx')
-									url.value = obj.data;
 								} else {
 									Toast.show(res.message);
 								}

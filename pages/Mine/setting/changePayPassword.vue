@@ -7,14 +7,15 @@
 		</Nav>
 		<view class="login">
 			<text class="login-title">{{$t('修改支付密码')}}</text>
-			<view class="second_tip">{{$t('验证码将发送到：')}}{{emailEncryption(userInfo.email)}}</view>
+			<view class="second_tip">{{$t('验证码将发送到：')}}{{emailEncryption(user.userInfo.email)}}</view>
 			<Form @submit="handleSubmit">
 				<Field center :placeholder="$t('请输入验证码')" class="ipt" v-model="submitInfo.code" name='code' maxlength='6'>
 					<template #button>
 						<text class="code" @click="handleSend">{{count=== 61 ? $t('获取验证码') : count + $t('s后获取')}}</text>
 					</template>
 				</Field>
-				<Field center :placeholder="$t('请设置新支付密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'" :right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
+				<Field center :placeholder="$t('请设置新支付密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'"
+					:right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
 					@click-right-icon='handleEyes' v-model="submitInfo.password" name='password' />
 				<Button native-type="submit" block class="btn" :disabled="btnState">{{$t('重置密码')}}</Button>
 			</Form>
@@ -40,7 +41,7 @@
 	import Toast from '@/hooks/useToast.js';
 	import { useUserStore } from '@/store/user.js';
 	import Nav from '@/pages/component/Nav/index.vue';
-	const { userInfo } = useUserStore();
+	const user = useUserStore();
 	const { $t: t } = getCurrentInstance().proxy;
 
 	let count = ref(61);
@@ -93,7 +94,7 @@
 		const parmas = {
 			accountType: 'email',
 			authType: 'update-pin',
-			account: userInfo.email
+			account: user.userInfo.email
 		}
 		if (count.value !== 61) return;
 

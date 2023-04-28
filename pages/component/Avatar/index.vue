@@ -5,22 +5,21 @@
 </template>
 
 <script setup>
-	import {
-		ref,
-		onMounted
-	} from 'vue';
-	const url = ref('/static/mine/profile_icon_default.png');
-	const {
-		src,
-		size
-	} = defineProps({
+	import { ref, onMounted, watch } from 'vue';
+	const props = defineProps({
 		src: String,
 		size: [Number, String]
 	})
 
+	let url = ref('/static/mine/profile_icon_default.png');
+
+	watch(() => props.src, (newVal) => {
+		url.value = newVal ? newVal : '/static/mine/profile_icon_default.png';
+	})
+
 	onMounted(() => {
-		if (src) {
-			url.value = src;
+		if (props.src) {
+			url.value = props.src;
 		}
 	})
 </script>

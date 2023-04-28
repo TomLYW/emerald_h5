@@ -94,7 +94,7 @@
 		if (val === 1) {
 			let arr = btcLines.value.series[0].data;
 			let max = Math.max(...arr);
-			if (max > 10) {
+			if (max > 1) {
 				opts.yAxis.data = [{ max: Math.ceil(max), min: 0 }];
 			} else {
 				opts.yAxis.data = [];
@@ -102,7 +102,7 @@
 		} else if (val === 2) {
 			let arr = ethLines.value.series[0].data;
 			let max = Math.max(...arr);
-			if (max > 10) {
+			if (max > 1) {
 				opts.yAxis.data = [{ max: Math.ceil(max), min: 0 }];
 			} else {
 				opts.yAxis.data = [];

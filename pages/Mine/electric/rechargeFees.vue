@@ -55,7 +55,7 @@
 	function handleSure() {
 		if (!amount.value) return;
 
-		if (amount.value > rest.value.available) {
+		if (Number(amount.value) > rest.value.available) {
 			Toast.show(I18n.t('余额不足'))
 			return;
 		}

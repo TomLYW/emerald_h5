@@ -58,7 +58,7 @@
 	import { getAssets, getElectricBalance } from '@/services/other.js';
 	import { Field } from 'vant';
 	import { ref, reactive, watch, toRef } from 'vue';
-	const { userInfo } = useUserStore();
+	const user = useUserStore();
 
 	// 校验正则
 	const ethtest = /^(0x)?[0-9a-fA-F]{40}$/;
@@ -163,7 +163,7 @@
 	function callback(val) {
 		options.isShow = false;
 		pin.value = val;
-		if (userInfo.isSet2fa) {
+		if (user.userInfo.isSet2fa) {
 			options1.isShow = true;
 		} else {
 			show.value = true;

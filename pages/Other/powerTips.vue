@@ -2,16 +2,16 @@
 	<view class="reminder">
 		<view class="box">
 			<view class="caption">
-				<text v-show="threshold.status === 2">{{I18n.t('账户已欠费')}}</text>
-				<text v-show="threshold.status === 1">{{I18n.t('电费不足提醒')}}</text>
+				<text v-show="data.status === 2">{{I18n.t('账户已欠费')}}</text>
+				<text v-show="data.status === 1">{{I18n.t('电费不足提醒')}}</text>
 			</view>
 			<view class="msg">
-				<view v-show="threshold.status === 1">
+				<view v-show="data.status === 1">
 					{{I18n.t('根据您昨日消耗估算，您的电费余额可能不足以支持未来')}}
-					<text class="day">{{threshold.balance_time}}</text>
+					<text class="day">{{data.balance_time}}</text>
 					{{I18n.t('天的消耗')}}
 				</view>
-				<text v-show="threshold.status === 2">{{I18n.t('您的电费账户已欠费，为避免造成收益损失，请及时充值电费')}}</text>
+				<text v-show="data.status === 2">{{I18n.t('您的电费账户已欠费，为避免造成收益损失，请及时充值电费')}}</text>
 			</view>
 			<view class="btn">
 				<text class="btn_item" @click="close">{{I18n.t('我已知晓')}}</text>
@@ -21,29 +21,10 @@
 </template>
 
 <script setup>
-	import { ref, onMounted } from 'vue';
-	import { getThreshold } from '@/services/other.js';
 	import I18n from '@/hooks/useLocale.js';
-	const props = defineProps({
-		close: Function
-	})
-
-	let threshold = ref({});
-
-	function getData() {
-		getThreshold().then(res => {
-			if (res.code === 0) {
-				if (res.data.status > 0) {
-					threshold.value = res.data;
-				} else {
-					props.close();
-				}
-			}
-		})
-	}
-
-	onMounted(() => {
-		getData();
+	defineProps({
+		close: Function,
+		data: Object
 	})
 </script>
 

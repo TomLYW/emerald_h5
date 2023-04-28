@@ -27,11 +27,11 @@
 	import I18n from '@/hooks/useLocale.js';
 	import { loadUserInfo } from '@/hooks/useGlobal.js';
 	import { ref } from 'vue';
-	const { userInfo } = useUserStore();
-	let name = ref(userInfo.nickname);
+	const user = useUserStore();
+	let name = ref(user.userInfo.nickname);
 
 	function handleClick() {
-		if (name.value && name.value !== userInfo.nickname) {
+		if (name.value && name.value !== user.userInfo.nickname) {
 			Toast.show(I18n.t('正在保存'));
 			modifyNickname({ nickname: name.value }).then(res => {
 				if (res.code === 0) {

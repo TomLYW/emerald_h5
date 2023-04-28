@@ -31,7 +31,7 @@
 
 
 <script setup>
-	import { reactive, ref, watch, getCurrentInstance, onMounted } from 'vue';
+	import { reactive, ref, watch, getCurrentInstance } from 'vue';
 	import { Field, Button, Form } from 'vant';
 	import { sendCode, login } from '@/services/user.js';
 	import { isEmailAddress } from '@/utils/index.js';
@@ -39,6 +39,7 @@
 	import Popup from '@/hooks/useCustomPop.js';
 	import Nav from '@/pages/component/Nav/index.vue';
 	import { useUserStore } from '@/store/user.js';
+	import { getThreshold } from '@/services/other.js';
 	const { $t: t } = getCurrentInstance().proxy;
 	let user = useUserStore();
 
@@ -77,10 +78,11 @@
 				Toast.show(t('登录成功'), {
 					type: 'success'
 				})
-				uni.reLaunch({
-					url: '/' + user.backPath + '?id=' + user.mark
-				})
-				Popup.showTips();
+				history.back();
+				// 电费余额欠费提醒
+				setTimeout(() => {
+					measure();
+				}, 300)
 			} else {
 				Toast.show(res.message, { type: 'fail' });
 			}
@@ -163,11 +165,15 @@
 		history.back();
 	}
 
-	onMounted(() => {
-		const pages = getCurrentPages();
-		if (pages.length === 1) return;
-		user.setBackPath(pages[pages.length - 2].route);
-	})
+	function measure() {
+		getThreshold().then(res => {
+			if (res.code === 0) {
+				if (res.data.status > 0) {
+					Popup.showTips(res.data);
+				}
+			}
+		})
+	}
 </script>
 
 <style lang="scss" scoped>

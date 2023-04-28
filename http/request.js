@@ -33,43 +33,8 @@ let Interceptor = ({
 
 /* 2.响应拦截器 */
 let Responder = (res) => {
-	// if (!user.isLogin) return;
 
-	if (res.data.code === 1000) {
-		Popup.showPop(I18n.t('用户认证失效'), {
-			title: I18n.t('提示'),
-			confirm: () => {
-				if (!user.isLogin) {
-					// location.reload();
-				}
-			}
-		});
-		user.loginOut();
-		uni.setStorageSync('token', '');
-	} else if (res.data.code === 1001) {
-		Popup.showPop(I18n.t('此账户已被禁用，请联系管理员了解'), {
-			title: I18n.t('提示'),
-			confirm: () => {
-				if (!user.isLogin) {
-					// location.reload();
-				}
-			}
-		});
-		user.loginOut();
-		uni.setStorageSync('token', '');
-	} else if (res.data.code === 1002) {
-		Popup.showPop(I18n.t('此账户已登录其他设备'), {
-			title: I18n.t('提示'),
-			confirm: () => {
-				if (!user.isLogin) {
-					// location.reload();
-				}
-			}
-		});
-		user.loginOut();
-		uni.setStorageSync('token', '');
-	}
-
+	dealCode(res.data.code);
 	return Promise.resolve(res.data);
 };
 
@@ -103,6 +68,37 @@ let request = (configOptions = {}) => {
 		});
 	});
 };
+
+// 异常处理
+function dealCode(code) {
+	if (!user.isLogin) return;
+
+	if (code === 1000) {
+		Popup.showPop(I18n.t('用户认证失效'), {
+			title: I18n.t('提示'),
+			confirm: () => {}
+		});
+
+		user.loginOut();
+		uni.setStorageSync('token', '');
+	} else if (code === 1001) {
+		Popup.showPop(I18n.t('此账户已被禁用，请联系管理员了解'), {
+			title: I18n.t('提示'),
+			confirm: () => {}
+		});
+
+		user.loginOut();
+		uni.setStorageSync('token', '');
+	} else if (code === 1002) {
+		Popup.showPop(I18n.t('此账户已登录其他设备'), {
+			title: I18n.t('提示'),
+			confirm: () => {}
+		});
+
+		user.loginOut();
+		uni.setStorageSync('token', '');
+	}
+}
 
 export default {
 	// get请求

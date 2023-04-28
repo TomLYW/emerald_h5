@@ -7,8 +7,6 @@ export const useUserStore = defineStore('user', {
 		return {
 			isLogin: false,
 			userInfo: {},
-			backPath: '',
-			mark: null
 		};
 	},
 
@@ -21,21 +19,10 @@ export const useUserStore = defineStore('user', {
 		loginOut() {
 			this.isLogin = false;
 			this.userInfo = {};
-			this.backPath = '';
-			this.mark = null;
 		},
 
 		setUserInfo(payload) {
 			this.userInfo = payload;
 		},
-
-		setBackPath(payload) {
-			this.backPath = payload;
-		},
-
-		setMark(payload) {
-			this.mark = payload;
-		},
-
 	},
 });

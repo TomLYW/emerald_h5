@@ -103,14 +103,14 @@
 		whetherSetPin,
 		whetherExceedDate
 	} from '@/utils/index.js';
-	import { ref, computed, reactive } from 'vue';
+	import { ref, computed, reactive, watch } from 'vue';
 	import { onLoad } from '@dcloudio/uni-app';
 	import { Progress } from 'vant';
 	import { useUserStore } from '@/store/user.js';
 
 	const user = useUserStore();
 
-	let flag = ref(false);
+	// let flag = ref(false);
 	let pageData = ref({});
 	let amount = ref(0);
 	let id = ref(0);
@@ -226,10 +226,15 @@
 		})
 	}
 
+	watch(() => user.isLogin, (newVal) => {
+		if (newVal) {
+			getData(id.value);
+		}
+	})
+
 	onLoad((option) => {
 		getData(option.id);
 		id.value = option.id;
-		user.setMark(option.id);
 	})
 </script>
 

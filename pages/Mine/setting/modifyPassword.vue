@@ -7,7 +7,7 @@
 		</Nav>
 		<view class="login">
 			<text class="login-title">{{$t('修改登录密码')}}</text>
-			<view class="second_tip">{{$t('验证码将发送到：')}}{{emailEncryption(userInfo.email)}}</view>
+			<view class="second_tip">{{$t('验证码将发送到：')}}{{emailEncryption(user.userInfo.email)}}</view>
 			<Form @submit="handleSubmit">
 				<Field center :placeholder="$t('请输入验证码')" class="ipt" v-model="submitInfo.code" name='code' maxlength='6'>
 					<template #button>
@@ -41,7 +41,7 @@
 	import Toast from '@/hooks/useToast.js';
 	import Nav from '@/pages/component/Nav/index.vue';
 	import { useUserStore } from '@/store/user.js';
-	const { userInfo } = useUserStore();
+	const user = useUserStore();
 	const { $t: t } = getCurrentInstance().proxy;
 
 	let count = ref(61);
@@ -63,7 +63,7 @@
 			});
 			return;
 		}
-		submitInfo.account = userInfo.email;
+		submitInfo.account = user.userInfo.email;
 
 		resetPwd(submitInfo).then(res => {
 			if (res.code === 0) {
@@ -97,7 +97,7 @@
 		const parmas = {
 			accountType: 'email',
 			authType: 'retrieve',
-			account: userInfo.email
+			account: user.userInfo.email
 		}
 		if (count.value !== 61) return;
 

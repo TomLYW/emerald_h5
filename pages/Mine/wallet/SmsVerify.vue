@@ -5,7 +5,7 @@
 				<text class="title">{{$t('请输入验证码')}}</text>
 				<image src="/static/base/login_icon_close.png" class="close_icon" @click="handleClose" />
 			</view>
-			<view class="second_tip">{{$t('验证码将发送到：')}}{{emailEncryption(userInfo.email)}}</view>
+			<view class="second_tip">{{$t('验证码将发送到：')}}{{emailEncryption(user.userInfo.email)}}</view>
 			<Field :placeholder="$t('请输入验证码')" class="ipt" @update:model-value="handleChange" maxlength='6' v-model="code">
 				<template #button>
 					<text class="code" @click="handleSend">{{count=== 61 ? $t('获取验证码') : count + $t('s后获取')}}</text>
@@ -23,7 +23,7 @@
 	import { useUserStore } from '@/store/user.js';
 	import { sendCode } from '@/services/user.js';
 	import Toast from '@/hooks/useToast.js';
-	const { userInfo } = useUserStore();
+	const user = useUserStore();
 
 	const props = defineProps({
 		show: Boolean,
@@ -68,7 +68,7 @@
 		const parmas = {
 			accountType: 'email',
 			authType: props.options.authType,
-			account: userInfo.email
+			account: user.userInfo.email
 		}
 		if (count.value !== 61) return;
 

@@ -18,9 +18,10 @@ const showPop = (message, option = {}) => {
 	Instance.mount(mountNode);
 }
 
-const showTips = (option = {}) => {
+const showTips = (data, option = {}) => {
 	const mountNode = document.createElement('div');
 	const Instance = createApp(PowerTips, {
+		data,
 		...option,
 		close: () => {
 			Instance.unmount(mountNode);
