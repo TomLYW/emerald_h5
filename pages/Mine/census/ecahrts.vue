@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-	import { ref, reactive, computed } from 'vue';
+	import { ref, reactive, computed, onMounted } from 'vue';
 	import { formatDate } from '@/utils/index.js';
 	const props = defineProps({
 		data: Object
@@ -110,7 +110,10 @@
 		}
 	}
 
-	handleChange(1);
+	onMounted(() => {
+		handleChange(1);
+		console.log('looks', btcLines.value)
+	})
 </script>
 
 <style lang="scss" scoped>

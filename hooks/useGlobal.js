@@ -9,14 +9,3 @@ export function loadUserInfo() {
 		}
 	})
 }
-
-export function savePath() {
-	const pages = getCurrentPages();
-	user.setBackPath(pages[pages.length - 2].route);
-}
-
-export function linkJump() {
-	uni.reLaunch({
-		url: `/${user.backPath}`
-	})
-}

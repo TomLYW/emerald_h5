@@ -14,8 +14,7 @@
 						<text class="code" @click="handleSend">{{count=== 61 ? $t('获取验证码') : count + $t('s后获取')}}</text>
 					</template>
 				</Field>
-				<Field center :placeholder="$t('请输入密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'"
-					:right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
+				<Field center :placeholder="$t('请输入密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'" :right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
 					@click-right-icon='handleEyes' v-model="submitInfo.password" name='password' v-else />
 				<view class="login-code">
 					<text @click="handleCode">{{$t('验证码登录')}}</text>
