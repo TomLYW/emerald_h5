@@ -174,7 +174,7 @@
 
 	function callback(val) {
 		buyCloudMiner({
-			id: id.value,
+			id: Number(id.value),
 			numbers: amount.value,
 			pin: val
 		}).then(res => {
@@ -182,7 +182,7 @@
 				options.isShow = false;
 				getData(id.value);
 				uni.navigateTo({
-					url: `/pages/Mine/electric/remindSuccess?title=${I18t.t('购买成功')}`
+					url: `/pages/Mine/electric/remindSuccess?title=${I18n.t('购买成功')}`
 				})
 			} else {
 				Toast.show(res.message);

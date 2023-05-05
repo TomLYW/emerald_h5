@@ -1,5 +1,5 @@
 <template>
-	<view class="cell" @click="handleClick">
+	<view class="cell" @click="handleClick" :style="{backgroundColor:showMaskType() > 0 ? '#E5E5E5' : '#fff'}">
 		<view>
 			<view class="tag" :style="{backgroundColor: getMealType(item.type).bgColor}">
 				<text class="tag-title">{{getMealType(item.type).text}}</text>
@@ -7,8 +7,7 @@
 		</view>
 		<view class="caption">
 			<view class="log">
-				<image class="icon"
-					:src="item.currency === 'BTC' ? '/static/home/home_icon_btc.png':'/static/home/home_icon_eth.png'" />
+				<image class="icon" :src="item.currency === 'BTC' ? '/static/home/home_icon_btc.png':'/static/home/home_icon_eth.png'" />
 				<text class="name">{{item.name + item.model}}</text>
 			</view>
 			<text class="price">{{Number(item.price).toFixed(2)}} U</text>
@@ -29,8 +28,8 @@
 					<text class="down">{{$t('历史产出率')}}</text>
 				</view>
 				<view class="progress">
-					<Circle v-model:current-rate="initRate" :rate="percent" speed="80" size="52" color="#049977"
-						layer-color="#B8D6CF" stroke-width="60">
+					<Circle v-model:current-rate="initRate" :rate="percent" speed="80" size="52" color="#049977" layer-color="#B8D6CF"
+						stroke-width="60">
 						<template #default>
 							<view class="circle-tips">
 								<text class="percent">{{percent.toFixed(0)}}%</text>
@@ -46,41 +45,31 @@
 </template>
 
 <script setup>
-	import {
-		ref
-	} from 'vue';
-	import {
-		Circle
-	} from 'vant';
-	import {
-		getMealType
-	} from '@/services/cloud.js';
-
-	import {
-		accMul,
-		whetherExceedDate
-	} from '@/utils/index.js';
-	const {
-		item
-	} = defineProps({
+	import { ref, computed } from 'vue';
+	import { Circle } from 'vant';
+	import { getMealType } from '@/services/cloud.js';
+	import { accMul, whetherExceedDate } from '@/utils/index.js';
+	const props = defineProps({
 		item: Object
 	})
 	const px = uni.getLocale() === 'zh' ? '12px' : '4px';
-	const initRate = ref(0);
-	const percent = (item.sold / (item.sold + item.stock)) * 100;
+	const percent = computed(() => {
+		return (props.item.sold / (props.item.sold + props.item.stock)) * 100;
+	})
 
+	let initRate = ref(0);
 	let url = ref('/static/home/home_icon_ended.png');
 
 	const showMaskType = () => {
 
 		//是否售罄
-		if (item.stock === 0) {
+		if (props.item.stock === 0) {
 			url.value = '/static/home/home_icon_soldout.png';
 			return 2;
 		}
 
 		//判断是否结束出售
-		if (whetherExceedDate(item.deployTime)) {
+		if (whetherExceedDate(props.item.deployTime)) {
 			return 1;
 		}
 
@@ -89,7 +78,7 @@
 
 	const handleClick = () => {
 		uni.navigateTo({
-			url: `/pages/Home/description/index?id=${item.id}`
+			url: `/pages/Home/description/index?id=${props.item.id}`
 		})
 	}
 </script>
@@ -98,7 +87,6 @@
 	.cell {
 		height: 150px;
 		border-radius: 15px;
-		background-color: #E5E5E5;
 		box-shadow: 0px 0px 10px -6px #000;
 		position: relative;
 		display: flex;

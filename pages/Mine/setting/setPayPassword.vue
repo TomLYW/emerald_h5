@@ -24,6 +24,7 @@
 	import Toast from '@/hooks/useToast.js';
 	import I18n from '@/hooks/useLocale.js';
 	import { setPayPassword } from '@/services/user.js';
+	import { loadUserInfo } from '@/hooks/useGlobal.js';
 	import { ref } from 'vue';
 	let password = ref('');
 
@@ -44,10 +45,11 @@
 
 			setPayPassword({ password: password.value }).then((res) => {
 				if (res.code === 0) {
+					loadUserInfo();
 					Toast.show(I18n.t('设置成功'), {
 						type: 'success'
 					});
-					uni.navigateBack();
+					history.back();
 				} else {
 					Toast.show(res.message);
 				}

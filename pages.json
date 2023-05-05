@@ -289,7 +289,7 @@
 		"color": "#8D8D8D",
 		"selectedColor": "#05AA84",
 		"borderStyle": "black",
-		"backgroundColor": "#F8F8F8",
+		"backgroundColor": "#fff",
 		"list": [{
 				"pagePath": "pages/Home/index",
 				"text": "%home%",

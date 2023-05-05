@@ -112,7 +112,7 @@
 
 	onMounted(() => {
 		handleChange(1);
-		console.log('looks', btcLines.value)
+		// console.log('looks', btcLines.value)
 	})
 </script>
 

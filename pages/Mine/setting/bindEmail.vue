@@ -22,24 +22,14 @@
 
 
 <script setup>
-	import {
-		reactive,
-		ref,
-		watch,
-		getCurrentInstance
-	} from 'vue';
-	import {
-		Field,
-		Button,
-		Form
-	} from 'vant';
+	import { reactive, ref, watch } from 'vue';
+	import { Field, Button, Form } from 'vant';
 	import { sendCode, bindEmail } from '@/services/user.js';
 	import { isEmailAddress } from '@/utils/index.js';
 	import Toast from '@/hooks/useToast.js';
 	import Nav from '@/pages/component/Nav/index.vue';
-	const {
-		$t: t
-	} = getCurrentInstance().proxy;
+	import I18n from '@/hooks/useLocale.js';
+	import { loadUserInfo } from '@/hooks/useGlobal.js';
 
 	let count = ref(61);
 	let btnState = ref(true);
@@ -54,13 +44,14 @@
 
 	const handleSubmit = (value) => {
 		if (!isEmailAddress(value.account)) {
-			Toast.show(t('请输入正确格式的邮箱'));
+			Toast.show(I18n.t('请输入正确格式的邮箱'));
 			return;
 		}
 
 		bindEmail({ email: value.account, code: value.code }).then(res => {
 			if (res.code === 0) {
-				Toast.show(t('绑定成功'), {
+				loadUserInfo();
+				Toast.show(I18n.t('绑定成功'), {
 					type: 'success'
 				})
 				uni.redirectTo({
@@ -88,12 +79,12 @@
 	//获取验证码
 	const handleSend = () => {
 		if (!submitInfo.account) {
-			Toast.show(t('请输入邮箱'));
+			Toast.show(I18n.t('请输入邮箱'));
 			return;
 		}
 
 		if (!isEmailAddress(submitInfo.account)) {
-			Toast.show(t('请输入正确格式的邮箱'));
+			Toast.show(I18n.t('请输入正确格式的邮箱'));
 			return;
 		}
 
@@ -106,7 +97,7 @@
 
 		sendCode(parmas).then(res => {
 			if (res.code === 0) {
-				Toast.show(t('验证码已发送'), {
+				Toast.show(I18n.t('验证码已发送'), {
 					type: 'success'
 				})
 				startTimer();

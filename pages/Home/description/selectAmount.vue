@@ -10,14 +10,9 @@
 </template>
 
 <script setup>
-	import {
-		ref,
-		onMounted,
-		watch
-	} from 'vue';
-	const {
-		stock
-	} = defineProps({
+	import { onShow } from "@dcloudio/uni-app";
+	import { ref, watch } from 'vue';
+	const props = defineProps({
 		stock: Number,
 		modelValue: Number
 	})
@@ -33,7 +28,7 @@
 	}
 
 	function add() {
-		if (count.value < stock) {
+		if (count.value < props.stock) {
 			count.value++;
 		}
 	}
@@ -42,9 +37,11 @@
 		emit('update:modelValue', newVal)
 	})
 
-	onMounted(() => {
-		if (stock > 0) {
+	onShow(() => {
+		if (props.stock > 0) {
 			count.value = 1;
+		} else {
+			count.value = 0;
 		}
 	})
 </script>

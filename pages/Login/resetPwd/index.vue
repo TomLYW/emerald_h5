@@ -72,9 +72,7 @@
 				Toast.show(t('重置成功'), {
 					type: 'success'
 				})
-				uni.redirectTo({
-					url: '/pages/Login/index'
-				});
+				history.back();
 			} else {
 				Toast.show(res.message);
 			}
@@ -108,7 +106,7 @@
 
 		const parmas = {
 			accountType: 'email',
-			authType: 'login',
+			authType: 'retrieve',
 			account: submitInfo.account
 		}
 		if (count.value !== 61) return;

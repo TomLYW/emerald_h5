@@ -44,7 +44,7 @@
 					<view class="echarts_empty" v-else>{{$t('暂无数据')}}</view>
 				</template>
 			</SelectCell>
-			<SelectCell :options="options2" class="invite" v-show="user.isLogin" />
+			<SelectCell :options="options2" class="invite" v-show="user.isLogin && user.userInfo.isPromoter" />
 			<SelectCell :options="options1" class="invite" />
 		</view>
 	</scroll-view>

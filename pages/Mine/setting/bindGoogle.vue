@@ -27,6 +27,7 @@
 	import I18n from '@/hooks/useLocale.js';
 	import InputModel from '@/pages/component/InputModel/index.vue';
 	import Nav from '@/pages/component/Nav/index.vue';
+	import { loadUserInfo } from '@/hooks/useGlobal.js';
 
 	let data = ref({ secret: '', uri: '' });
 
@@ -42,7 +43,8 @@
 		})
 		setGoogleSecret({ secret: data.value.secret, code: val }).then(res => {
 			if (res.code === 0) {
-				Toast.show(I18n.t('正在绑定'), {
+				loadUserInfo();
+				Toast.show(I18n.t('绑定成功'), {
 					type: 'success'
 				});
 				uni.redirectTo({

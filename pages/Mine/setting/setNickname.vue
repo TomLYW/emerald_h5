@@ -36,7 +36,8 @@
 			modifyNickname({ nickname: name.value }).then(res => {
 				if (res.code === 0) {
 					loadUserInfo();
-					Toast.show(I18n.t('保存成功'), { type: 'success' })
+					Toast.show(I18n.t('保存成功'), { type: 'success' });
+					history.back();
 				} else {
 					Toast.show(res.message)
 				}
