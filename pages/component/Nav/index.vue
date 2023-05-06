@@ -26,7 +26,7 @@
 
 		.left_arrow {
 			width: 22px;
-			height: 17px;
+			height: 16px;
 		}
 
 		.title {

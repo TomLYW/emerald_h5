@@ -52,7 +52,7 @@
 
 <script setup>
 	import { onShow } from "@dcloudio/uni-app";
-	import { reactive } from 'vue';
+	import { reactive, onMounted } from 'vue';
 	import SelectCell from '@/pages/component/SelectCell/index.vue';
 	import Avatar from '@/pages/component/Avatar/index.vue';
 	import Echarts from '@/pages/Mine/census/ecahrts.vue';
@@ -60,6 +60,7 @@
 	import { emailEncryption, dealNumber, unroundNumber } from '@/utils/index.js';
 	import { getYieldLines } from '@/services/mine.js';
 	import { getElectricBalance, getAssets } from '@/services/other.js';
+	import { loadUserInfo } from '@/hooks/useGlobal.js';
 	const user = useUserStore();
 
 	let data = reactive({
@@ -158,6 +159,12 @@
 	onShow(() => {
 		if (user.isLogin) {
 			loadData();
+		}
+	})
+
+	onMounted(() => {
+		if (user.isLogin) {
+			loadUserInfo();
 		}
 	})
 </script>

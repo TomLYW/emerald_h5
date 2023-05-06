@@ -2,7 +2,7 @@
 	<view class="recharge_main">
 		<Nav class="recharge_header">
 			<template #left>
-				<image src="/static/base/title_left_arrow.png" class="icon" @click="handleClick" />
+				<image src="/static/base/title_left_arrow.png" class="icon" @click="handleBack" />
 			</template>
 		</Nav>
 		<view class="recharge_fees">
@@ -67,17 +67,23 @@
 
 	function callback(password) {
 		Toast.show(I18n.t('正在充值'), {
-			type: 'loading'
+			type: 'loading',
+			duration: 0
 		})
 		rechargeFees({ amount: Number(amount.value), pin: password }).then(res => {
 			if (res.code === 0) {
 				amount.value = '';
+				options.isShow = false;
 				Toast.closeToast();
 				uni.navigateTo({
 					url: `/pages/Mine/electric/remindSuccess?title=${I18n.t('充值成功')}`
 				})
+				loadData();
 			} else {
-				Toast.show(res.message)
+				Toast.show(res.message, {
+					type: 'fail'
+				})
+				options.isShow = false;
 			}
 		})
 	}
@@ -90,8 +96,10 @@
 		})
 	}
 
-	function handleClick() {
-		history.back();
+	function handleBack() {
+		uni.redirectTo({
+			url: '/pages/Mine/electric/index'
+		})
 	}
 
 	onMounted(() => {
@@ -106,8 +114,8 @@
 
 		.recharge_header {
 			.icon {
-				width: 23px;
-				height: 17px;
+				width: 22px;
+				height: 16px;
 			}
 		}
 

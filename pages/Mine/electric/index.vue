@@ -19,11 +19,12 @@
 </template>
 
 <script setup>
+	import { onShow } from "@dcloudio/uni-app";
+	import { reactive } from 'vue';
 	import Nav from '@/pages/component/Nav/index.vue';
 	import NoData from '@/pages/component/NoData/index.vue';
 	import CustomTitle from '@/pages/component/CustomTitle/index.vue';
 	import CensusCell from '@/pages/component/CensusCell/index.vue';
-	import { reactive, onMounted } from 'vue';
 	import Toast from '@/hooks/useToast.js';
 	import I18n from '@/hooks/useLocale.js';
 	import { getElectricList } from '@/services/mine.js';
@@ -60,7 +61,7 @@
 		})
 	}
 
-	onMounted(() => {
+	onShow(() => {
 		getData();
 	})
 </script>
@@ -77,8 +78,8 @@
 			color: #fff;
 
 			.icon {
-				width: 23px;
-				height: 17px;
+				width: 22px;
+				height: 16px;
 			}
 		}
 

@@ -16,7 +16,7 @@
 				</Field>
 				<Field center :placeholder="$t('请设置新支付密码')" class="ipt" :type="pwdEyes ? 'text' : 'password'"
 					:right-icon="pwdEyes ? '/static/login/login_icon_eyes_open.png': '/static/login/login_icon_eyes_close.png'"
-					@click-right-icon='handleEyes' v-model="submitInfo.password" name='password' />
+					@click-right-icon='handleEyes' v-model="submitInfo.password" name='password' maxlength="6" />
 				<Button native-type="submit" block class="btn" :disabled="btnState">{{$t('重置密码')}}</Button>
 			</Form>
 		</view>
@@ -31,18 +31,14 @@
 		watch,
 		getCurrentInstance
 	} from 'vue';
-	import {
-		Field,
-		Button,
-		Form
-	} from 'vant';
+	import { Field, Button, Form } from 'vant';
 	import { sendCode, changePayPassword } from '@/services/user.js';
 	import { checkNumber, emailEncryption } from '@/utils/index.js';
 	import Toast from '@/hooks/useToast.js';
 	import { useUserStore } from '@/store/user.js';
 	import Nav from '@/pages/component/Nav/index.vue';
-	const user = useUserStore();
 	const { $t: t } = getCurrentInstance().proxy;
+	const user = useUserStore();
 
 	let count = ref(61);
 	let pwdEyes = ref(false);
@@ -134,8 +130,8 @@
 
 		.pay_nav {
 			.icon {
-				width: 23px;
-				height: 17px;
+				width: 22px;
+				height: 16px;
 			}
 		}
 

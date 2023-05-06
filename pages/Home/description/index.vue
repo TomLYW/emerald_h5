@@ -185,7 +185,10 @@
 					url: `/pages/Mine/electric/remindSuccess?title=${I18n.t('购买成功')}`
 				})
 			} else {
-				Toast.show(res.message);
+				Toast.show(res.message, {
+					type: 'fail'
+				});
+				options.isShow = false;
 			}
 		})
 	}
