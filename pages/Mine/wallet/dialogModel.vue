@@ -19,9 +19,12 @@
 
 <script setup>
 	import { Overlay } from 'vant';
+	import Toast from '@/hooks/useToast.js';
+	import I18n from '@/hooks/useLocale.js';
 	const props = defineProps({
 		type: String,
 		open: Boolean,
+		assets: Array,
 	})
 	const emit = defineEmits(['update:open', 'update:type']);
 
@@ -30,8 +33,21 @@
 		emit('update:type', '');
 	}
 
+
 	function onJump(val) {
+		const current = props.assets.find(v => v.currency === val);
 		onClick();
+
+		if (props.type === 'recharge' && !current.openRecharge) {
+			Toast.show(I18n.t('此钱包未开放充值'));
+			return;
+		}
+
+		if (props.type === 'cash' && !current.openWithdraw) {
+			Toast.show(I18n.t('此钱包未开放提现'));
+			return;
+		}
+
 		uni.navigateTo({
 			url: val === 'USDT' && props.type === 'recharge' ? `/pages/Mine/wallet/rechargeUsdt?type=${val}` :
 				`/pages/Mine/wallet/cashPage?type=${val}`

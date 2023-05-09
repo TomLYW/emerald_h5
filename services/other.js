@@ -19,3 +19,13 @@ export const getAssets = (data) => {
 export const getElectricBalance = (data) => {
 	return http.get('/v1/electric/balance', data);
 }
+
+// 获取强制通知列表
+export const getForceList = (data) => {
+	return http.get('/v1/notice-forces/list', data);
+}
+
+// 确认强制通知
+export const confirmForce = (data) => {
+	return http.get('/v1/notice-forces/confirms', data);
+}

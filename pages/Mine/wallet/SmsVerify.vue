@@ -18,11 +18,12 @@
 
 <script setup>
 	import { Popup, Field, Button } from 'vant';
-	import { ref, computed } from 'vue';
+	import { ref, computed, watch } from 'vue';
 	import { emailEncryption } from '@/utils/index.js';
 	import { useUserStore } from '@/store/user.js';
 	import { sendCode } from '@/services/user.js';
 	import Toast from '@/hooks/useToast.js';
+	import I18n from '@/hooks/useLocale.js';
 	const user = useUserStore();
 
 	const props = defineProps({
@@ -74,7 +75,7 @@
 
 		sendCode(parmas).then(res => {
 			if (res.code === 0) {
-				Toast.show(t('发送成功'), {
+				Toast.show(I18n.t('发送成功'), {
 					type: 'success'
 				})
 				startTimer();
@@ -86,6 +87,12 @@
 
 	const isShow = computed(() => {
 		return props.show;
+	})
+
+	watch(() => props.show, (newVal) => {
+		if (!newVal) {
+			code.value = '';
+		}
 	})
 </script>
 

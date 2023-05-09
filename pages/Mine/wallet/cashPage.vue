@@ -114,6 +114,8 @@
 			} else {
 				return unroundNumber(num * (1 - data.assets.feesRate), 8);
 			}
+		} else {
+			return 0;
 		}
 	}
 
@@ -179,9 +181,11 @@
 				Toast.show(I18n.t("提交成功"), { type: 'success' });
 				data.address = '';
 				data.num = '';
-				uni.navigateBack();
+				loadData(type.value);
+				options1.isShow = false;
 			} else {
-				Toast.show(res.message)
+				Toast.show(res.message);
+				options1.isShow = false;
 			}
 		})
 	}
@@ -201,9 +205,11 @@
 					Toast.show(I18n.t("提交成功"), { type: 'success' });
 					data.address = '';
 					data.num = '';
-					uni.navigateBack();
+					loadData(type.value);
+					show.value = false;
 				} else {
-					Toast.show(res.message)
+					Toast.show(res.message);
+					show.value = false;
 				}
 			})
 		}

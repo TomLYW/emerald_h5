@@ -10,7 +10,6 @@
 	import 'vant/lib/popup/style';
 	import '@/styles/index.scss';
 
-
 	export default {
 		setup() {
 

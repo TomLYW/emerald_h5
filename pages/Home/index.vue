@@ -32,7 +32,7 @@
 
 <script setup>
 	import { onShow } from "@dcloudio/uni-app";
-	import { reactive } from 'vue';
+	import { reactive, onBeforeUnmount, onMounted } from 'vue';
 	import { Button } from 'vant';
 	import { getBannerImgs, getNoticeList } from '@/services/home.js';
 	import { getMinerList } from '@/services/cloud.js';
@@ -40,8 +40,11 @@
 	import YunCell from '@/pages/Home/YunList/index.vue';
 	import CustomTitle from '@/pages/component/CustomTitle/index.vue';
 	import { useNoticeStore } from '@/store/notice.js';
+	import { useUserStore } from '@/store/user.js';
+	import Popup from '@/hooks/useCustomPop.js';
 
 	const store = useNoticeStore();
+	const user = useUserStore();
 
 	let current = reactive({
 		bannerList: [],
@@ -89,6 +92,18 @@
 
 	onShow(() => {
 		getData();
+	})
+
+	onMounted(() => {
+		if (user.isLogin && !uni.getStorageSync('init')) {
+			Popup.showForce();
+			uni.setStorageSync('init', '1');
+		}
+	})
+
+	onBeforeUnmount(() => {
+		console.log('组件卸载')
+		uni.removeStorageSync('init');
 	})
 </script>
 

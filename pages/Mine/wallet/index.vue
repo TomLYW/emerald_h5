@@ -33,16 +33,17 @@
 			</view>
 			<NoData hideBtn style="height: inherit; margin-bottom: 20px;" v-else />
 		</view>
-		<DialogModel v-model:open='data.open' v-model:type="data.type" />
+		<DialogModel v-model:open='data.open' v-model:type="data.type" :assets="data.assets" />
 	</view>
 </template>
 
 <script setup>
+	import { onShow } from "@dcloudio/uni-app";
 	import Nav from '@/pages/component/Nav/index.vue';
 	import CustomTitle from '@/pages/component/CustomTitle/index.vue';
 	import CensusCell from '@/pages/component/CensusCell/index.vue';
 	import NoData from '@/pages/component/NoData/index.vue';
-	import { reactive, onMounted } from 'vue';
+	import { reactive } from 'vue';
 	import Toast from '@/hooks/useToast.js';
 	import I18n from '@/hooks/useLocale.js';
 	import { getAssetLogs } from '@/services/mine.js';
@@ -118,7 +119,7 @@
 		})
 	}
 
-	onMounted(() => {
+	onShow(() => {
 		getData();
 	})
 </script>
