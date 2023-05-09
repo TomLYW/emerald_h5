@@ -1,6 +1,7 @@
 <template>
 	<view class="reminder">
-		<view class="box">
+		<ForceNotice v-if="current.showIndex === 1" />
+		<view class="box" v-else-if="current.showIndex === 2">
 			<view class="caption">
 				<text v-show="data.status === 2">{{I18n.t('账户已欠费')}}</text>
 				<text v-show="data.status === 1">{{I18n.t('电费不足提醒')}}</text>
@@ -21,10 +22,37 @@
 </template>
 
 <script setup>
+	import { reactive, onMounted } from 'vue';
+	import { getForceList, getThreshold } from '@/services/other.js';
+	import ForceNotice from '@/pages/Other/forceNotice.vue';
 	import I18n from '@/hooks/useLocale.js';
 	defineProps({
 		close: Function,
-		data: Object
+	})
+
+	let current = reactive({
+		showIndex: 0,
+		force: [],
+		threshold: {}
+
+	})
+
+	function getData() {
+		getForceList().then(res => {
+			if (res.code === 0) {
+				current.force = res.data;
+			}
+		})
+
+		getThreshold().then(res => {
+			if (res.code === 0) {
+				current.threshold = res.data;
+			}
+		})
+	}
+
+	onMounted(() => {
+		getData();
 	})
 </script>
 

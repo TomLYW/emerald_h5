@@ -95,9 +95,13 @@
 	})
 
 	onMounted(() => {
-		if (user.isLogin && !uni.getStorageSync('init')) {
-			Popup.showForce();
-			uni.setStorageSync('init', '1');
+		// if (user.isLogin && !uni.getStorageSync('init')) {
+		// 	Popup.showForce();
+		// 	uni.setStorageSync('init', '1');
+		// }
+		if (user.isLogin) {
+			Popup.showTips();
+			// uni.setStorageSync('init', '1');
 		}
 	})
 

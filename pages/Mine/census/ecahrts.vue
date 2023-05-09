@@ -39,7 +39,7 @@
 		yAxis: {
 			gridType: "dash",
 			data: [],
-			format: "yAxisDemo2"
+			// format: "yAxisDemo2"
 		},
 		extra: {
 			area: {
@@ -91,28 +91,23 @@
 		tab.value = val;
 
 		// y轴刻度调整
+		let arr = [];
 		if (val === 1) {
-			let arr = btcLines.value.series[0].data;
-			let max = Math.max(...arr);
-			if (max > 1) {
-				opts.yAxis.data = [{ max: Math.ceil(max), min: 0 }];
-			} else {
-				opts.yAxis.data = [];
-			}
+			arr = btcLines.value.series[0].data;
 		} else if (val === 2) {
-			let arr = ethLines.value.series[0].data;
-			let max = Math.max(...arr);
-			if (max > 1) {
-				opts.yAxis.data = [{ max: Math.ceil(max), min: 0 }];
-			} else {
-				opts.yAxis.data = [];
-			}
+			arr = ethLines.value.series[0].data;
+		}
+
+		let max = Math.max(...arr);
+		if (max > 1) {
+			opts.yAxis.data = [{ max: Math.ceil(max), min: 0 }];
+		} else {
+			opts.yAxis.data = [];
 		}
 	}
 
 	onMounted(() => {
 		handleChange(1);
-		// console.log('looks', btcLines.value)
 	})
 </script>
 
