@@ -1,18 +1,18 @@
 <template>
 	<view class="reminder">
-		<ForceNotice v-if="current.showIndex === 1" />
-		<view class="box" v-else-if="current.showIndex === 2">
+		<ForceNotice :data="force" :callback="handleFinish" v-if="showIndex === 1" />
+		<view class="box" v-else-if="showIndex === 2">
 			<view class="caption">
-				<text v-show="data.status === 2">{{I18n.t('账户已欠费')}}</text>
-				<text v-show="data.status === 1">{{I18n.t('电费不足提醒')}}</text>
+				<text v-if="threshold.status === 2">{{I18n.t('账户已欠费')}}</text>
+				<text v-else-if="threshold.status === 1">{{I18n.t('电费不足提醒')}}</text>
 			</view>
 			<view class="msg">
-				<view v-show="data.status === 1">
+				<view v-if="threshold.status === 1">
 					{{I18n.t('根据您昨日消耗估算，您的电费余额可能不足以支持未来')}}
-					<text class="day">{{data.balance_time}}</text>
+					<text class="day">{{threshold.balance_time}}</text>
 					{{I18n.t('天的消耗')}}
 				</view>
-				<text v-show="data.status === 2">{{I18n.t('您的电费账户已欠费，为避免造成收益损失，请及时充值电费')}}</text>
+				<text v-else-if="threshold.status === 2">{{I18n.t('您的电费账户已欠费，为避免造成收益损失，请及时充值电费')}}</text>
 			</view>
 			<view class="btn">
 				<text class="btn_item" @click="close">{{I18n.t('我已知晓')}}</text>
@@ -22,38 +22,25 @@
 </template>
 
 <script setup>
-	import { reactive, onMounted } from 'vue';
-	import { getForceList, getThreshold } from '@/services/other.js';
+	import { ref } from 'vue';
 	import ForceNotice from '@/pages/Other/forceNotice.vue';
 	import I18n from '@/hooks/useLocale.js';
-	defineProps({
+	const props = defineProps({
 		close: Function,
+		force: Array,
+		threshold: Object,
+		showIndex: Number
 	})
 
-	let current = reactive({
-		showIndex: 0,
-		force: [],
-		threshold: {}
+	let showIndex = ref(props.showIndex);
 
-	})
-
-	function getData() {
-		getForceList().then(res => {
-			if (res.code === 0) {
-				current.force = res.data;
-			}
-		})
-
-		getThreshold().then(res => {
-			if (res.code === 0) {
-				current.threshold = res.data;
-			}
-		})
+	function handleFinish() {
+		if (props.threshold.status > 0) {
+			showIndex.value = 2;
+		} else {
+			props.close();
+		}
 	}
-
-	onMounted(() => {
-		getData();
-	})
 </script>
 
 <style lang="scss" scoped>

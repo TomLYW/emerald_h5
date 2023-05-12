@@ -10,19 +10,20 @@
 					{{current.list[0]?.content}}
 				</label>
 			</view>
-			<view class="btn" @click="handleConfirm" :style="{backgroundColor: current.isChecked ? '#05AA84' : '#ccc',color:current.isChecked ? '#fff' : 'gray'}">{{I18n.t('我已知晓')}}
+			<view class="btn" @click="handleConfirm"
+				:style="{backgroundColor: current.isChecked ? '#05AA84' : '#ccc',color:current.isChecked ? '#fff' : 'gray'}">{{I18n.t('我已知晓')}}
 			</view>
 		</view>
 	</view>
 </template>
 
 <script setup>
-	import { reactive, onMounted, watch } from 'vue';
-	import { getForceList, confirmForce, getThreshold } from '@/services/other.js';
+	import { reactive, watch } from 'vue';
+	import { confirmForce } from '@/services/other.js';
 	import I18n from '@/hooks/useLocale.js';
-	import Popup from '@/hooks/useCustomPop.js';
 	const props = defineProps({
-		// data: Array,
+		data: Array,
+		callback: Function
 	})
 
 	let current = reactive({
@@ -50,40 +51,10 @@
 		}
 	}
 
-	function showArrears() {
-		getThreshold().then(res => {
-			if (res.code === 0) {
-				if (res.data.status > 0) {
-					Popup.showTips(res.data);
-				}
-			}
-		})
-	}
-
-
-	function getData() {
-		getForceList().then(res => {
-			if (res.code === 0) {
-				if (!current.list.length) {
-					props.close();
-					showArrears();
-					return;
-				}
-				current.list = res.data;
-			}
-		})
-	}
-
 	watch(() => current.list, (newVal) => {
-		// if (!newVal.length) {
-		// 	props.close();
-		// 	// Popup.showTips({ status: 1, balance_time: "4" });
-		// 	showArrears();
-		// }
-	})
-
-	onMounted(() => {
-		// getData();
+		if (!newVal.length) {
+			props.callback();
+		}
 	})
 </script>
 
@@ -97,7 +68,7 @@
 		.section_1 {
 			height: 300px;
 			background-color: #ccc;
-			padding: 10px;
+			padding: 5px;
 			border-radius: 5px;
 
 			.img {

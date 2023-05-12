@@ -34,12 +34,12 @@
 	import { reactive, ref, watch, getCurrentInstance } from 'vue';
 	import { Field, Button, Form } from 'vant';
 	import { sendCode, login } from '@/services/user.js';
+	import { getForceList, getThreshold } from '@/services/other.js';
 	import { isEmailAddress } from '@/utils/index.js';
 	import Toast from '@/hooks/useToast.js';
 	import Popup from '@/hooks/useCustomPop.js';
 	import Nav from '@/pages/component/Nav/index.vue';
 	import { useUserStore } from '@/store/user.js';
-	import { getThreshold } from '@/services/other.js';
 	const { $t: t } = getCurrentInstance().proxy;
 	let user = useUserStore();
 
@@ -55,6 +55,24 @@
 		authMethod: 'password', // password/code
 		accountType: 'email', // 默认手机好注册 email/tel
 	});
+
+	// 弹窗显示
+	const getDialog = async () => {
+		let index = 0;
+		const res1 = await getForceList();
+		const res2 = await getThreshold();
+		if (res1.data.length) {
+			index = 1;
+		} else {
+			if (res2.data.status > 0) {
+				index = 2;
+			}
+		}
+
+		if ((res1.data.length && res2.data.status === 0) || (!res1.data.length && res2.data.status > 0)) {
+			Popup.showTips({ force: res1.data, threshold: res2.data, showIndex: index });
+		}
+	}
 
 	const handleSubmit = (value) => {
 		if (!isEmailAddress(value.account)) {
@@ -81,7 +99,7 @@
 				history.back();
 				// 电费余额欠费提醒
 				setTimeout(() => {
-					measure();
+					getDialog();
 				}, 300)
 			} else {
 				Toast.show(res.message, { type: 'fail' });
@@ -163,16 +181,6 @@
 
 	function handleBack() {
 		history.back();
-	}
-
-	function measure() {
-		getThreshold().then(res => {
-			if (res.code === 0) {
-				if (res.data.status > 0) {
-					Popup.showTips(res.data);
-				}
-			}
-		})
 	}
 </script>
 

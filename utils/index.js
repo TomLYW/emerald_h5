@@ -112,7 +112,7 @@ export function checkNumber(theObj) {
 
 /* 科学计数法转字符串 */
 export function convertString(number) {
-	if (isNaN(number)) return;
+	if (isNaN(number)) return '0';
 	if (typeof number === 'string') return number;
 
 	let str = String(number);
@@ -141,6 +141,28 @@ export function accMul(arg1, arg2) {
 		(Number(s1?.replace('.', '')) * Number(s2?.replace('.', ''))) /
 		Math.pow(10, m)
 	);
+}
+
+// 小数计算丢失精度处理（减法）
+export function accRed(arg1, arg2) {
+	let s1 = convertString(arg1),
+		s2 = convertString(arg2);
+	let s1Digits = (s1.split('.')[1] || '').length;
+	let s2Digits = (s2.split('.')[1] || '').length;
+
+	const baseNum = Math.pow(10, Math.max(s1Digits, s2Digits));
+	return (accMul(s1, baseNum) - accMul(s2, baseNum)) / baseNum;
+}
+
+// 小数计算丢失精度处理（加法）
+export function accAdd(arg1, arg2) {
+	let s1 = convertString(arg1),
+		s2 = convertString(arg2);
+	let s1Digits = (s1.split('.')[1] || '').length;
+	let s2Digits = (s2.split('.')[1] || '').length;
+
+	const baseNum = Math.pow(10, Math.max(s1Digits, s2Digits));
+	return (accMul(s1, baseNum) + accMul(s2, baseNum)) / baseNum;
 }
 
 /*截取小数后面小数 采用向下取整的方式*/

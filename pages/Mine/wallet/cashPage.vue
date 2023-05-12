@@ -23,13 +23,13 @@
 						</template>
 					</Field>
 					<view class="item_tip">
-						<text>{{$t('您有')}} {{dealNumber(data.assets.available, 8)}} {{type + $t('可用')}}, </text>
+						<text>{{$t('您有')}} {{unroundNumber(data.assets.available, 8)}} {{type + $t('可用')}}, </text>
 						<text class="mr10">{{$t('最小提现金额')}} {{data.assets.minWithdraw}} {{type}}</text>
 						<text class="all_btn" @click="onAll">{{$t('全部')}}</text>
 					</view>
 				</view>
 				<view class="sure_btn" @click="handleOk" :style="{backgroundColor:canSubmit() ?'#05AA84' : '#ADDAD0' }">{{$t('确认')}}</view>
-				<view class="receipt">{{$t('实际到账')}} {{getDidCount()}} {{type}}</view>
+				<view class="receipt">{{$t('实际扣除')}} {{getDidCount()}} {{type}}</view>
 			</view>
 			<view class="cash_tips">
 				<text class="tips_item general_title">{{$t('温馨提示')}}</text>
@@ -47,7 +47,7 @@
 
 <script setup>
 	import { onLoad } from '@dcloudio/uni-app';
-	import { dealNumber, unroundNumber } from '@/utils/index.js';
+	import { unroundNumber, accRed, accAdd, accMul } from '@/utils/index.js';
 	import InputModel from '@/pages/component/InputModel/index.vue';
 	import SmsVerify from '@/pages/Mine/wallet/SmsVerify.vue';
 	import Nav from '@/pages/component/Nav/index.vue';
@@ -105,14 +105,16 @@
 	}
 
 	function getDidCount() {
-		let { fees } = toRef(data, 'assets').value;
+		let { fees, feesRate } = toRef(data, 'assets').value;
 		let num = toRef(data, 'num').value;
 
-		if (fees && num) {
+		if (num) {
 			if (fees > 0) {
-				return (num - fees) > 0 ? unroundNumber(num - fees, 8) : 0;
+				const addNum = accAdd(Number(num), fees);
+				return unroundNumber(addNum, 8);
 			} else {
-				return unroundNumber(num * (1 - data.assets.feesRate), 8);
+				const mulNum = accMul(Number(num), 1 + feesRate);
+				return unroundNumber(mulNum, 8);
 			}
 		} else {
 			return 0;
@@ -120,7 +122,15 @@
 	}
 
 	function onAll() {
-		data.num = dealNumber(data.assets.available, 8);
+		let allNum = 0;
+		if (Number(data.assets.fees) > 0) {
+			allNum = accRed(data.assets.available, data.assets.fees);
+		} else {
+			const allFees = accMul(data.assets.available, data.assets.feesRate);
+			allNum = accRed(data.assets.available, allFees);
+		}
+
+		data.num = unroundNumber(allNum, 8);
 	}
 
 	function handleOk() {
@@ -141,12 +151,19 @@
 
 		if (state.value) state.value = false;
 
+		let needNum = 0;
+		if (Number(data.assets.fees) > 0) {
+			needNum = accAdd(Number(data.num), data.assets.fees);
+		} else {
+			needNum = accMul(Number(data.num), 1 + data.assets.feesRate);
+		}
+
 		if (data.balance.available < 0) {
 			Toast.show(I18n.t("您的电费账户已欠费，为避免造成收益损失，请及时充值电费"));
 			return;
 		}
 
-		if (Number(data.num) > Number(data.assets.available)) {
+		if (needNum > Number(data.assets.available)) {
 			Toast.show(I18n.t("余额不足"));
 			return;
 		}

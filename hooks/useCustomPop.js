@@ -1,7 +1,6 @@
 import { createApp } from 'vue';
 import WarnPop from '@/pages/Other/warnPop.vue';
 import PowerTips from '@/pages/Other/powerTips.vue';
-import ForceTips from '@/pages/Other/forceNotice.vue';
 
 
 const showPop = (message, option = {}) => {
@@ -19,24 +18,9 @@ const showPop = (message, option = {}) => {
 	Instance.mount(mountNode);
 }
 
-const showTips = (data, option = {}) => {
+const showTips = (option = {}) => {
 	const mountNode = document.createElement('div');
 	const Instance = createApp(PowerTips, {
-		data,
-		...option,
-		close: () => {
-			Instance.unmount(mountNode);
-			document.body.removeChild(mountNode);
-		}
-	})
-
-	document.body.appendChild(mountNode);
-	Instance.mount(mountNode);
-}
-
-const showForce = (option = {}) => {
-	const mountNode = document.createElement('div');
-	const Instance = createApp(ForceTips, {
 		...option,
 		close: () => {
 			Instance.unmount(mountNode);
@@ -50,6 +34,5 @@ const showForce = (option = {}) => {
 
 export default {
 	showPop,
-	showTips,
-	showForce
+	showTips
 };

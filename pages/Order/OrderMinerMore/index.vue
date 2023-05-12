@@ -2,7 +2,7 @@
 	<view class="record_main">
 		<Nav class="record_nav" :title="$t('output_r')">
 			<template #left>
-				<image src="/static/base/title_left_arrow.png" class="icon" @click="handleCBack" />
+				<image src="/static/base/title_left_arrow.png" class="icon" @click="handleBack" />
 			</template>
 		</Nav>
 		<view class="output_record">
@@ -28,7 +28,7 @@
 		details: {}
 	})
 
-	function handleCBack() {
+	function handleBack() {
 		history.back();
 	}
 

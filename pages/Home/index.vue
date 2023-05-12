@@ -42,6 +42,7 @@
 	import { useNoticeStore } from '@/store/notice.js';
 	import { useUserStore } from '@/store/user.js';
 	import Popup from '@/hooks/useCustomPop.js';
+	import { getForceList, getThreshold } from '@/services/other.js';
 
 	const store = useNoticeStore();
 	const user = useUserStore();
@@ -90,6 +91,24 @@
 		})
 	}
 
+	// 弹窗显示
+	const getDialog = async () => {
+		let index = 0;
+		const res1 = await getForceList();
+		const res2 = await getThreshold();
+		if (res1.data.length) {
+			index = 1;
+		} else {
+			if (res2.data.status > 0) {
+				index = 2;
+			}
+		}
+
+		if ((res1.data.length && res2.data.status === 0) || (!res1.data.length && res2.data.status > 0)) {
+			Popup.showTips({ force: res1.data, threshold: res2.data, showIndex: index });
+		}
+	}
+
 	onShow(() => {
 		getData();
 	})
@@ -100,14 +119,14 @@
 		// 	uni.setStorageSync('init', '1');
 		// }
 		if (user.isLogin) {
-			Popup.showTips();
+			getDialog();
 			// uni.setStorageSync('init', '1');
 		}
 	})
 
 	onBeforeUnmount(() => {
-		console.log('组件卸载')
-		uni.removeStorageSync('init');
+		// console.log('组件卸载')
+		// uni.removeStorageSync('init');
 	})
 </script>
 

@@ -5,8 +5,7 @@
 		</view>
 		<view class="caption">
 			<view class="log">
-				<image class="icon"
-					:src="item.currency === 'BTC' ? '/static/home/home_icon_btc.png':'/static/home/home_icon_eth.png'" />
+				<image class="icon" :src="item.currency === 'BTC' ? '/static/home/home_icon_btc.png':'/static/home/home_icon_eth.png'" />
 				<text class="name">{{item.model + item.name}}</text>
 				<view class="tagCount">X{{item.numbers}}</view>
 			</view>
@@ -47,30 +46,14 @@
 </template>
 
 <script setup>
-	import {
-		ref
-	} from 'vue';
-	import {
-		getDeviceType
-	} from '@/services/cloud.js';
-
-	import {
-		formatDate,
-		dealNumber
-	} from '@/utils/index.js';
-	import {
-		activeMiner,
-		stopMiner
-	} from '@/services/order.js';
+	import { ref } from 'vue';
+	import { getDeviceType } from '@/services/cloud.js';
+	import { formatDate, dealNumber } from '@/utils/index.js';
+	import { activeMiner, stopMiner } from '@/services/order.js';
 	import I18n from '@/hooks/useLocale.js';
 	import Toast from '@/hooks/useToast.js';
-	import {
-		showConfirmDialog
-	} from 'vant';
-	const {
-		item,
-		hideBtn
-	} = defineProps({
+	import { showConfirmDialog } from 'vant';
+	const props = defineProps({
 		item: Object,
 		hideBtn: Boolean
 	})
@@ -78,12 +61,12 @@
 	const px = uni.getLocale() === 'zh' ? '12px' : '4px';
 
 	let showNum = ref(0);
-	let status = ref(item.status);
+	let status = ref(props.item.status);
 
 	function showActionNum() {
 		if (!status.value) return;
 
-		if (hideBtn) {
+		if (props.hideBtn) {
 			showNum.value = 0;
 			return;
 		}
@@ -154,7 +137,7 @@
 			type: 'loading'
 		});
 		activeMiner({
-				orderId: item.id
+				orderId: props.item.id
 			})
 			.then(res => {
 				if (res.code === 0) {
@@ -184,7 +167,7 @@
 					type: 'loading'
 				});
 				stopMiner({
-						orderId: item.id
+						orderId: props.item.id
 					})
 					.then(res => {
 						if (res.code === 0) {
@@ -204,9 +187,9 @@
 	}
 
 	function handleClick() {
-		if (!hideBtn) return;
+		if (!props.hideBtn) return;
 		uni.navigateTo({
-			url: `/pages/Order/OrderMinerMore/index?id=${item.id}`
+			url: `/pages/Order/OrderMinerMore/index?id=${props.item.id}`
 		})
 	}
 </script>
