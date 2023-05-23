@@ -7,7 +7,7 @@
 			<NoData hideBtn v-else />
 		</view>
 		<view class="main" v-else-if="user.isLogin && tab === 2">
-			<OrderMinerList :item="item" hideBtn v-for="item  in listData.miner" :key="item.id" style="margin-bottom: 15px;"
+			<OrderMinerList :item="item" hideBtn v-for="item  in listData.miner" :key="item.id + item.status" style="margin-bottom: 15px;"
 				v-if="listData.miner.length" />
 			<NoData hideBtn v-else />
 		</view>

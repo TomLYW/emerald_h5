@@ -283,17 +283,6 @@
 					"titleNView": false
 				}
 			}
-		},
-
-		{
-			"path": "pages/Other/forceNotice",
-			"style": {
-				"enablePullDownRefresh": false,
-				// "navigationBarTitleText": "",
-				"h5": {
-					"titleNView": false
-				}
-			}
 		}
 	],
 	"tabBar": {
@@ -308,7 +297,6 @@
 				"selectedIconPath": "static/tab/tab_home_s.png"
 			},
 			{
-				// "pagePath": "pages/Other/forceNotice",
 				"pagePath": "pages/Cloud/index",
 				"text": "%cloud%",
 				"iconPath": "static/tab/tab_yun.png",
